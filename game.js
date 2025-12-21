@@ -130,11 +130,13 @@ const game = {
     init() {
         const edu = ["本科", "硕士"][Math.floor(Math.random()*2)];
         let baseRep = edu === "硕士" ? 5 : 0;
+        const baseAge = edu === "硕士" ? 25 : 22;
 
         this.state = {
             player: {
                 name: NAME_DB[Math.floor(Math.random()*NAME_DB.length)],
                 edu: edu,
+                age: baseAge,
                 titleIdx: 0,
                 health: 100, mood: 100,
                 iq: Math.floor(Math.random()*11),
@@ -151,7 +153,8 @@ const game = {
                 researchApplied: false,
                 researchSuccessCount: 0,
                 hasAppliedExhibitThisQuarter: false,
-                promotedThisYear: false
+                promotedThisYear: false,
+                didActionThisQuarter: false
             }
         };
         
@@ -162,6 +165,7 @@ const game = {
     },
 
     saveState() { this.history = JSON.parse(JSON.stringify(this.state)); },
+    markAction() { this.state.flags.didActionThisQuarter = true; },
     undoQuarter() {
         if (!this.history) return;
         this.state = JSON.parse(JSON.stringify(this.history));
@@ -171,54 +175,77 @@ const game = {
     },
 
     nextQuarter() {
-        this.saveState();
-        this.changeStat('money', 30000);
-        this.log("success", "💰 季度经费已到账 (+30000)，新的预算周期开始了。");
+        const proceedEndQuarter = () => {
+            this.saveState();
+            this.changeStat('money', 30000);
+            this.log("success", "💰 季度经费已到账 (+30000)，新的预算周期开始了。");
 
-        // 发放工资到个人存款（savings）
-        const sal = (TITLES[this.state.player.titleIdx] && TITLES[this.state.player.titleIdx].salary) || 0;
-        if (sal > 0) {
-            this.changeStat('savings', sal);
-            this.log("success", `💵 工资已发放：${UTILS.formatMoney(sal)}（已入个人存款）`);
-        }
-
-        // 触发随机事件
-        EventManager.triggerEndQuarter(this);
-
-        if (this.state.turn.quarter === 4 && this.state.flags.researchApplied) this.settleResearch();
-
-        this.state.exhibitions.forEach(ex => {
-            ex.quartersActive++;
-            if (ex.status === 'waiting') {
-                ex.feedbackTimer--;
-                if (ex.feedbackTimer <= 0) {
-                    ex.status = 'ready_for_feedback';
-                    this.log("success", `📬 [${ex.name}] 的观众反馈报告送到了您的案头，请查阅。`);
-                }
+            // 发放季度工资到个人存款（savings）
+            const sal = (TITLES[this.state.player.titleIdx] && TITLES[this.state.player.titleIdx].salary) || 0;
+            const quarterSalary = sal * 3;
+            if (quarterSalary > 0) {
+                this.changeStat('savings', quarterSalary);
+                this.log("success", `💵 工资已发放：${UTILS.formatMoney(quarterSalary)}（已入个人存款）`);
             }
-        });
 
-        this.state.turn.quarter++;
-        this.state.flags.quartersInTitle++;
-        
-        if (this.state.turn.quarter > 4) {
-            this.state.turn.year++;
-            this.state.turn.quarter = 1;
-            this.state.flags.researchApplied = false;
-            this.state.flags.promotedThisYear = false;
-        }
+            // 触发随机事件
+            EventManager.triggerEndQuarter(this);
 
-        if (this.state.turn.year === 4 && this.state.turn.quarter === 1 && this.state.player.titleIdx === 0) {
-            this.endGame("解聘通知", "很遗憾，因入职三年未获晋升，您心灰意冷，决定将重心放到生活之中。");
+            if (this.state.turn.quarter === 4 && this.state.flags.researchApplied) this.settleResearch();
+
+            this.state.exhibitions.forEach(ex => {
+                ex.quartersActive++;
+                if (ex.status === 'waiting') {
+                    ex.feedbackTimer--;
+                    if (ex.feedbackTimer <= 0) {
+                        ex.status = 'ready_for_feedback';
+                        this.log("success", `📬 [${ex.name}] 的观众反馈报告送到了您的案头，请查阅。`);
+                    }
+                }
+            });
+
+            this.state.turn.quarter++;
+            this.state.flags.quartersInTitle++;
+            
+            if (this.state.turn.quarter > 4) {
+                this.state.turn.year++;
+                this.state.turn.quarter = 1;
+                this.state.player.age += 1;
+                this.state.flags.researchApplied = false;
+                this.state.flags.promotedThisYear = false;
+            }
+
+            if (this.state.turn.year === 4 && this.state.turn.quarter === 1 && this.state.player.titleIdx === 0) {
+                this.endGame("解聘通知", "很遗憾，因入职三年未获晋升，您心灰意冷，决定将重心放到生活之中。");
+                return;
+            }
+            this.state.limits.leisure = 2;
+            this.state.flags.hasAppliedExhibitThisQuarter = false;
+            this.state.flags.didActionThisQuarter = false;
+
+            this.checkSurvival();
+            this.log("turn", `📅 Y${this.state.turn.year} - Q${this.state.turn.quarter}`);
+            this.updateUI();
+            this.renderExhibitPanel();
+        };
+
+        if (!this.state.flags.didActionThisQuarter) {
+            this.showModal(
+                "提醒",
+                "本季度你没有任何操作，记得安排工作或提升自己。",
+                [{
+                    txt: "知道了",
+                    cb: () => {
+                        this.closeModal();
+                        proceedEndQuarter();
+                    }
+                }],
+                true
+            );
             return;
         }
-        this.state.limits.leisure = 2;
-        this.state.flags.hasAppliedExhibitThisQuarter = false;
 
-        this.checkSurvival();
-        this.log("turn", `📅 Y${this.state.turn.year} - Q${this.state.turn.quarter}`);
-        this.updateUI();
-        this.renderExhibitPanel();
+        proceedEndQuarter();
     },
 
     // 结果弹窗 (通知类，可点击背景关闭)
@@ -268,6 +295,7 @@ const game = {
     },
 
     actionApplyExhibit() {
+        this.markAction();
         if (this.state.flags.hasAppliedExhibitThisQuarter) {
             this.showResult("申请受限", "本季度申请额度已用完，请下个季度再来。");
             return;
@@ -310,6 +338,7 @@ const game = {
     },
 
     actionExhibitTask(id, key) {
+        this.markAction();
         if (this.state.player.health <= 10) {
             this.showResult("健康预警", "🚑 您的身体状况极差，无法进行高强度工作！请务必先休息。");
             return;
@@ -407,6 +436,7 @@ const game = {
     },
 
     actionViewFeedback(id) {
+        this.markAction();
         const ex = this.state.exhibitions.find(e => e.id === id);
         const isRushJob = ex.quartersActive <= 4;
         const isBadReview = isRushJob && Math.random() > 0.5;
@@ -426,6 +456,7 @@ const game = {
     },
 
     actionShop(type) {
+        this.markAction();
         if (type === 'coffee') {
             // [修改] 检查存款 savings
             if (this.state.player.savings < 50) { 
@@ -465,6 +496,8 @@ const game = {
         const p = this.state.player;
         document.getElementById('ui-name').innerText = p.name;
         document.getElementById('ui-edu').innerText = p.edu;
+        const ageEl = document.getElementById('ui-age');
+        if (ageEl) ageEl.innerText = p.age;
         document.getElementById('ui-title').innerText = TITLES[p.titleIdx].name;
         document.getElementById('ui-iq').innerText = p.iq;
         document.getElementById('ui-eq').innerText = p.eq;
@@ -483,6 +516,25 @@ const game = {
         document.getElementById('ui-quarter').innerText = this.state.turn.quarter;
 
         document.getElementById('btn-promote').disabled = !(this.state.turn.quarter === 4 && !this.state.flags.promotedThisYear && p.titleIdx < 4);
+
+        const degreeBtn = document.getElementById('btn-degree');
+        const degreeTitle = document.getElementById('degree-title');
+        const degreeDesc = document.getElementById('degree-desc');
+        if (degreeBtn && degreeTitle && degreeDesc) {
+            if (p.edu === "本科") {
+                degreeTitle.innerText = "申请在职硕士 (50000元)";
+                degreeDesc.innerText = "晋升学历 (本科可申请)";
+                degreeBtn.disabled = false;
+            } else if (p.edu === "硕士") {
+                degreeTitle.innerText = "申请在职博士 (50000元)";
+                degreeDesc.innerText = "晋升学历 (需硕士学位)";
+                degreeBtn.disabled = false;
+            } else {
+                degreeTitle.innerText = "已获博士学位";
+                degreeDesc.innerText = "无需再申请";
+                degreeBtn.disabled = true;
+            }
+        }
         
         const btnRes = document.getElementById('btn-research');
         document.getElementById('research-count').innerText = `${this.state.flags.researchSuccessCount}/5`;
@@ -534,6 +586,7 @@ const game = {
 
     // [新增] 大学进修逻辑 (框架)
     actionStudy(type) {
+        this.markAction();
         if (type === 'course') {
             if (this.state.player.savings < 5000) {
                 this.showResult("存款不足", "学费不够，还是先去搬砖吧。");
@@ -545,7 +598,29 @@ const game = {
             this.showResult("进修完成", { iq: iqAdd, rep: 5 });
             this.log("success", "🎓 在大学上了一门高深莫测的课，感觉脑子长出来了。");
         } else if (type === 'degree') {
-            this.showResult("功能开发中", "博士点正在建设中，请稍后再来...");
+            const p = this.state.player;
+            const cost = 50000;
+            if (p.edu === "本科") {
+                if (p.savings < cost) {
+                    this.showResult("存款不足", "学费不够，先攒点钱吧。");
+                    return;
+                }
+                this.changeStat('savings', -cost);
+                p.edu = "硕士";
+                this.showResult("在职硕士毕业", { rep: 5 });
+                this.log("success", "🎓 在职硕士毕业，声望+5。");
+            } else if (p.edu === "硕士") {
+                if (p.savings < cost) {
+                    this.showResult("存款不足", "学费不够，先攒点钱吧。");
+                    return;
+                }
+                this.changeStat('savings', -cost);
+                p.edu = "博士";
+                this.showResult("在职博士毕业", "学历已晋升为博士。");
+                this.log("success", "🎓 在职博士毕业，学历晋升为博士。");
+            } else {
+                this.showResult("已是博士", "您已经拥有博士学位，无需再次申请。");
+            }
         }
         this.updateUI();
     },
@@ -614,6 +689,7 @@ const game = {
 
     // [修改] 升级后的摸鱼逻辑：随机抽取剧情事件
     actionLeisure(type) {
+        this.markAction();
         if(this.state.limits.leisure <= 0) { 
             this.showResult("没时间了", "本季度的摸鱼额度已用完，快去工作吧！"); 
             return;
@@ -640,6 +716,7 @@ const game = {
     },
 
     actionResearch() {
+        this.markAction();
         this.changeStat('health', -10);
         this.changeStat('mood', -5);
         this.state.flags.researchApplied = true;
@@ -659,6 +736,7 @@ const game = {
     },
 
     actionPromote() {
+        this.markAction();
         const p = this.state.player;
         const q = this.state.flags.quartersInTitle;
         let success = false, next = "";

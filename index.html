@@ -34,6 +34,7 @@
             <div class="user-name" id="ui-name">NoName</div>
             <div class="user-title" id="ui-title">助理馆员</div>
             <div style="font-size:0.8rem; margin-top:5px; color:#90a4ae;" id="ui-edu">PHD</div>
+            <div style="font-size:0.8rem; margin-top:2px; color:#90a4ae;">年龄：<span id="ui-age">0</span>岁</div>
             <button id="btn-promote" class="primary" style="width:100%; margin-top:15px; font-size:0.85rem;" onclick="game.actionPromote()" disabled>申请职称评定</button>
         </div>
 
@@ -122,9 +123,9 @@
                     参加进修课程 (5000元)<br>
                     <span style="font-size:0.8em; opacity:0.8">+智商 +声望 -精力</span>
                 </button>
-                <button class="primary" style="width:100%; padding:15px; background:#7e57c2" onclick="game.actionStudy('degree')">
-                    申请在职博士 (50000元)<br>
-                    <span style="font-size:0.8em; opacity:0.8">晋升学历 (需硕士学位)</span>
+                <button id="btn-degree" class="primary" style="width:100%; padding:15px; background:#7e57c2" onclick="game.actionStudy('degree')">
+                    <span id="degree-title">申请在职博士 (50000元)</span><br>
+                    <span id="degree-desc" style="font-size:0.8em; opacity:0.8">晋升学历 (需硕士学位)</span>
                 </button>
             </div>
         </div>
