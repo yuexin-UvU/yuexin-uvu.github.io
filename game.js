@@ -742,16 +742,54 @@ const game = {
                 txt: "开始入职",
                 cb: () => {
                     const input = document.getElementById(inputId);
-                    const name = input && input.value.trim() ? input.value.trim() : randomName();
-                    const genderSelect = document.getElementById("gender-select");
-                    const gender = genderSelect && genderSelect.value ? genderSelect.value : "其他";
-                    this.state.player.name = name;
-                    this.state.player.gender = gender;
-                    const useBento = btnBento && btnBento.classList.contains('active');
-                    document.body.classList.toggle('theme-bento', useBento);
-                    this.closeModal();
-                    this.updateUI();
-                    this.showGuide();
+                    const rawName = input && input.value.trim() ? input.value.trim() : randomName();
+                    const finishIntro = (finalName) => {
+                        const genderSelect = document.getElementById("gender-select");
+                        const gender = genderSelect && genderSelect.value ? genderSelect.value : "\u5176\u4ed6";
+                        this.state.player.name = finalName;
+                        this.state.player.gender = gender;
+                        const useBento = btnBento && btnBento.classList.contains('active');
+                        document.body.classList.toggle('theme-bento', useBento);
+                        this.closeModal();
+                        this.updateUI();
+                        this.showGuide();
+                    };
+
+                    const blockedName = "\u90ed\u60a6\u6b46";
+                    const loveName1 = "\u6234\u5b50\u5764";
+                    const loveName2 = "\u5446\u5b50\u56f0";
+                    const willingName = "\u8d75\u709c\u7433";
+
+                    if (rawName === blockedName) {
+                        const fallback = randomName();
+                        this.showModal(
+                            "\u63d0\u793a",
+                            "\u4f60\u624d\u4e0d\u662f\u90ed\u60a6\u6b46\uff01\uff01",
+                            [{ txt: "\u7ee7\u7eed", cb: () => finishIntro(fallback) }],
+                            true
+                        );
+                        return;
+                    }
+                    if (rawName === loveName1 || rawName === loveName2) {
+                        this.showModal(
+                            "\u63d0\u793a",
+                            "LOVE\u2764",
+                            [{ txt: "\u7ee7\u7eed", cb: () => finishIntro(rawName) }],
+                            true
+                        );
+                        return;
+                    }
+                    if (rawName === willingName) {
+                        this.showModal(
+                            "\u63d0\u793a",
+                            "Hello\uff0cWilling!!",
+                            [{ txt: "\u7ee7\u7eed", cb: () => finishIntro(rawName) }],
+                            true
+                        );
+                        return;
+                    }
+
+                    finishIntro(rawName);
                 }
             }]
         );
@@ -804,7 +842,7 @@ const game = {
                 <h3>学术深造中心</h3>
                 <p>在这里攻读更高学位，提升基础智商上限。</p>
                 <div style="margin-top:20px; width:100%">
-                    <button class="primary" style="width:100%; padding:15px; margin-bottom:10px" onclick="game.actionStudy('course')">
+                    <button class="primary" id="btn-study-course" style="width:100%; padding:15px; margin-bottom:10px" onclick="game.actionStudy('course')">
                         参加进修课程 (5000元)<br>
                         <span style="font-size:0.8em; opacity:0.8">-精力10 -愉悦10</span>
                     </button>
@@ -927,7 +965,11 @@ const game = {
         uni.courseStartYear = {};
         uni.selectedThisQuarter = false;
         this.state.player.eduStatus = type === 'PhD' ? "在读博士" : "在读硕士";
-        this.showResult("录取成功", `目标学分：${uni.targetCredits}，请在本季度选课。`);
+        const degreeLabel = type === 'PhD' ? "博士" : "硕士";
+        this.showResult(
+            "录取成功",
+            `你成功申请上了南京大学博物馆专业的非全日制专业${degreeLabel}，尽情享受校园生活，注意不要挂科哦！`
+        );
         this.updateUI();
     },
 
@@ -1284,7 +1326,7 @@ const game = {
                 p.eq = UTILS.clamp(p.eq, caps.min, caps.max);
                 this.endGame(
                     "结局·馆长",
-                    "恭喜你，经过多年的学习、实践与选择，你最终成为了这座博物馆的馆长。\n在展厅与办公室之间，你逐渐找到了平衡学术、公众与现实运作的方法。\n博物馆并非完美，却在你的带领下持续运转、不断调整，也回应着时代的期待。\n或许前方仍有争议与挑战，但你已经明白——\n博物馆的未来，正是在一次次判断与承担中被塑造出来的。"
+                    "恭喜你，经过多年的学习、实践与选择，你最终成为了这座博物馆的馆长。\n在展厅与办公室之间，你逐渐找到了平衡学术、公众与现实运作的方法。\n博物馆并非完美，却在你的带领下持续运转、不断调整，也回应着时代的期待。\n或许前方仍有争议与挑战，但你已经明白\n博物馆的未来，正是在一次次判断与承担中被塑造出来的。"
                 );
                 return;
             }
@@ -1299,7 +1341,7 @@ const game = {
         if (this.state.player.health <= 0) {
             this.endGame(
                 "结局·劳碌命",
-                "你把几乎所有时间都留给了博物馆。\n展览、会议、报告与突发事件不断叠加，责任从未减轻。\n在长期的透支中，你最终倒在了熟悉的工作岗位上。\n博物馆仍在运转，而你的名字只留在了内部文件与回忆里。\n工作之余也要注意身体——\n身体，才是革命的本钱。"
+                "你把几乎所有时间都留给了博物馆。\n展览、会议、报告与突发事件不断叠加，责任从未减轻。\n在长期的透支中，你最终倒在了熟悉的工作岗位上。\n博物馆仍在运转，而你的名字只留在了内部文件与回忆里。\n工作之余也要注意身体\n身体，才是革命的本钱。"
             );
         }
         if (this.state.player.mood <= 0) {
@@ -1321,34 +1363,168 @@ const game = {
 
     // isNotice: true 表示是通知类弹窗，可点击背景关闭
     showOnboarding() {
-        const overlay = document.getElementById('onboarding-overlay');
+        const overlay = document.getElementById('guide-overlay');
         if (overlay) overlay.classList.remove('hidden');
     },
 
     closeOnboarding() {
-        const overlay = document.getElementById('onboarding-overlay');
+        const overlay = document.getElementById('guide-overlay');
         if (overlay) overlay.classList.add('hidden');
     },
 
-    // 新增：游戏引导弹窗
     showGuide() {
-        const title = "📜 入职培训手册";
-        const content = `欢迎加入博物馆！作为一名新进策展人，你的目标是不断晋升，最终成为【馆长】。但在这之前，请先活下去：
+        this.guideSteps = [
+            {
+                selector: "#status-panel",
+                scene: "office",
+                text: "??????????????????????????????????????????????????????????????????????????"
+            },
+            {
+                selector: ".leisure-section",
+                scene: "office",
+                text: "?????????????????????????????????"
+            },
+            {
+                selector: ".shop-section",
+                scene: "office",
+                text: "????????????????????????????????"
+            },
+            {
+                selector: "#research-block",
+                scene: "office",
+                text: "???????? Q1 ?????Q4 ?????????????????????"
+            },
+            {
+                selector: "#exhibit-block",
+                scene: "office",
+                text: "????????????????????????????????"
+            },
+            {
+                selector: "#tab-university",
+                scene: "office",
+                text: "?????????????????????"
+            },
+            {
+                selector: "#btn-study-course",
+                scene: "university",
+                text: "??????????????????????????????????"
+            },
+            {
+                selector: "#btn-apply-program",
+                scene: "university",
+                text: "?????????? Q2 ???????????????????????"
+            },
+            {
+                selector: "#tab-home",
+                scene: "office",
+                text: "??????????????????"
+            },
+            {
+                selector: "#btn-end-quarter",
+                scene: "office",
+                text: "???????????????????????"
+            }
+        ];
+        this.guideState = { index: 0 };
+        this.renderGuideStep();
+        if (!this._guideResizeHandler) {
+            this._guideResizeHandler = () => {
+                if (this.guideState) this.renderGuideStep(true);
+            };
+            window.addEventListener('resize', this._guideResizeHandler);
+        }
+    },
 
-📊   属性说明
-• 智商/情商：决定突发事件的处理效果和科研成功率。
-• 声望 🌟：通过策展和论文获得，是晋升的硬指标。
-• 经费 💰：没钱寸步难行！每季度会自动发放预算。
+    renderGuideStep(isResize = false) {
+        if (!this.guideSteps || !this.guideState) return;
+        const overlay = document.getElementById('guide-overlay');
+        const highlight = document.getElementById('guide-highlight');
+        const bubble = document.getElementById('guide-bubble');
+        const stepEl = document.getElementById('guide-step');
+        const textEl = document.getElementById('guide-text');
+        const nextBtn = document.getElementById('guide-next');
+        if (!overlay || !highlight || !bubble || !stepEl || !textEl || !nextBtn) return;
 
-⚠️   生存红线 (重要!)
-• 精力值 🚑：工作会消耗精力。归零触发【过劳死】。
-• 愉悦值 😊：压力会降低心情。归零触发【抑郁离职】。
-*提示：快撑不住时，记得去左下角"摸鱼"或"商店"回血！*
+        const index = this.guideState.index;
+        const step = this.guideSteps[index];
+        if (!step) return;
 
-🏆   终极目标
-在被解聘（3年未晋升）之前，积累资历完成职称评定！`;
+        if (!isResize && step.scene) this.switchScene(step.scene);
 
-        this.showModal(title, content, [{txt:"我准备好了！", cb:()=>this.closeModal()}]);
+        overlay.classList.remove('hidden');
+        stepEl.innerText = `?? ${index + 1}/${this.guideSteps.length}`;
+        textEl.innerText = step.text;
+        nextBtn.innerText = index === this.guideSteps.length - 1 ? "???????????" : "???";
+
+        const updatePosition = () => {
+            const target = document.querySelector(step.selector);
+            if (!target) {
+                this.nextGuideStep();
+                return;
+            }
+            const rect = target.getBoundingClientRect();
+            const padding = 8;
+            const top = Math.max(rect.top - padding, 8);
+            const left = Math.max(rect.left - padding, 8);
+            const width = Math.min(rect.width + padding * 2, window.innerWidth - left - 8);
+            const height = Math.min(rect.height + padding * 2, window.innerHeight - top - 8);
+
+            highlight.style.top = `${top}px`;
+            highlight.style.left = `${left}px`;
+            highlight.style.width = `${width}px`;
+            highlight.style.height = `${height}px`;
+
+            bubble.style.visibility = 'hidden';
+            requestAnimationFrame(() => {
+                const bubbleRect = bubble.getBoundingClientRect();
+                const spaceRight = window.innerWidth - (rect.right + padding);
+                const spaceLeft = rect.left - padding;
+                const spaceBottom = window.innerHeight - (rect.bottom + padding);
+                const spaceTop = rect.top - padding;
+                const gap = 12;
+                let bubbleTop = rect.top + rect.height / 2 - bubbleRect.height / 2;
+                let bubbleLeft = rect.right + gap;
+
+                if (spaceRight >= bubbleRect.width + gap) {
+                    bubbleLeft = rect.right + gap;
+                } else if (spaceLeft >= bubbleRect.width + gap) {
+                    bubbleLeft = rect.left - bubbleRect.width - gap;
+                } else if (spaceBottom >= bubbleRect.height + gap) {
+                    bubbleTop = rect.bottom + gap;
+                    bubbleLeft = rect.left + rect.width / 2 - bubbleRect.width / 2;
+                } else {
+                    bubbleTop = rect.top - bubbleRect.height - gap;
+                    bubbleLeft = rect.left + rect.width / 2 - bubbleRect.width / 2;
+                }
+
+                bubbleTop = Math.max(12, Math.min(bubbleTop, window.innerHeight - bubbleRect.height - 12));
+                bubbleLeft = Math.max(12, Math.min(bubbleLeft, window.innerWidth - bubbleRect.width - 12));
+
+                bubble.style.top = `${bubbleTop}px`;
+                bubble.style.left = `${bubbleLeft}px`;
+                bubble.style.visibility = 'visible';
+            });
+        };
+
+        if (step.scene) {
+            setTimeout(updatePosition, 60);
+        } else {
+            updatePosition();
+        }
+    },
+
+    nextGuideStep(e) {
+        if (e && e.stopPropagation) e.stopPropagation();
+        if (!this.guideSteps || !this.guideState) return;
+        const nextIndex = this.guideState.index + 1;
+        if (nextIndex >= this.guideSteps.length) {
+            const overlay = document.getElementById('guide-overlay');
+            if (overlay) overlay.classList.add('hidden');
+            this.guideState = null;
+            return;
+        }
+        this.guideState.index = nextIndex;
+        this.renderGuideStep();
     },
 
     showModal(title, text, choices, isNotice = false) {

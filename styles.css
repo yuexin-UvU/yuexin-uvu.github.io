@@ -336,42 +336,65 @@
             color: #fff;
         }
 
-        /* ???? */
-        .onboarding-overlay {
-            position: fixed; inset: 0;
-            background: rgba(0, 0, 0, 0.35);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 200;
+        /* 聚光灯式引导 */
+        .guide-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 300;
         }
-        .onboarding-card {
-            width: 760px; max-width: 92vw;
-            background: #fff; border-radius: 10px; overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-            border: 1px solid #e3eaf2;
+        .guide-highlight {
+            position: fixed;
+            border-radius: 12px;
+            border: 2px solid #fff;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+            transition: all 0.2s ease;
+            pointer-events: none;
         }
-        .onboarding-header {
-            background: #1b4f8a; color: #fff;
-            padding: 12px 20px;
-            display: flex; align-items: center; justify-content: space-between;
-            font-weight: 700; letter-spacing: 0.5px;
+        body.theme-bento .guide-highlight { border-radius: 20px; }
+        .guide-bubble {
+            position: fixed;
+            width: 320px;
+            max-width: calc(100vw - 32px);
+            background: #fff;
+            color: #111827;
+            border: 2px solid #000;
+            border-radius: 14px;
+            padding: 14px 16px 12px;
+            box-shadow: 4px 4px 0 #000;
         }
-        .onboarding-title { font-size: 1.05rem; }
-        .onboarding-close {
-            background: #fff; color: #1b4f8a; border: none;
-            padding: 8px 12px; border-radius: 8px;
-            font-weight: 600; cursor: pointer;
+        body.theme-bento .guide-bubble {
+            border: none;
+            border-radius: 18px;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.2);
         }
-        .onboarding-body { padding: 20px 24px; color: #37474f; }
-        .onboarding-section { margin-bottom: 16px; }
-        .onboarding-section-title {
-            font-size: 1rem; font-weight: 700; color: #1b4f8a;
-            margin-bottom: 8px; border-left: 4px solid #1b4f8a;
-            padding-left: 8px;
+        .guide-step {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #6b7280;
+            margin-bottom: 6px;
         }
-        .onboarding-paragraph { line-height: 1.6; }
-        .onboarding-paragraph .highlight { color: #d32f2f; font-weight: 700; }
-        .onboarding-list { margin: 0; padding-left: 18px; line-height: 1.7; }
-        .onboarding-list li { margin-bottom: 4px; }
+        .guide-text { line-height: 1.6; font-size: 0.95rem; }
+        .guide-next {
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 2px solid #000;
+            background: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 3px 3px 0 #000;
+        }
+        .guide-next:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0 #000;
+        }
+        body.theme-bento .guide-next {
+            border: none;
+            background: #111827;
+            color: #fff;
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.25);
+        }
 
         /* === 新增：中间栏导航条 === */
         .middle-nav {

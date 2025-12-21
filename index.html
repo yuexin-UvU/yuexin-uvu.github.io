@@ -40,22 +40,24 @@
             <button id="btn-promote" class="primary" style="width:100%; margin-top:15px; font-size:0.85rem;" onclick="game.actionPromote()" disabled>申请职称评定</button>
         </div>
 
-        <div class="stats-grid">
-            <div class="stat-item"><span class="stat-label">智商</span><span class="stat-num" id="ui-iq">0</span></div>
-            <div class="stat-item"><span class="stat-label">情商</span><span class="stat-num" id="ui-eq">0</span></div>
-            <div class="stat-item"><span class="stat-label">声望</span><span class="stat-num" id="ui-rep">0</span></div>
-            <div class="stat-item"><span class="stat-label">公款</span><span class="stat-num" id="ui-money" style="font-size:0.9rem">0</span></div>
-            <div class="stat-item"><span class="stat-label">存款</span><span class="stat-num" id="ui-savings" style="font-size:0.9rem">0</span></div>
-        </div>
-
-        <div class="bars-area">
-            <div class="bar-row">
-                <div class="bar-label"><span>精力</span><span id="txt-health">100</span></div>
-                <div class="bar-track"><div class="bar-fill" id="bar-health" style="background:var(--danger)"></div></div>
+        <div id="status-panel">
+            <div class="stats-grid">
+                <div class="stat-item"><span class="stat-label">智商</span><span class="stat-num" id="ui-iq">0</span></div>
+                <div class="stat-item"><span class="stat-label">情商</span><span class="stat-num" id="ui-eq">0</span></div>
+                <div class="stat-item"><span class="stat-label">声望</span><span class="stat-num" id="ui-rep">0</span></div>
+                <div class="stat-item"><span class="stat-label">公款</span><span class="stat-num" id="ui-money" style="font-size:0.9rem">0</span></div>
+                <div class="stat-item"><span class="stat-label">存款</span><span class="stat-num" id="ui-savings" style="font-size:0.9rem">0</span></div>
             </div>
-            <div class="bar-row">
-                <div class="bar-label"><span>愉悦</span><span id="txt-mood">100</span></div>
-                <div class="bar-track"><div class="bar-fill" id="bar-mood" style="background:var(--warning)"></div></div>
+
+            <div class="bars-area">
+                <div class="bar-row">
+                    <div class="bar-label"><span>精力</span><span id="txt-health">100</span></div>
+                    <div class="bar-track"><div class="bar-fill" id="bar-health" style="background:var(--danger)"></div></div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label"><span>愉悦</span><span id="txt-mood">100</span></div>
+                    <div class="bar-track"><div class="bar-fill" id="bar-mood" style="background:var(--warning)"></div></div>
+                </div>
             </div>
         </div>
 
@@ -92,7 +94,7 @@
     </div>
 
     <div id="view-office" class="view-container active">
-        <div class="nav-block">
+        <div class="nav-block" id="research-block">
             <div class="nav-title">
                 <span>🔬 科研项目</span>
                 <span style="font-size:0.9rem; color:var(--text-sub)" id="research-count">0/5</span>
@@ -103,7 +105,7 @@
             </div>
         </div>
 
-        <div class="nav-block" style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
+        <div class="nav-block" id="exhibit-block" style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
             <div class="nav-title">
                 <span>🏛️ 展览策划</span>
                 <div style="font-size:0.8rem; color:#e57373;">每次操作消耗少量精力</div>
@@ -150,7 +152,7 @@
             <span>工作周报</span><span class="log-tag">Y<span id="ui-year">1</span> - Q<span id="ui-quarter">1</span></span>
         </div>
         <div id="log-container"></div>
-        <button class="primary" onclick="game.nextQuarter()" style="margin-top:15px; height:55px; font-size:1.1rem; border-radius:16px;">结束本季度 🌙</button>
+        <button class="primary" id="btn-end-quarter" onclick="game.nextQuarter()" style="margin-top:15px; height:55px; font-size:1.1rem; border-radius:16px;">结束本季度 🌙</button>
     </div>
 </div>
 
@@ -162,37 +164,12 @@
     </div>
 </div>
 
-<div id="onboarding-overlay" class="onboarding-overlay hidden" onclick="game.closeOnboarding()">
-    <div class="onboarding-card" onclick="event.stopPropagation()">
-        <div class="onboarding-header">
-            <div class="onboarding-title">????</div>
-            <button class="onboarding-close" onclick="game.closeOnboarding()">????</button>
-        </div>
-        <div class="onboarding-body">
-            <div class="onboarding-section">
-                <div class="onboarding-section-title">????</div>
-                <div class="onboarding-paragraph">?????????????? <span class="highlight">6?</span> ?????????????????</div>
-            </div>
-            <div class="onboarding-section">
-                <div class="onboarding-section-title">????</div>
-                <ul class="onboarding-list">
-                    <li>?????6?????????</li>
-                    <li>??????? &lt; -10?</li>
-                    <li>??????? ? 0</li>
-                    <li>??????? ? -50</li>
-                    <li>?????????? ? 100</li>
-                    <li>???????? &gt; 5?</li>
-                </ul>
-            </div>
-            <div class="onboarding-section" style="margin-bottom:0;">
-                <div class="onboarding-section-title">??/????</div>
-                <ul class="onboarding-list">
-                    <li>????????????????</li>
-                    <li>???????????????????</li>
-                    <li>???????? :D</li>
-                </ul>
-            </div>
-        </div>
+<div id="guide-overlay" class="guide-overlay hidden" onclick="game.nextGuideStep(event)">
+    <div class="guide-highlight" id="guide-highlight"></div>
+    <div class="guide-bubble" id="guide-bubble" onclick="event.stopPropagation()">
+        <div class="guide-step" id="guide-step">步骤 1/10</div>
+        <div class="guide-text" id="guide-text"></div>
+        <button class="guide-next" id="guide-next" onclick="game.nextGuideStep(event)">下一步</button>
     </div>
 </div>
 
