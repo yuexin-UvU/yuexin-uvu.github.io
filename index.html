@@ -41,7 +41,9 @@
             <div class="stat-item"><span class="stat-label">智商</span><span class="stat-num" id="ui-iq">0</span></div>
             <div class="stat-item"><span class="stat-label">情商</span><span class="stat-num" id="ui-eq">0</span></div>
             <div class="stat-item"><span class="stat-label">声望</span><span class="stat-num" id="ui-rep">0</span></div>
-            <div class="stat-item"><span class="stat-label">经费</span><span class="stat-num" id="ui-money" style="font-size:0.9rem">0</span></div>
+            <div class="stat-item"><span class="stat-label">公款</span><span class="stat-num" id="ui-money" style="font-size:0.9rem">0</span></div>
+            <div class="stat-item"><span class="stat-label">存款</span><span class="stat-num" id="ui-savings" style="font-size:0.9rem">0</span></div>
+            <div class="stat-item"><span class="stat-label">年龄</span><span class="stat-num" id="ui-age">22</span></div>
         </div>
 
         <div class="bars-area">
@@ -57,7 +59,7 @@
 
         <div class="leisure-section">
             <div class="leisure-header">
-                <span>☕ 摸鱼休息</span> <span id="limit-leisure" style="color:var(--primary)">4/4</span>
+                <span>☕ 摸鱼休息</span> <span id="limit-leisure" style="color:var(--primary)">2/2</span>
             </div>
             <div class="leisure-grid" style="display:grid; gap:8px;">
                 <button class="btn-leisure" style="display:flex; justify-content:space-between;" onclick="game.actionLeisure('slack')"><span>闭目养神</span><span>💤</span></button>
@@ -70,16 +72,24 @@
             <div class="shop-header">🛒 文创商店</div>
             <div class="shop-grid">
                 <button class="btn-shop" onclick="game.actionShop('coffee')">
-                    <span>☕ 咖啡 (50元)</span><span style="font-size:0.75em; color:#999">-健康 +愉悦</span>
+                    <span>☕ 咖啡</span><span style="font-size:0.75em; color:#999">50元</span>
                 </button>
                 <button class="btn-shop" onclick="game.actionShop('meal')">
-                    <span>🍱 小食套餐 (100元)</span><span style="font-size:0.75em; color:#999">++健康 ++愉悦</span>
+                    <span>🍱 小食套餐</span><span style="font-size:0.75em; color:#999">100元</span>
                 </button>
             </div>
         </div>
     </div>
 
     <div class="panel" id="col-middle" style="background:#f8faff; border:none; padding:0; box-shadow:none;">
+    
+    <div class="middle-nav">
+        <div class="nav-tab active" onclick="game.switchScene('office')" id="tab-office">🏢 办公室</div>
+        <div class="nav-tab" onclick="game.switchScene('university')" id="tab-university">🎓 大学</div>
+        <div class="nav-tab locked" onclick="game.switchScene('home')" id="tab-home">🏠 家庭</div>
+    </div>
+
+    <div id="view-office" class="view-container active">
         <div class="nav-block">
             <div class="nav-title">
                 <span>🔬 科研项目</span>
@@ -91,16 +101,49 @@
             </div>
         </div>
 
-        <div class="nav-block" style="flex:1; display:flex; flex-direction:column;">
+        <div class="nav-block" style="flex:1; display:flex; flex-direction:column; overflow:hidden;">
             <div class="nav-title">
                 <span>🏛️ 展览策划</span>
-                <div style="font-size:0.8rem; color:#e57373;">每次策展消耗少量健康</div>
+                <div style="font-size:0.8rem; color:#e57373;">每次操作消耗少量健康</div>
             </div>
             
             <button id="btn-new-exhibit" class="primary" style="margin-bottom:15px; width:100%; padding:12px;" onclick="game.actionApplyExhibit()">+ 申请新展览</button>
+            
             <div id="exhibits-container" style="flex:1; overflow-y:auto; padding-right:5px;"></div>
         </div>
     </div>
+
+    <div id="view-university" class="view-container">
+        <div class="scene-placeholder">
+            <div class="scene-icon">🎓</div>
+            <h3>学术深造中心</h3>
+            <p>在这里攻读更高学位，提升基础智商上限。</p>
+            <div style="margin-top:20px; width:100%">
+                <button class="primary" style="width:100%; padding:15px; margin-bottom:10px" onclick="game.actionStudy('course')">
+                    参加进修课程 (5000元)<br>
+                    <span style="font-size:0.8em; opacity:0.8">+智商 +声望 -精力</span>
+                </button>
+                <button class="primary" style="width:100%; padding:15px; background:#7e57c2" onclick="game.actionStudy('degree')">
+                    申请在职博士 (50000元)<br>
+                    <span style="font-size:0.8em; opacity:0.8">晋升学历 (需硕士学位)</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="view-home" class="view-container">
+        <div class="scene-placeholder">
+            <div class="scene-icon">🔒</div>
+            <h3>温馨小窝</h3>
+            <p>这里是你心灵的港湾。</p>
+            <p style="color:var(--danger); margin-top:10px">解锁条件：个人存款达到 100,000 元</p>
+        </div>
+        <div id="home-content" class="hidden" style="width:100%">
+            <p>欢迎回家！这里可以恢复大量心情。</p>
+        </div>
+    </div>
+
+</div>
 
     <div class="panel" id="col-right">
         <div class="log-header">
