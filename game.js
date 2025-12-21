@@ -236,7 +236,10 @@ const game = {
             this.updateUniversityQuarter(didYearAdvance);
 
             if (this.state.turn.year === 4 && this.state.turn.quarter === 1 && this.state.player.titleIdx === 0) {
-                this.endGame("解聘通知", "很遗憾，因入职三年未获晋升，您心灰意冷，决定将重心放到生活之中。");
+                this.endGame(
+                    "结局·庸碌一生",
+                    "你始终认真对待每一项工作，也付出了足够的努力。\n然而，认同与回报始终没有如期而至。\n在漫长的消耗中，你逐渐放下了改变现状的期待。\n最终，你选择按部就班地生活，等待时间慢慢流走。\n这并非失败，只是另一种选择。"
+                );
                 return;
             }
             this.state.limits.leisure = 2;
@@ -885,6 +888,10 @@ const game = {
             this.showResult("申请受限", "仅限每年 Q2 申请入学。");
             return;
         }
+        if (this.state.player.iq <= 10 || this.state.player.eq <= 10 || this.state.player.savings <= 100000) {
+            this.showResult("条件不足", "申请在读硕士/博士需智商与情商 > 10，且存款 > 100,000。");
+            return;
+        }
         const p = this.state.player;
         if (type === 'Master') {
             if (p.edu === "硕士" || p.edu === "博士") {
@@ -1275,6 +1282,11 @@ const game = {
                 const caps = this.getIqEqCaps();
                 p.iq = UTILS.clamp(p.iq, caps.min, caps.max);
                 p.eq = UTILS.clamp(p.eq, caps.min, caps.max);
+                this.endGame(
+                    "结局·馆长",
+                    "恭喜你，经过多年的学习、实践与选择，你最终成为了这座博物馆的馆长。\n在展厅与办公室之间，你逐渐找到了平衡学术、公众与现实运作的方法。\n博物馆并非完美，却在你的带领下持续运转、不断调整，也回应着时代的期待。\n或许前方仍有争议与挑战，但你已经明白——\n博物馆的未来，正是在一次次判断与承担中被塑造出来的。"
+                );
+                return;
             }
             this.showModal("评审通过", `恭喜晋升为 [${next}]！`, [{txt:"确认",cb:()=>this.closeModal()}]);
         } else {
@@ -1284,8 +1296,18 @@ const game = {
     },
 
     checkSurvival() {
-        if(this.state.player.health<=0) this.endGame("过劳死", "身体被掏空...");
-        if(this.state.player.mood<=0) this.endGame("抑郁离职", "世界那么大，我想去看看...");
+        if (this.state.player.health <= 0) {
+            this.endGame(
+                "结局·劳碌命",
+                "你把几乎所有时间都留给了博物馆。\n展览、会议、报告与突发事件不断叠加，责任从未减轻。\n在长期的透支中，你最终倒在了熟悉的工作岗位上。\n博物馆仍在运转，而你的名字只留在了内部文件与回忆里。\n工作之余也要注意身体——\n身体，才是革命的本钱。"
+            );
+        }
+        if (this.state.player.mood <= 0) {
+            this.endGame(
+                "结局·不如回家",
+                "繁忙而重复的工作逐渐消磨了你的热情。\n在长期的压力下，你感到情绪低落，开始怀疑继续坚持的意义。\n最终，你选择辞去工作，离开这座熟悉的博物馆。\n或许前路并不清晰，但至少此刻，你决定先回家休息。\n有时候，退出也是一种自我保护。"
+            );
+        }
     },
 
     log(type, msg) {
