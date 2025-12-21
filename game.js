@@ -153,6 +153,7 @@ const game = {
                 researchApplied: false,
                 researchSuccessCount: 0,
                 hasAppliedExhibitThisQuarter: false,
+                hasStudiedThisQuarter: false,
                 promotedThisYear: false,
                 didActionThisQuarter: false
             }
@@ -221,6 +222,7 @@ const game = {
             }
             this.state.limits.leisure = 2;
             this.state.flags.hasAppliedExhibitThisQuarter = false;
+            this.state.flags.hasStudiedThisQuarter = false;
             this.state.flags.didActionThisQuarter = false;
 
             this.checkSurvival();
@@ -587,15 +589,53 @@ const game = {
     actionStudy(type) {
         this.markAction();
         if (type === 'course') {
+            if (this.state.flags.hasStudiedThisQuarter) {
+                this.showResult("进修受限", "本季度只能进修课程一次，请下个季度再来。");
+                return;
+            }
             if (this.state.player.savings < 5000) {
                 this.showResult("存款不足", "学费不够，还是先去搬砖吧。");
                 return;
             }
-            this.changeStat('savings', -5000);
-            this.changeStat('health', -10);
-            this.changeStat('mood', -10);
-            this.showResult("进修完成", { iq: 5, rep: 3 });
-            this.log("success", "🎓 在大学上了一门高深莫测的课，感觉脑子长出来了。");
+            const courses = [
+                {
+                    title: "博物馆管理与运营",
+                    feedback: "你进修了海旦大学的博物馆管理与运营课程，受益匪浅。"
+                },
+                {
+                    title: "文物保护与修复",
+                    feedback: "你进修了南衡文保学院的文物保护与修复课程，对专业规范有了更深理解。"
+                },
+                {
+                    title: "CAD建模课程",
+                    feedback: "你进修了维界学院的CAD建模课程，开始理解空间表达的技术逻辑。"
+                },
+                {
+                    title: "数字博物馆建设",
+                    feedback: "你进修了那江大学的数字博物馆建设课程，思考工作中更多的可能性。"
+                },
+                {
+                    title: "博物馆教育设计",
+                    feedback: "你进修了青原大学的博物馆教育设计课程，对观众体验更加敏感。"
+                }
+            ];
+
+            const choices = courses.map((course) => ({
+                txt: course.title,
+                cb: () => {
+                    this.closeModal();
+                    this.changeStat('savings', -5000);
+                    this.changeStat('health', -10);
+                    this.changeStat('mood', -10);
+                    this.state.flags.hasStudiedThisQuarter = true;
+                    this.showResult(course.feedback, { iq: 5, rep: 3 });
+                    this.log("success", `🎓 进修完成：${course.title}`);
+                    this.updateUI();
+                }
+            }));
+
+            this.showModal("选择进修课程", "请从以下课程中选择一门进修：", choices);
+            return;
         } else if (type === 'degree') {
             const p = this.state.player;
             const cost = 50000;

@@ -3491,7 +3491,7 @@ const RANDOM_EVENT_DB = {
             { title: "超市大促", desc: "楼下超市周年庆，人山人海。", choices: [{ txt: "疯狂抢购", effect: { savings: -600, health: -5 }, res: "买了一堆没用的东西，还累得腰疼。" }, { txt: "被踩掉鞋", effect: { mood: -7, health: -6 }, res: "东西没买着，鞋还丢了一只。" }, { txt: "理性捡漏", effect: { savings: 500, mood: 6 }, res: "抢到了半价的神户牛肉，省了一笔！" }] },
             { title: "生病", desc: "换季流感来袭，你感觉喉咙发痒。", choices: [{ txt: "硬抗", effect: { health: -8, mood: -6 }, res: "病情加重，差点晕倒在工位。" }, { txt: "去私立医院", effect: { savings: -1000 }, res: "服务很好，但医药费花了一千块。" }, { txt: "吃老偏方", effect: { health: 8, mood: 5 }, res: "姜汤发汗，睡一觉居然痊愈了！" }] },
             { title: "相亲局", desc: "家里安排了一场相亲，对方条件据说不错。", choices: [{ txt: "话不投机", effect: { mood: -7, eq: -2 }, res: "对方一直在炫富，令人作呕。" }, { txt: "买单走人", effect: { savings: -500, mood: -5 }, res: "对方没看上你，你还要付饭钱。" }, { txt: "遇到知音", effect: { mood: 8, eq: 2 }, res: "居然聊得很开心，心情大好！" }] },
-            { title: "理发赌博", desc: "理发师Tony老师提议给你换个\"最潮\"的发型。", choices: [{ txt: "同意，付钱！", effect: { mood: -8, rep: -2 }, res: "丑得不敢见人，同事都在笑你。" }, { txt: "办卡止损", effect: { savings: -1000 }, res: "被忽悠办了张卡，虽然发型依然丑。" }, { txt: "不为所动，还照原来的想法剪", effect: { mood: 8, rep: 5 }, res: "居然剪出了明星同款！自信爆棚。" }] },
+            { title: "理发赌博", desc: "理发师Tony老师提议给你换个\"最潮\"的发型。", choices: [{ txt: "同意，付钱！", effect: { mood: -8, rep: -3 }, res: "丑得不敢见人，同事都在笑你。" }, { txt: "办卡止损", effect: { savings: -1000 }, res: "被忽悠办了张卡，虽然发型依然丑。" }, { txt: "不为所动，还照原来的想法剪", effect: { mood: 8, rep: 3 }, res: "居然剪出了明星同款！自信爆棚。" }] },
             { title: "宠物生病", desc: "家里的猫主子突然呕吐不止。", choices: [{ txt: "连夜急诊", effect: { savings: -1000, health: -5 }, res: "猫治好了，你的钱包空了，人也熬夜废了。" }, { txt: "焦虑百度", effect: { mood: -7, iq: -1 }, res: "被网上的虚假医疗信息吓得半死。" }, { txt: "自行喂药", effect: { health: 5, eq: 2 }, res: "凭借经验治好了，省了一大笔钱。" }] },
             { title: "借钱", desc: "一个很久不联系的同学突然找你借钱。", choices: [{ txt: "借给他", effect: { savings: -1000 }, res: "他把你拉黑了，钱打水漂了。" }, { txt: "严词拒绝", effect: { mood: -5, eq: -2 }, res: "被他在同学群里骂冷血。" }, { txt: "哭穷劝退", effect: { eq: 2, savings: 0 }, res: "不仅没借，还反向找他借了点（没借成）。" }] },
             { title: "交通意外", desc: "上班路上被电瓶车撞了一下。", choices: [{ txt: "对方跑了", effect: { health: -6, mood: -7 }, res: "只能自己去买跌打酒，气死人。" }, { txt: "私了赔钱", effect: { savings: -500 }, res: "其实是你全责，赔了对方五百块。" }, { txt: "对方赔偿", effect: { savings: 800, health: -2 }, res: "对方态度很好，赔偿了医药费和误工费。" }] },
@@ -3513,68 +3513,68 @@ const RANDOM_EVENT_DB = {
 
     audience: {
         active: [
-            { title: "熊孩子", desc: "一个小孩试图攀爬恐龙骨架。", choices: [{ txt: "大声呵斥", effect: { rep: -5, mood: -5 }, res: "家长把你投诉了，说你吓坏了孩子。" }, { txt: "冲上去拉", effect: { health: -6, savings: -500 }, res: "孩子没事，你扭伤了腰，还赔了医药费。" }, { txt: "耐心教育", effect: { rep: 5, eq: 2 }, res: "全场观众为你鼓掌，家长羞愧道歉。" }] },
-            { title: "网红直播", desc: "网红在展厅开闪光灯直播，影响他人。", choices: [{ txt: "强行驱逐", effect: { rep: -8, mood: -5 }, res: "网红在网上挂你，引发网暴。" }, { txt: "听之任之", effect: { rep: -5, iq: -1 }, res: "普通观众觉得管理混乱，给差评。" }, { txt: "礼貌劝阻", effect: { rep: 6, eq: 2 }, res: "网红配合关了灯，还夸博物馆专业。" }] },
-            { title: "奇怪的投诉", desc: "观众投诉展厅里太冷，说阴气重。", choices: [{ txt: "回怼迷信", effect: { rep: -5, eq: -2 }, res: "被投诉态度恶劣。" }, { txt: "调高温度", effect: { money: -2000 }, res: "空调费超支了，而且别的观众喊热。" }, { txt: "借送毛毯", effect: { eq: 2, rep: 5 }, res: "提供了便民毛毯，观众很感动。" }] },
-            { title: "遗失物品", desc: "有人在展厅丢了最新款手机，大吵大闹。", choices: [{ txt: "推卸责任", effect: { rep: -6, mood: -5 }, res: "吵得不可开交，影响极坏。" }, { txt: "自掏腰包", effect: { savings: -1000 }, res: "为了息事宁人，你垫付了部分钱（太傻了）。" }, { txt: "调取监控", effect: { iq: 2, rep: 6 }, res: "两分钟帮他找回了手机，神探！" }] },
-            { title: "民科挑衅", desc: "一位民科在展厅大声宣扬\"文物都是假的\"。", choices: [{ txt: "当场辩论", effect: { health: -6, mood: -6 }, res: "秀才遇到兵，有理说不清，气死你。" }, { txt: "叫保安撵走", effect: { rep: -5 }, res: "被拍视频说是\"店大欺客\"。" }, { txt: "专业折服", effect: { iq: 2, rep: 8 }, res: "引经据典把他驳得哑口无言，观众叫好。" }] },
-            { title: "触摸展品", desc: "一位大爷非要摸摸那块汉代砖。", choices: [{ txt: "严厉制止", effect: { rep: -3, mood: -4 }, res: "大爷躺下讹人，说心脏病犯了。" }, { txt: "视而不见", effect: { money: -3000 }, res: "文物被摸包浆了，修复费扣工资。" }, { txt: "引导触摸区", effect: { eq: 2, rep: 5 }, res: "带他去专门的复制品触摸区，大爷很开心。" }] },
-            { title: "情侣吵架", desc: "一对情侣在展厅吵架，甚至摔东西。", choices: [{ txt: "上去劝架", effect: { health: -7, mood: -5 }, res: "被误伤，脸上挨了一巴掌。" }, { txt: "报警", effect: { rep: -4 }, res: "警车来了，观众都吓跑了。" }, { txt: "赠送文创", effect: { savings: -500, eq: 2 }, res: "自费送了个玩偶哄好了，恢复秩序。" }] },
-            { title: "外宾接待", desc: "突然来了一团外国游客，没有翻译。", choices: [{ txt: "手语比划", effect: { rep: -5, iq: -1 }, res: "鸡同鸭讲，场面尴尬。" }, { txt: "拒绝接待", effect: { rep: -8 }, res: "被投诉歧视，外交无小事。" }, { txt: "亲自上阵", effect: { iq: 2, rep: 8 }, res: "流利的英语征服了外宾。" }] },
-            { title: "学生破坏", desc: "春游的小学生在展板上乱涂乱画。", choices: [{ txt: "扣留学生", effect: { rep: -6, mood: -5 }, res: "家长来闹事，学校也抗议。" }, { txt: "更换展板", effect: { money: -2500 }, res: "只能用公款重新做一块。" }, { txt: "现场教育", effect: { eq: 2, rep: 5 }, res: "让他们擦干净并上了一堂公德课。" }] },
+            { title: "熊孩子", desc: "一个小孩试图攀爬恐龙骨架。", choices: [{ txt: "大声呵斥", effect: { rep: -3, mood: -5 }, res: "家长把你投诉了，说你吓坏了孩子。" }, { txt: "冲上去拉", effect: { health: -6, savings: -500 }, res: "孩子没事，你扭伤了腰，还赔了医药费。" }, { txt: "耐心教育", effect: { rep: 3, eq: 2 }, res: "全场观众为你鼓掌，家长羞愧道歉。" }] },
+            { title: "网红直播", desc: "网红在展厅开闪光灯直播，影响他人。", choices: [{ txt: "强行驱逐", effect: { rep: -3, mood: -5 }, res: "网红在网上挂你，引发网暴。" }, { txt: "听之任之", effect: { rep: -3, iq: -1 }, res: "普通观众觉得管理混乱，给差评。" }, { txt: "礼貌劝阻", effect: { rep: 3, eq: 2 }, res: "网红配合关了灯，还夸博物馆专业。" }] },
+            { title: "奇怪的投诉", desc: "观众投诉展厅里太冷，说阴气重。", choices: [{ txt: "回怼迷信", effect: { rep: -3, eq: -2 }, res: "被投诉态度恶劣。" }, { txt: "调高温度", effect: { money: -2000 }, res: "空调费超支了，而且别的观众喊热。" }, { txt: "借送毛毯", effect: { eq: 2, rep: 3 }, res: "提供了便民毛毯，观众很感动。" }] },
+            { title: "遗失物品", desc: "有人在展厅丢了最新款手机，大吵大闹。", choices: [{ txt: "推卸责任", effect: { rep: -3, mood: -5 }, res: "吵得不可开交，影响极坏。" }, { txt: "自掏腰包", effect: { savings: -1000 }, res: "为了息事宁人，你垫付了部分钱（太傻了）。" }, { txt: "调取监控", effect: { iq: 2, rep: 3 }, res: "两分钟帮他找回了手机，神探！" }] },
+            { title: "民科挑衅", desc: "一位民科在展厅大声宣扬\"文物都是假的\"。", choices: [{ txt: "当场辩论", effect: { health: -6, mood: -6 }, res: "秀才遇到兵，有理说不清，气死你。" }, { txt: "叫保安撵走", effect: { rep: -3 }, res: "被拍视频说是\"店大欺客\"。" }, { txt: "专业折服", effect: { iq: 2, rep: 3 }, res: "引经据典把他驳得哑口无言，观众叫好。" }] },
+            { title: "触摸展品", desc: "一位大爷非要摸摸那块汉代砖。", choices: [{ txt: "严厉制止", effect: { rep: -3, mood: -4 }, res: "大爷躺下讹人，说心脏病犯了。" }, { txt: "视而不见", effect: { money: -3000 }, res: "文物被摸包浆了，修复费扣工资。" }, { txt: "引导触摸区", effect: { eq: 2, rep: 3 }, res: "带他去专门的复制品触摸区，大爷很开心。" }] },
+            { title: "情侣吵架", desc: "一对情侣在展厅吵架，甚至摔东西。", choices: [{ txt: "上去劝架", effect: { health: -7, mood: -5 }, res: "被误伤，脸上挨了一巴掌。" }, { txt: "报警", effect: { rep: -3 }, res: "警车来了，观众都吓跑了。" }, { txt: "赠送文创", effect: { savings: -500, eq: 2 }, res: "自费送了个玩偶哄好了，恢复秩序。" }] },
+            { title: "外宾接待", desc: "突然来了一团外国游客，没有翻译。", choices: [{ txt: "手语比划", effect: { rep: -3, iq: -1 }, res: "鸡同鸭讲，场面尴尬。" }, { txt: "拒绝接待", effect: { rep: -3 }, res: "被投诉歧视，外交无小事。" }, { txt: "亲自上阵", effect: { iq: 2, rep: 3 }, res: "流利的英语征服了外宾。" }] },
+            { title: "学生破坏", desc: "春游的小学生在展板上乱涂乱画。", choices: [{ txt: "扣留学生", effect: { rep: -3, mood: -5 }, res: "家长来闹事，学校也抗议。" }, { txt: "更换展板", effect: { money: -2500 }, res: "只能用公款重新做一块。" }, { txt: "现场教育", effect: { eq: 2, rep: 3 }, res: "让他们擦干净并上了一堂公德课。" }] },
             { title: "醉汉闯入", desc: "一个醉汉闯进大厅要找馆长喝酒。", choices: [{ txt: "肉搏", effect: { health: -8, mood: -5 }, res: "被打了一拳，乌眼青。" }, { txt: "给钱打发", effect: { savings: -600 }, res: "破财免灾，醉汉拿钱走了。" }, { txt: "智取", effect: { iq: 2, mood: 5 }, res: "骗他说馆长在派出所，把他忽悠走了。" }] }
         ],
         passive: [
-            { desc: "收到锦旗：帮助走失儿童，家长送来锦旗。", effect: { rep: 8, mood: 6 } },
-            { desc: "恶意差评：有人在网上造谣展品是义乌货。", effect: { rep: -6, mood: -5 } },
-            { desc: "大V打卡：百万粉博主来探馆，流量暴增。", effect: { rep: 10, money: 3000 } },
+            { desc: "收到锦旗：帮助走失儿童，家长送来锦旗。", effect: { rep: 3, mood: 6 } },
+            { desc: "恶意差评：有人在网上造谣展品是义乌货。", effect: { rep: -3, mood: -5 } },
+            { desc: "大V打卡：百万粉博主来探馆，流量暴增。", effect: { rep: 3, money: 3000 } },
             { desc: "投诉厕所：观众嫌厕所太少排队太久。", effect: { rep: -3, mood: -4 } },
             { desc: "志愿者帮忙：大学生志愿者团队表现出色。", effect: { health: 6, mood: 6 } },
-            { desc: "有人晕倒：展厅太闷，观众中暑（赔了点钱）。", effect: { money: -2000, rep: -2 } },
-            { desc: "问卷好评：季度满意度调查获得高分。", effect: { rep: 5, mood: 5 } },
+            { desc: "有人晕倒：展厅太闷，观众中暑（赔了点钱）。", effect: { money: -2000, rep: -3 } },
+            { desc: "问卷好评：季度满意度调查获得高分。", effect: { rep: 3, mood: 5 } },
             { desc: "熊孩子尿尿：古建柱子被童子尿浇灌。", effect: { money: -2000, mood: -7 } },
-            { desc: "收到捐赠：观众捐赠了一批老照片。", effect: { rep: 6, iq: 1 } },
-            { desc: "偷盗未遂：安保抓住了想偷展品的小偷。", effect: { rep: 8, mood: 5 } }
+            { desc: "收到捐赠：观众捐赠了一批老照片。", effect: { rep: 3, iq: 1 } },
+            { desc: "偷盗未遂：安保抓住了想偷展品的小偷。", effect: { rep: 3, mood: 5 } }
         ]
     },
 
     hall: {
         active: [
-            { title: "空调故障", desc: "展厅空调坏了，温度直逼40度。", choices: [{ txt: "暂停开放", effect: { money: -4000, rep: -5 }, res: "退票赔款，损失惨重。" }, { txt: "坚持开放", effect: { rep: -8, health: -5 }, res: "观众中暑，你也中暑了。" }, { txt: "紧急抢修", effect: { iq: 2, money: -2000 }, res: "虽然花了钱，但下午就修好了。" }] },
-            { title: "展柜起雾", desc: "温湿度控制失灵，玻璃上一层雾。", choices: [{ txt: "人工擦拭", effect: { health: -7, mood: -5 }, res: "擦了一天，手断了。" }, { txt: "置之不理", effect: { rep: -6 }, res: "根本看不清展品，体验极差。" }, { txt: "调整系统", effect: { iq: 2, mood: 5 }, res: "找到了参数BUG，一键解决。" }] },
-            { title: "灯光闪烁", desc: "主展厅灯光像迪厅一样闪。", choices: [{ txt: "全部关灯", effect: { rep: -5, mood: -4 }, res: "摸黑看展，被骂惨了。" }, { txt: "更换线路", effect: { money: -3000 }, res: "大工程，花了不少公款。" }, { txt: "更换灯泡", effect: { iq: 1, health: 5 }, res: "原来只是灯泡松了，虚惊一场。" }] },
-            { title: "老鼠出没", desc: "有观众看到展厅里有老鼠跑过。", choices: [{ txt: "全馆闭馆", effect: { money: -5000, rep: -2 }, res: "为了抓老鼠损失了一天门票。" }, { txt: "否认三连", effect: { rep: -6, mood: -5 }, res: "被拍了照片发网上，信誉扫地。" }, { txt: "专业消杀", effect: { money: -2000, health: 6 }, res: "连夜请专业公司搞定。" }] },
-            { title: "漏水危机", desc: "暴雨天，屋顶开始往下滴水。", choices: [{ txt: "拿桶接水", effect: { rep: -5, mood: -4 }, res: "满地是桶，太难看了。" }, { txt: "展品泡水", effect: { money: -5000, rep: -8 }, res: "未能及时转移，损失惨重！" }, { txt: "转移展品", effect: { health: 6, iq: 2 }, res: "全员出动及时转移，有惊无险。" }] },
-            { title: "地面打滑", desc: "保洁阿姨拖地太湿，有人滑倒。", choices: [{ txt: "推卸责任", effect: { rep: -7, eq: -2 }, res: "家属来拉横幅闹事。" }, { txt: "赔偿医药费", effect: { money: -3000 }, res: "赔了公款三千元。" }, { txt: "铺防滑垫", effect: { savings: -500, rep: 2 }, res: "自费买垫子，反应迅速获好评。" }] },
-            { title: "说明牌错误", desc: "专家指出有个年份写错了。", choices: [{ txt: "涂改液改", effect: { rep: -5, iq: -1 }, res: "太不专业了，像小学生作业。" }, { txt: "坚持没错", effect: { rep: -8, iq: -2 }, res: "死鸭子嘴硬，成了笑柄。" }, { txt: "重新制作", effect: { money: -2000, rep: 2 }, res: "知错能改，重新做了个金牌。" }] },
-            { title: "安检排队", desc: "节假日安检口排起长龙，怨声载道。", choices: [{ txt: "无动于衷", effect: { rep: -6, mood: -5 }, res: "被骂上了热搜。" }, { txt: "降低标准", effect: { rep: -10, health: -5 }, res: "放进去一个带打火机的，差点着火！" }, { txt: "增开通道", effect: { money: -2500, rep: 5 }, res: "临时雇人加通道，解决了拥堵。" }] },
-            { title: "监控死角", desc: "发现展厅角落是监控死角。", choices: [{ txt: "不管它", effect: { money: -4000, rep: -5 }, res: "结果真丢东西了！" }, { txt: "增加人力", effect: { health: -7, mood: -5 }, res: "你自己去那个角落站了一天岗。" }, { txt: "加装探头", effect: { money: -2000, iq: 1 }, res: "花小钱保平安。" }] },
-            { title: "讲解员请假", desc: "金牌讲解员突然失声，没人带团。", choices: [{ txt: "取消讲解", effect: { rep: -5, money: -2000 }, res: "退还了讲解费，观众失望。" }, { txt: "硬着头皮上", effect: { mood: -6, rep: -2 }, res: "你讲得结结巴巴，尴尬无比。" }, { txt: "电子导览", effect: { money: -2000, iq: 2 }, res: "紧急租了一批设备，效果还不错。" }] }
+            { title: "空调故障", desc: "展厅空调坏了，温度直逼40度。", choices: [{ txt: "暂停开放", effect: { money: -4000, rep: -3 }, res: "退票赔款，损失惨重。" }, { txt: "坚持开放", effect: { rep: -3, health: -5 }, res: "观众中暑，你也中暑了。" }, { txt: "紧急抢修", effect: { iq: 2, money: -2000 }, res: "虽然花了钱，但下午就修好了。" }] },
+            { title: "展柜起雾", desc: "温湿度控制失灵，玻璃上一层雾。", choices: [{ txt: "人工擦拭", effect: { health: -7, mood: -5 }, res: "擦了一天，手断了。" }, { txt: "置之不理", effect: { rep: -3 }, res: "根本看不清展品，体验极差。" }, { txt: "调整系统", effect: { iq: 2, mood: 5 }, res: "找到了参数BUG，一键解决。" }] },
+            { title: "灯光闪烁", desc: "主展厅灯光像迪厅一样闪。", choices: [{ txt: "全部关灯", effect: { rep: -3, mood: -4 }, res: "摸黑看展，被骂惨了。" }, { txt: "更换线路", effect: { money: -3000 }, res: "大工程，花了不少公款。" }, { txt: "更换灯泡", effect: { iq: 1, health: 5 }, res: "原来只是灯泡松了，虚惊一场。" }] },
+            { title: "老鼠出没", desc: "有观众看到展厅里有老鼠跑过。", choices: [{ txt: "全馆闭馆", effect: { money: -5000, rep: -3 }, res: "为了抓老鼠损失了一天门票。" }, { txt: "否认三连", effect: { rep: -3, mood: -5 }, res: "被拍了照片发网上，信誉扫地。" }, { txt: "专业消杀", effect: { money: -2000, health: 6 }, res: "连夜请专业公司搞定。" }] },
+            { title: "漏水危机", desc: "暴雨天，屋顶开始往下滴水。", choices: [{ txt: "拿桶接水", effect: { rep: -3, mood: -4 }, res: "满地是桶，太难看了。" }, { txt: "展品泡水", effect: { money: -5000, rep: -3 }, res: "未能及时转移，损失惨重！" }, { txt: "转移展品", effect: { health: 6, iq: 2 }, res: "全员出动及时转移，有惊无险。" }] },
+            { title: "地面打滑", desc: "保洁阿姨拖地太湿，有人滑倒。", choices: [{ txt: "推卸责任", effect: { rep: -3, eq: -2 }, res: "家属来拉横幅闹事。" }, { txt: "赔偿医药费", effect: { money: -3000 }, res: "赔了公款三千元。" }, { txt: "铺防滑垫", effect: { savings: -500, rep: 3 }, res: "自费买垫子，反应迅速获好评。" }] },
+            { title: "说明牌错误", desc: "专家指出有个年份写错了。", choices: [{ txt: "涂改液改", effect: { rep: -3, iq: -1 }, res: "太不专业了，像小学生作业。" }, { txt: "坚持没错", effect: { rep: -3, iq: -2 }, res: "死鸭子嘴硬，成了笑柄。" }, { txt: "重新制作", effect: { money: -2000, rep: 3 }, res: "知错能改，重新做了个金牌。" }] },
+            { title: "安检排队", desc: "节假日安检口排起长龙，怨声载道。", choices: [{ txt: "无动于衷", effect: { rep: -3, mood: -5 }, res: "被骂上了热搜。" }, { txt: "降低标准", effect: { rep: -3, health: -5 }, res: "放进去一个带打火机的，差点着火！" }, { txt: "增开通道", effect: { money: -2500, rep: 3 }, res: "临时雇人加通道，解决了拥堵。" }] },
+            { title: "监控死角", desc: "发现展厅角落是监控死角。", choices: [{ txt: "不管它", effect: { money: -4000, rep: -3 }, res: "结果真丢东西了！" }, { txt: "增加人力", effect: { health: -7, mood: -5 }, res: "你自己去那个角落站了一天岗。" }, { txt: "加装探头", effect: { money: -2000, iq: 1 }, res: "花小钱保平安。" }] },
+            { title: "讲解员请假", desc: "金牌讲解员突然失声，没人带团。", choices: [{ txt: "取消讲解", effect: { rep: -3, money: -2000 }, res: "退还了讲解费，观众失望。" }, { txt: "硬着头皮上", effect: { mood: -6, rep: -3 }, res: "你讲得结结巴巴，尴尬无比。" }, { txt: "电子导览", effect: { money: -2000, iq: 2 }, res: "紧急租了一批设备，效果还不错。" }] }
         ],
         passive: [
             { desc: "设备老化：投影仪坏了，换新的好贵。", effect: { money: -4000, mood: -5 } },
-            { desc: "消防检查：顺利通过消防突击检查。", effect: { rep: 5, iq: 1 } },
+            { desc: "消防检查：顺利通过消防突击检查。", effect: { rep: 3, iq: 1 } },
             { desc: "墙皮脱落：展厅墙皮掉了，连夜修补。", effect: { money: -2500, health: -5 } },
             { desc: "发现白蚁：及时发现并消杀，保住了木构件。", effect: { money: -3000, iq: 1 } },
-            { desc: "WiFi升级：全馆覆盖高速WiFi，好评！", effect: { money: -5000, rep: 8 } },
+            { desc: "WiFi升级：全馆覆盖高速WiFi，好评！", effect: { money: -5000, rep: 3 } },
             { desc: "展柜破裂：熊孩子砸裂了玻璃，幸好文物没事。", effect: { money: -3000, mood: -6 } },
             { desc: "绿植枯死：展厅植物没光照死了，清理麻烦。", effect: { health: -5, mood: -4 } },
-            { desc: "系统崩溃：票务系统瘫痪半小时，焦头烂额。", effect: { rep: -5, health: -6 } },
+            { desc: "系统崩溃：票务系统瘫痪半小时，焦头烂额。", effect: { rep: -3, health: -6 } },
             { desc: "神秘回声：声学设计有问题，说话有回音。", effect: { rep: -3, iq: 1 } },
-            { desc: "保洁表彰：卫生搞得太好了，被评为卫生先进单位。", effect: { rep: 8, mood: 6 } }
+            { desc: "保洁表彰：卫生搞得太好了，被评为卫生先进单位。", effect: { rep: 3, mood: 6 } }
         ]
     },
 
     school: {
         active: [
-            { title: "期末考试", desc: "工作太忙，明天就要期末考了。", choices: [{ txt: "裸考", effect: { iq: -1, rep: -5 }, res: "挂科了，丢人现眼。" }, { txt: "通宵复习", effect: { health: -8, mood: -6 }, res: "考过了，但发际线后移了。" }, { txt: "平时积累", effect: { iq: 2, mood: 5 }, res: "凭借工作经验轻松过关，学霸！" }] },
-            { title: "导师召唤", desc: "导师让你去帮他干私活（整理发票）。", choices: [{ txt: "拒绝", effect: { rep: -5, mood: -4 }, res: "导师以后给你穿小鞋。" }, { txt: "摸鱼应付", effect: { iq: -1, rep: -2 }, res: "被导师骂了一顿。" }, { txt: "积极表现", effect: { health: -5, iq: 2 }, res: "虽然累，但导师答应推荐你读博。" }] },
-            { title: "小组作业", desc: "队友全是摆烂怪，deadline将至。", choices: [{ txt: "一起摆烂", effect: { rep: -5, iq: -1 }, res: "全组不及格。" }, { txt: "独自Carry", effect: { health: -8, mood: -7 }, res: "累吐血，带飞全组，心里不平衡。" }, { txt: "分工施压", effect: { eq: 2, iq: 1 }, res: "发挥领导力逼他们干活，顺利完成。" }] },
-            { title: "昂贵教材", desc: "教授推荐了一套绝版外文教材。", choices: [{ txt: "不买", effect: { iq: -1, rep: -2 }, res: "上课听不懂。" }, { txt: "买原版", effect: { savings: -1000 }, res: "好贵啊，吃土一个月。" }, { txt: "图书馆借", effect: { iq: 1, health: -3 }, res: "跑了三个校区终于借到了，省钱！" }] },
-            { title: "学术会议", desc: "有个高端学术会议，但报名费很贵。", choices: [{ txt: "自费参加", effect: { savings: -1000, health: -4 }, res: "钱包受损，舟车劳顿。" }, { txt: "不去", effect: { iq: -1, rep: -3 }, res: "错过了结识大佬的机会。" }, { txt: "申请公费", effect: { money: -2000, rep: 5 }, res: "成功申请公款出差，还认识了大牛。" }] }
+            { title: "期末考试", desc: "工作太忙，明天就要期末考了。", choices: [{ txt: "裸考", effect: { iq: -1, rep: -3 }, res: "挂科了，丢人现眼。" }, { txt: "通宵复习", effect: { health: -8, mood: -6 }, res: "考过了，但发际线后移了。" }, { txt: "平时积累", effect: { iq: 2, mood: 5 }, res: "凭借工作经验轻松过关，学霸！" }] },
+            { title: "导师召唤", desc: "导师让你去帮他干私活（整理发票）。", choices: [{ txt: "拒绝", effect: { rep: -3, mood: -4 }, res: "导师以后给你穿小鞋。" }, { txt: "摸鱼应付", effect: { iq: -1, rep: -3 }, res: "被导师骂了一顿。" }, { txt: "积极表现", effect: { health: -5, iq: 2 }, res: "虽然累，但导师答应推荐你读博。" }] },
+            { title: "小组作业", desc: "队友全是摆烂怪，deadline将至。", choices: [{ txt: "一起摆烂", effect: { rep: -3, iq: -1 }, res: "全组不及格。" }, { txt: "独自Carry", effect: { health: -8, mood: -7 }, res: "累吐血，带飞全组，心里不平衡。" }, { txt: "分工施压", effect: { eq: 2, iq: 1 }, res: "发挥领导力逼他们干活，顺利完成。" }] },
+            { title: "昂贵教材", desc: "教授推荐了一套绝版外文教材。", choices: [{ txt: "不买", effect: { iq: -1, rep: -3 }, res: "上课听不懂。" }, { txt: "买原版", effect: { savings: -1000 }, res: "好贵啊，吃土一个月。" }, { txt: "图书馆借", effect: { iq: 1, health: -3 }, res: "跑了三个校区终于借到了，省钱！" }] },
+            { title: "学术会议", desc: "有个高端学术会议，但报名费很贵。", choices: [{ txt: "自费参加", effect: { savings: -1000, health: -4 }, res: "钱包受损，舟车劳顿。" }, { txt: "不去", effect: { iq: -1, rep: -3 }, res: "错过了结识大佬的机会。" }, { txt: "申请公费", effect: { money: -2000, rep: 3 }, res: "成功申请公款出差，还认识了大牛。" }] }
         ],
         passive: [
-            { desc: "奖学金：学业优秀，获得一等奖学金！", effect: { savings: 1000, rep: 5 } },
+            { desc: "奖学金：学业优秀，获得一等奖学金！", effect: { savings: 1000, rep: 3 } },
             { desc: "挂科补考：有一门课挂了，交补考费。", effect: { savings: -500, mood: -6 } },
             { desc: "图书馆占座：起晚了没位置，站着看书。", effect: { health: -5, iq: 1 } },
             { desc: "校园卡丢了：补办饭卡，麻烦。", effect: { savings: -500, mood: -4 } },
