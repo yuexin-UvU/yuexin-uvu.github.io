@@ -2,11 +2,11 @@
 const NAME_DB = ["张吉惟","林国瑞","林玟书","林雅南","江奕云","刘柏宏","阮建安","林子帆","夏志豪","吉茹定","李中冰","黄文隆","谢彦文","傅智翔","洪振霞","刘姿婷","荣姿康","吕致盈","方一强","黎芸贵","郑伊雯","雷进宝","吴美隆","吴心真","王美珠","郭芳天","李雅惠","陈文婷","曹敏侑","王依婷"];
 
 const TITLES = [
-    { name: "助理馆员", salary: 18000, require: { health:60, mood:50, ability:40, rep:10, quarters:4 } },
-    { name: "馆员", salary: 30000, require: { health:50, mood:40, iq:60, eq:40, rep:50, quarters:24 } },
-    { name: "副研究员", salary: 36000, require: { health:40, mood:30, iq:80, eq:60, rep:150, quarters:32 } },
-    { name: "研究员", salary: 45000, require: { health:30, mood:20, iq:90, eq:80, rep:300, quarters:48 } },
-    { name: "馆长", salary: 60000, require: { health:1, mood:1, iq:100, eq:90, rep:500, quarters:60 } }
+    { name: "助理馆员", require: { health:60, mood:50, ability:40, rep:10, quarters:4 }, salary: 5000 },
+    { name: "馆员", require: { health:50, mood:40, iq:60, eq:40, rep:50, quarters:24 }, salary: 8000 },
+    { name: "副研究员", require: { health:40, mood:30, iq:80, eq:60, rep:150, quarters:32 }, salary: 12000 },
+    { name: "研究员", require: { health:30, mood:20, iq:90, eq:80, rep:300, quarters:48 }, salary: 20000 },
+    { name: "馆长", require: { health:1, mood:1, iq:100, eq:90, rep:500, quarters:60 }, salary: 40000 }
 ];
 
 const EX_TASKS = {

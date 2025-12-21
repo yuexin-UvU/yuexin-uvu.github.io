@@ -3,7 +3,116 @@ const UTILS = {
     randArr: (arr) => arr[Math.floor(Math.random() * arr.length)],
     clamp: (num, min, max) => Math.min(Math.max(num, min), max),
     formatMoney: (val) => val >= 10000 ? (val/10000).toFixed(2) + "万" : Math.floor(val) + "元",
-    getStatName: (k) => k==='money'?'经费':(k==='rep'?'声望':(k==='iq'?'智商':(k==='eq'?'情商':(k==='health'?'健康':(k==='mood'?'愉悦':k)))))
+    getStatName: (k) => k==='money'?'公款':(k==='savings'?'存款':(k==='rep'?'声望':(k==='iq'?'智商':(k==='eq'?'情商':(k==='health'?'健康':(k==='mood'?'愉悦':k))))))
+};
+
+// ==================== 事件管理器 ====================
+const EventManager = {
+    queue: [], // 事件队列
+
+    // 触发季度末事件 (1-2个)
+    triggerEndQuarter(game) {
+        this.queue = []; // 清空旧队列
+        const count = Math.random() < 0.5 ? 1 : 2; // 50%概率1个，50%概率2个
+        
+        // 1. 构建可用事件池
+        let pool = ['life', 'audience', 'hall'];
+        // 检查大学是否解锁 (假设 savings >= 10000 且智商 > 50 视为解锁了大学相关剧情，或者简单点，只要有钱就能触发)
+        // 这里我们用一个简单判断：如果玩家智商 > 40，解锁学校事件
+        if (game.state.player.iq >= 40) pool.push('school');
+
+        for (let i = 0; i < count; i++) {
+            const type = UTILS.randArr(pool);
+            const category = RANDOM_EVENT_DB[type];
+            
+            // 50% 概率是被动，50% 是主动
+            const isPassive = Math.random() < 0.5;
+            const eventList = isPassive ? category.passive : category.active;
+            const eventData = UTILS.randArr(eventList);
+
+            this.queue.push({
+                ...eventData,
+                type: type,
+                isPassive: isPassive
+            });
+        }
+
+        // 开始处理队列
+        this.processNext(game);
+    },
+
+    processNext(game) {
+        if (this.queue.length === 0) return;
+
+        const evt = this.queue.shift(); // 取出第一个
+        
+        if (evt.isPassive) {
+            // 被动事件：直接结算并显示结果，点击关闭后处理下一个
+            game.changeStat('money', evt.effect.money || 0); // 确保money变动被处理
+            // 处理其他属性
+            for(let k in evt.effect) {
+                if(k !== 'money') game.changeStat(k, evt.effect[k]);
+            }
+            
+            let effectText = "";
+            for (let k in evt.effect) {
+                let name = UTILS.getStatName(k);
+                let val = evt.effect[k] > 0 ? `+${evt.effect[k]}` : evt.effect[k];
+                effectText += `\n${name} ${val}`;
+            }
+
+            game.showModal(
+                "📢 突发消息", 
+                `${evt.desc}\n----------------${effectText}`, 
+                [{
+                    txt: "知道了",
+                    cb: () => {
+                        game.closeModal();
+                        setTimeout(() => this.processNext(game), 300); // 延迟一点处理下一个
+                    }
+                }],
+                true // 允许点击背景关闭
+            );
+            game.log("info", `[随机] ${evt.desc}`);
+            game.updateUI();
+
+        } else {
+            // 主动事件：显示选项
+            const choices = evt.choices.map(c => ({
+                txt: c.txt,
+                cb: () => {
+                    game.closeModal();
+                    // 结算效果
+                    for(let k in c.effect) game.changeStat(k, c.effect[k]);
+                    
+                    let effectText = "";
+                    for (let k in c.effect) {
+                        let name = UTILS.getStatName(k);
+                        let val = c.effect[k] > 0 ? `+${c.effect[k]}` : c.effect[k];
+                        effectText += `\n${name} ${val}`;
+                    }
+
+                    // 显示结果弹窗，结果弹窗关闭后，继续处理队列
+                    game.showModal(
+                        "事件结果", 
+                        `${c.res}\n----------------${effectText}`, 
+                        [{
+                            txt: "确定", 
+                            cb: () => {
+                                game.closeModal();
+                                setTimeout(() => this.processNext(game), 300);
+                            }
+                        }], 
+                        true
+                    );
+                    game.log("warning", `[抉择] ${evt.title}：${c.txt} -> ${c.res}`);
+                    game.updateUI();
+                }
+            }));
+
+            game.showModal(`❓ ${evt.title}`, evt.desc, choices);
+        }
+    }
 };
 
 const game = {
@@ -15,12 +124,12 @@ const game = {
         document.getElementById('start-screen').style.display = 'none';
         document.getElementById('app').style.display = 'grid';
         this.init();
-        this.showOnboarding();
+        this.showGuide();
     },
 
     init() {
-        const edu = ["本科", "硕士", "博士"][Math.floor(Math.random()*3)];
-        let baseRep = edu === "硕士" ? 5 : (edu === "博士" ? 10 : 0);
+        const edu = ["本科", "硕士"][Math.floor(Math.random()*2)];
+        let baseRep = edu === "硕士" ? 5 : 0;
 
         this.state = {
             player: {
@@ -28,13 +137,14 @@ const game = {
                 edu: edu,
                 titleIdx: 0,
                 health: 100, mood: 100,
-                iq: Math.floor(Math.random()*40)+10,
-                eq: Math.floor(Math.random()*40)+10,
+                iq: Math.floor(Math.random()*11),
+                eq: Math.floor(Math.random()*11),
                 rep: baseRep,
-                money: 130000
+                money: 130000,
+                savings: 200
             },
             turn: { year: 1, quarter: 1 },
-            limits: { leisure: 4 },
+            limits: { leisure: 2 },
             exhibitions: [],
             flags: {
                 quartersInTitle: 0,
@@ -65,7 +175,15 @@ const game = {
         this.changeStat('money', 30000);
         this.log("success", "💰 季度经费已到账 (+30000)，新的预算周期开始了。");
 
-        this.triggerRandomEvent();
+        // 发放工资到个人存款（savings）
+        const sal = (TITLES[this.state.player.titleIdx] && TITLES[this.state.player.titleIdx].salary) || 0;
+        if (sal > 0) {
+            this.changeStat('savings', sal);
+            this.log("success", `💵 工资已发放：${UTILS.formatMoney(sal)}（已入个人存款）`);
+        }
+
+        // 触发随机事件
+        EventManager.triggerEndQuarter(this);
 
         if (this.state.turn.quarter === 4 && this.state.flags.researchApplied) this.settleResearch();
 
@@ -91,11 +209,10 @@ const game = {
         }
 
         if (this.state.turn.year === 4 && this.state.turn.quarter === 1 && this.state.player.titleIdx === 0) {
-            this.endGame("解聘通知", "很遗憾，因入职三年未获晋升，您的聘用合同已终止。");
+            this.endGame("解聘通知", "很遗憾，因入职三年未获晋升，您心灰意冷，决定将重心放到生活之中。");
             return;
         }
-
-        this.state.limits.leisure = 4;
+        this.state.limits.leisure = 2;
         this.state.flags.hasAppliedExhibitThisQuarter = false;
 
         this.checkSurvival();
@@ -126,17 +243,28 @@ const game = {
         this.updateUI();
     },
 
-    triggerRandomEvent() {
-        if (Math.random() > 0.4) return;
-        const evt = RANDOM_EVENTS[Math.floor(Math.random()*RANDOM_EVENTS.length)];
-        const choices = evt.choices.map(c => ({
-            txt: c.txt,
-            cb: () => {
-                this.closeModal();
-                c.cb(this);
-            }
-        }));
-        this.showModal(evt.title, evt.desc, choices);
+    // [新增] 检查某个展览的某阶段是否解锁
+    checkPhaseUnlocked(ex, phase) {
+        if (phase === 1) return true; // 第一阶段永远解锁
+        
+        // 检查上一阶段的所有任务是否都已完成 (>=100)
+        const prevPhaseTasks = Object.keys(EX_TASKS).filter(k => EX_TASKS[k].phase === phase - 1);
+        const allDone = prevPhaseTasks.every(k => ex.tasks[k] >= 100);
+        
+        return allDone;
+    },
+
+    // [新增] 检查展览是否因为死线到了而失败
+    checkDeadline(ex) {
+        if (ex.status !== 'active') return;
+
+        // 如果时间到了 (deadline <= 0) 且任务没做完
+        const allFinished = Object.keys(ex.tasks).every(k => ex.tasks[k] >= 100);
+        if (ex.deadline <= 0 && !allFinished) {
+            ex.status = 'failed';
+            this.showResult(`❌ 展览事故！`, { rep: -20, mood: -20 });
+            this.log("danger", `☠️ [${ex.name}] 因工期延误未能开展，造成了严重的教学事故！`);
+        }
     },
 
     actionApplyExhibit() {
@@ -167,6 +295,7 @@ const game = {
                     id: Date.now(),
                     name: t,
                     status: 'active',
+                    deadline: Math.floor(Math.random() * 3) + 3, // 随机 3-5 个季度
                     tasks: { collect:0, read:0, trip:0, theme:0, items:0, design:0, souvenir:0 },
                     feedbackTimer: 0,
                     quartersActive: 0
@@ -241,15 +370,29 @@ const game = {
         this.changeStat('money', -cost);
         
         // 应用子事件效果 (包含动态健康扣除)
-        if(effect) {
-            for(let k in effect) this.changeStat(k, effect[k]);
+        // 重要修改：展览策划事件只影响 health 和 mood，且幅度限制在 ±1..±5
+        let appliedEffect = {};
+        if (effect) {
+            if (typeof effect === 'object') {
+                if (effect.health !== undefined) {
+                    const v = effect.health;
+                    const capped = Math.sign(v) * Math.min(Math.abs(v), 5);
+                    if (capped !== 0) { appliedEffect.health = capped; this.changeStat('health', capped); }
+                }
+                if (effect.mood !== undefined) {
+                    const v = effect.mood;
+                    const capped = Math.sign(v) * Math.min(Math.abs(v), 5);
+                    if (capped !== 0) { appliedEffect.mood = capped; this.changeStat('mood', capped); }
+                }
+            }
         }
 
         const progress = Math.floor(Math.random()*51) + 50;
         ex.tasks[key] = Math.min(100, ex.tasks[key] + progress);
         
         this.closeModal();
-        this.showResult(resText, effect);
+        // 只展示并记录实际生效的健康/愉悦变化
+        this.showResult(resText, Object.keys(appliedEffect).length ? appliedEffect : "无明显变化");
         
         // 周报故事化
         let story = EX_TASKS[key].story || `完成了${EX_TASKS[key].name}工作。`;
@@ -284,26 +427,38 @@ const game = {
 
     actionShop(type) {
         if (type === 'coffee') {
-            if (this.state.player.money < 50) { this.showResult("余额不足", "买不起咖啡了..."); return; }
-            let hCost = Math.floor(Math.random()*3)+3; // 3-5
+            // [修改] 检查存款 savings
+            if (this.state.player.savings < 50) { 
+                this.showResult("囊中羞涩", "你的【个人存款】不足，买不起咖啡了..."); 
+                return; 
+            }
+            let hCost = Math.floor(Math.random()*3)+3;
             let mAdd = Math.floor(Math.random()*3)+3;
-            this.changeStat('money', -50);
+            
+            // [修改] 扣除存款 savings
+            this.changeStat('savings', -50);
             this.showResult("喝了一杯特浓咖啡", {health: -hCost, mood: mAdd});
-            this.log("system", "☕ 喝了杯咖啡，虽然心跳加速，但心情变好了。");
+            this.log("system", "☕ 花50元私房钱喝了杯咖啡，心情变好了。");
         } else {
-            if (this.state.player.money < 100) { this.showResult("余额不足", "吃不起套餐..."); return; }
-            let hAdd = Math.floor(Math.random()*6)+3; // 3-8
+            // [修改] 检查存款 savings
+            if (this.state.player.savings < 100) { 
+                this.showResult("囊中羞涩", "你的【个人存款】不足，吃不起套餐..."); 
+                return; 
+            }
+            let hAdd = Math.floor(Math.random()*6)+3;
             let mAdd = Math.floor(Math.random()*6)+3;
-            this.changeStat('money', -100);
+            
+            // [修改] 扣除存款 savings
+            this.changeStat('savings', -100);
             this.showResult("享用了文创套餐", {health: hAdd, mood: mAdd});
-            this.log("system", "🍱 美食治愈了一切，感觉充满了力量！");
+            this.log("system", "🍱 花100元私房钱吃了顿好的，充满力量！");
         }
     },
 
     changeStat(key, val) {
         this.state.player[key] += val;
         if(['health','mood','iq','eq'].includes(key)) this.state.player[key] = UTILS.clamp(this.state.player[key], 0, 100);
-        if(key === 'money') this.state.player[key] = Math.max(0, this.state.player[key]);
+        if(key === 'money' || key === 'savings') this.state.player[key] = Math.max(0, this.state.player[key]);
     },
 
     updateUI() {
@@ -315,13 +470,15 @@ const game = {
         document.getElementById('ui-eq').innerText = p.eq;
         document.getElementById('ui-rep').innerText = p.rep;
         document.getElementById('ui-money').innerText = UTILS.formatMoney(p.money);
+        // [新增] 更新存款显示
+        if(document.getElementById('ui-savings')) document.getElementById('ui-savings').innerText = UTILS.formatMoney(p.savings);
         
         document.getElementById('txt-health').innerText = p.health;
         document.getElementById('bar-health').style.width = p.health+"%";
         document.getElementById('txt-mood').innerText = p.mood;
         document.getElementById('bar-mood').style.width = p.mood+"%";
         
-        document.getElementById('limit-leisure').innerText = `${this.state.limits.leisure}/4`;
+        document.getElementById('limit-leisure').innerText = `${this.state.limits.leisure}/2`;
         document.getElementById('ui-year').innerText = this.state.turn.year;
         document.getElementById('ui-quarter').innerText = this.state.turn.quarter;
 
@@ -338,6 +495,59 @@ const game = {
             document.getElementById('research-msg').innerText = this.state.flags.researchApplied ? "等待评审" : "窗口关闭";
             document.getElementById('research-msg').style.color = "var(--text-sub)";
         }
+
+        // [新增] 检测家庭解锁状态
+        const homeTab = document.getElementById('tab-home');
+        if (homeTab) {
+            if (this.state.player.savings >= 100000) {
+                homeTab.classList.remove('locked');
+                homeTab.innerText = "🏠 家庭"; // 去掉锁图标
+                const homeView = document.getElementById('view-home');
+                const placeholder = homeView && homeView.querySelector('.scene-placeholder');
+                if(placeholder) {
+                    placeholder.innerHTML = `<div class='scene-icon'>🏠</div><h3>温馨小窝</h3><p>欢迎回家，主人。</p>`;
+                }
+            }
+        }
+    },
+
+    // [新增] 切换中间栏场景
+    switchScene(sceneName) {
+        // 1. 检查家庭解锁条件
+        if (sceneName === 'home') {
+            if (this.state.player.savings < 100000) {
+                this.showResult("未解锁", "买房首付还没攒够呢！(需要存款≥10万)");
+                return;
+            }
+        }
+
+        // 2. 切换 UI 显示
+        document.querySelectorAll('.view-container').forEach(el => el.classList.remove('active'));
+        const target = document.getElementById(`view-${sceneName}`);
+        if (target) target.classList.add('active');
+
+        // 3. 更新 Tab 样式
+        document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+        const tab = document.getElementById(`tab-${sceneName}`);
+        if (tab && !tab.classList.contains('locked')) tab.classList.add('active');
+    },
+
+    // [新增] 大学进修逻辑 (框架)
+    actionStudy(type) {
+        if (type === 'course') {
+            if (this.state.player.savings < 5000) {
+                this.showResult("存款不足", "学费不够，还是先去搬砖吧。");
+                return;
+            }
+            this.changeStat('savings', -5000);
+            this.changeStat('health', -10);
+            let iqAdd = Math.floor(Math.random()*3) + 2;
+            this.showResult("进修完成", { iq: iqAdd, rep: 5 });
+            this.log("success", "🎓 在大学上了一门高深莫测的课，感觉脑子长出来了。");
+        } else if (type === 'degree') {
+            this.showResult("功能开发中", "博士点正在建设中，请稍后再来...");
+        }
+        this.updateUI();
     },
 
     renderExhibitPanel() {
@@ -354,10 +564,42 @@ const game = {
             div.className = "exhibit-card " + ex.status;
             
             if (ex.status === 'active') {
-                let html = `<div style="font-weight:bold;margin-bottom:10px; color:var(--primary)">${ex.name}</div><div class="task-grid">`;
+                // 显示倒计时，颜色随时间变红
+                let dlColor = ex.deadline <= 1 ? "var(--danger)" : (ex.deadline <= 2 ? "var(--warning)" : "var(--success)");
+                let html = `
+                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                        <div style="font-weight:bold; color:var(--primary)">${ex.name}</div>
+                        <div style="font-weight:bold; color:${dlColor}">🔥 距开展: ${ex.deadline}Q</div>
+                    </div>
+                    <div class="task-grid">`;
+                
+                // 遍历任务按钮
                 for(let k in EX_TASKS) {
+                    const taskConfig = EX_TASKS[k];
                     const done = ex.tasks[k] >= 100;
-                    html += `<button class="task-btn ${done?'done':''}" onclick="game.actionExhibitTask(${ex.id},'${k}')" ${done?'disabled':''}><span>${EX_TASKS[k].name}</span>${done?'✔':''}</button>`;
+                    // 检查阶段锁
+                    const unlocked = this.checkPhaseUnlocked(ex, taskConfig.phase);
+                    
+                    let btnClass = "task-btn";
+                    let btnTxt = taskConfig.name;
+                    let disabled = "";
+
+                    if (done) {
+                        btnClass += " done";
+                        btnTxt += " ✔";
+                        disabled = "disabled";
+                    } else if (!unlocked) {
+                        // 如果未解锁，变灰并加锁
+                        btnClass += " locked"; 
+                        btnTxt = "🔒 " + (taskConfig.phase === 2 ? "策划" : "执行"); // 简略显示阶段名
+                        disabled = "disabled";
+                    }
+
+                    // 只有解锁且未完成的才能点
+                    html += `<button class="${btnClass}" style="${!unlocked ? 'opacity:0.5; cursor:not-allowed;' : ''}" 
+                             onclick="game.actionExhibitTask(${ex.id},'${k}')" ${disabled}>
+                             <span>${btnTxt}</span>
+                             </button>`;
                 }
                 html += `</div>`;
                 div.innerHTML = html;
@@ -370,13 +612,31 @@ const game = {
         });
     },
 
+    // [修改] 升级后的摸鱼逻辑：随机抽取剧情事件
     actionLeisure(type) {
-        if(this.state.limits.leisure <= 0) { this.log("danger", "没时间摸鱼了"); return; }
-        this.state.limits.leisure--;
+        if(this.state.limits.leisure <= 0) { 
+            this.showResult("没时间了", "本季度的摸鱼额度已用完，快去工作吧！"); 
+            return;
+        }
         
-        if(type==='slack') { this.showResult("闭目养神", {health:5, mood:5}); this.log("system", "😴 闭目养神了一会儿。"); }
-        else if(type==='read') { this.showResult("阅读了一本书", {iq:3, mood:2}); this.log("system", "📚 读了一本好书。"); }
-        else { this.showResult("听到了八卦", {eq:3}); this.log("system", "💬 听到了一些传闻。"); }
+        // 随机抽取一个事件
+        const eventPool = LEISURE_EVENTS[type];
+        if (!eventPool || eventPool.length === 0) return;
+        const evt = eventPool[Math.floor(Math.random() * eventPool.length)];
+
+        // 构造选项
+        const choices = evt.choices.map(c => ({
+            txt: c.txt,
+            cb: () => {
+                this.state.limits.leisure--; // 只有做出选择后才扣除次数
+                this.closeModal();
+                this.showResult(c.res, c.effect);
+                this.log("system", `🍵 [摸鱼] ${evt.title} - ${c.txt}`);
+                this.updateUI();
+            }
+        }));
+
+        this.showModal(evt.title, evt.desc, choices);
     },
 
     actionResearch() {
@@ -448,17 +708,17 @@ const game = {
         const title = "📜 入职培训手册";
         const content = `欢迎加入博物馆！作为一名新进策展人，你的目标是不断晋升，最终成为【馆长】。但在这之前，请先活下去：
 
-📊 **属性说明**
+📊   属性说明
 • 智商/情商：决定突发事件的处理效果和科研成功率。
 • 声望 🌟：通过策展和论文获得，是晋升的硬指标。
 • 经费 💰：没钱寸步难行！每季度会自动发放预算。
 
-⚠️ **生存红线 (重要!)**
+⚠️   生存红线 (重要!)
 • 健康值 🚑：工作会消耗健康。归零触发【过劳死】。
 • 愉悦值 😊：压力会降低心情。归零触发【抑郁离职】。
 *提示：快撑不住时，记得去左下角"摸鱼"或"商店"回血！*
 
-🏆 **终极目标**
+🏆   终极目标
 在被解聘（3年未晋升）之前，积累资历完成职称评定！`;
 
         this.showModal(title, content, [{txt:"我准备好了！", cb:()=>this.closeModal()}]);
@@ -467,7 +727,7 @@ const game = {
     showModal(title, text, choices, isNotice = false) {
         this.isModalOpen = true;
         document.getElementById('modal-title').innerText = title;
-        document.getElementById('modal-text').innerText = text;
+        document.getElementById('modal-text').innerHTML = text.replace(/\n/g, '<br>');
         const cBox = document.getElementById('modal-choices');
         cBox.innerHTML = "";
         choices.forEach(c => {
