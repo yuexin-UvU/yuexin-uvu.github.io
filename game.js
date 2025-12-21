@@ -3,7 +3,7 @@ const UTILS = {
     randArr: (arr) => arr[Math.floor(Math.random() * arr.length)],
     clamp: (num, min, max) => Math.min(Math.max(num, min), max),
     formatMoney: (val) => val >= 10000 ? (val/10000).toFixed(2) + "万" : Math.floor(val) + "元",
-    getStatName: (k) => k==='money'?'公款':(k==='savings'?'存款':(k==='rep'?'声望':(k==='iq'?'智商':(k==='eq'?'情商':(k==='health'?'健康':(k==='mood'?'愉悦':k))))))
+    getStatName: (k) => k==='money'?'公款':(k==='savings'?'存款':(k==='rep'?'声望':(k==='iq'?'智商':(k==='eq'?'情商':(k==='health'?'精力':(k==='mood'?'愉悦':k))))))
 };
 
 // ==================== 事件管理器 ====================
@@ -234,11 +234,14 @@ const game = {
                 "提醒",
                 "本季度你没有任何操作，记得安排工作或提升自己。",
                 [{
-                    txt: "知道了",
+                    txt: "继续进入下一季度",
                     cb: () => {
                         this.closeModal();
                         proceedEndQuarter();
                     }
+                }, {
+                    txt: "返回本季度",
+                    cb: () => this.closeModal()
                 }],
                 true
             );
@@ -340,7 +343,7 @@ const game = {
     actionExhibitTask(id, key) {
         this.markAction();
         if (this.state.player.health <= 10) {
-            this.showResult("健康预警", "🚑 您的身体状况极差，无法进行高强度工作！请务必先休息。");
+            this.showResult("精力预警", "🚑 您的精力状况极差，无法进行高强度工作！请务必先休息。");
             return;
         }
         
@@ -398,21 +401,17 @@ const game = {
         // 扣除经费
         this.changeStat('money', -cost);
         
-        // 应用子事件效果 (包含动态健康扣除)
-        // 重要修改：展览策划事件只影响 health 和 mood，且幅度限制在 ±1..±5
+        // 应用子事件效果 (包含动态精力扣除)
+        // 展览工作：每个选项固定消耗 10-15 精力，其余只影响 mood
         let appliedEffect = {};
-        if (effect) {
-            if (typeof effect === 'object') {
-                if (effect.health !== undefined) {
-                    const v = effect.health;
-                    const capped = Math.sign(v) * Math.min(Math.abs(v), 5);
-                    if (capped !== 0) { appliedEffect.health = capped; this.changeStat('health', capped); }
-                }
-                if (effect.mood !== undefined) {
-                    const v = effect.mood;
-                    const capped = Math.sign(v) * Math.min(Math.abs(v), 5);
-                    if (capped !== 0) { appliedEffect.mood = capped; this.changeStat('mood', capped); }
-                }
+        const workCost = -UTILS.rand(10, 15);
+        appliedEffect.health = workCost;
+        this.changeStat('health', workCost);
+        if (effect && typeof effect === 'object') {
+            if (effect.mood !== undefined) {
+                const v = effect.mood;
+                const capped = Math.sign(v) * Math.min(Math.abs(v), 5);
+                if (capped !== 0) { appliedEffect.mood = capped; this.changeStat('mood', capped); }
             }
         }
 
@@ -463,12 +462,12 @@ const game = {
                 this.showResult("囊中羞涩", "你的【个人存款】不足，买不起咖啡了..."); 
                 return; 
             }
-            let hCost = Math.floor(Math.random()*3)+3;
-            let mAdd = Math.floor(Math.random()*3)+3;
+            let hAdd = Math.floor(Math.random()*6)+5;
+            let mAdd = Math.floor(Math.random()*6)+5;
             
             // [修改] 扣除存款 savings
             this.changeStat('savings', -50);
-            this.showResult("喝了一杯特浓咖啡", {health: -hCost, mood: mAdd});
+            this.showResult("喝了一杯特浓咖啡", {health: hAdd, mood: mAdd});
             this.log("system", "☕ 花50元私房钱喝了杯咖啡，心情变好了。");
         } else {
             // [修改] 检查存款 savings
@@ -476,8 +475,8 @@ const game = {
                 this.showResult("囊中羞涩", "你的【个人存款】不足，吃不起套餐..."); 
                 return; 
             }
-            let hAdd = Math.floor(Math.random()*6)+3;
-            let mAdd = Math.floor(Math.random()*6)+3;
+            let hAdd = Math.floor(Math.random()*6)+10;
+            let mAdd = Math.floor(Math.random()*5)+8;
             
             // [修改] 扣除存款 savings
             this.changeStat('savings', -100);
@@ -594,8 +593,8 @@ const game = {
             }
             this.changeStat('savings', -5000);
             this.changeStat('health', -10);
-            let iqAdd = Math.floor(Math.random()*3) + 2;
-            this.showResult("进修完成", { iq: iqAdd, rep: 5 });
+            this.changeStat('mood', -10);
+            this.showResult("进修完成", { iq: 5, rep: 3 });
             this.log("success", "🎓 在大学上了一门高深莫测的课，感觉脑子长出来了。");
         } else if (type === 'degree') {
             const p = this.state.player;
@@ -792,7 +791,7 @@ const game = {
 • 经费 💰：没钱寸步难行！每季度会自动发放预算。
 
 ⚠️   生存红线 (重要!)
-• 健康值 🚑：工作会消耗健康。归零触发【过劳死】。
+• 精力值 🚑：工作会消耗精力。归零触发【过劳死】。
 • 愉悦值 😊：压力会降低心情。归零触发【抑郁离职】。
 *提示：快撑不住时，记得去左下角"摸鱼"或"商店"回血！*
 
