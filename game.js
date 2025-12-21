@@ -124,7 +124,7 @@ const game = {
         document.getElementById('start-screen').style.display = 'none';
         document.getElementById('app').style.display = 'grid';
         this.init();
-        this.showGuide();
+        this.showIntro();
     },
 
     init() {
@@ -134,8 +134,10 @@ const game = {
 
         this.state = {
             player: {
-                name: NAME_DB[Math.floor(Math.random()*NAME_DB.length)],
+                name: "",
+                gender: "",
                 edu: edu,
+                eduStatus: "",
                 age: baseAge,
                 titleIdx: 0,
                 health: 100, mood: 100,
@@ -156,6 +158,20 @@ const game = {
                 hasStudiedThisQuarter: false,
                 promotedThisYear: false,
                 didActionThisQuarter: false
+            },
+            university: {
+                isEnrolled: false,
+                programType: null,
+                targetCredits: 0,
+                currentQuarters: 0,
+                thesisProgress: 0,
+                thesisUnlocked: false,
+                isDelayed: false,
+                activeCourseIds: [],
+                courseProgress: {},
+                courseCompleted: {},
+                courseStartYear: {},
+                selectedThisQuarter: false
             }
         };
         
@@ -205,6 +221,7 @@ const game = {
                 }
             });
 
+            const prevYear = this.state.turn.year;
             this.state.turn.quarter++;
             this.state.flags.quartersInTitle++;
             
@@ -215,6 +232,8 @@ const game = {
                 this.state.flags.researchApplied = false;
                 this.state.flags.promotedThisYear = false;
             }
+            const didYearAdvance = this.state.turn.year !== prevYear;
+            this.updateUniversityQuarter(didYearAdvance);
 
             if (this.state.turn.year === 4 && this.state.turn.quarter === 1 && this.state.player.titleIdx === 0) {
                 this.endGame("解聘通知", "很遗憾，因入职三年未获晋升，您心灰意冷，决定将重心放到生活之中。");
@@ -487,16 +506,31 @@ const game = {
         }
     },
 
+    getIqEqCaps() {
+        const p = this.state && this.state.player ? this.state.player : null;
+        const max = p && p.edu === "博士" ? 120 : 100;
+        if (p && p.titleIdx === 4) {
+            return { min: 101, max: 120 };
+        }
+        return { min: 0, max: max };
+    },
+
     changeStat(key, val) {
         this.state.player[key] += val;
-        if(['health','mood','iq','eq'].includes(key)) this.state.player[key] = UTILS.clamp(this.state.player[key], 0, 100);
+        if (key === 'health' || key === 'mood') {
+            this.state.player[key] = UTILS.clamp(this.state.player[key], 0, 100);
+        }
+        if (key === 'iq' || key === 'eq') {
+            const caps = this.getIqEqCaps();
+            this.state.player[key] = UTILS.clamp(this.state.player[key], caps.min, caps.max);
+        }
         if(key === 'money' || key === 'savings') this.state.player[key] = Math.max(0, this.state.player[key]);
     },
 
     updateUI() {
         const p = this.state.player;
         document.getElementById('ui-name').innerText = p.name;
-        document.getElementById('ui-edu').innerText = p.edu;
+        document.getElementById('ui-edu').innerText = p.eduStatus ? p.eduStatus : p.edu;
         const ageEl = document.getElementById('ui-age');
         if (ageEl) ageEl.innerText = p.age;
         document.getElementById('ui-title').innerText = TITLES[p.titleIdx].name;
@@ -562,6 +596,7 @@ const game = {
                 }
             }
         }
+        this.renderUniversityUI();
     },
 
     // [新增] 切换中间栏场景
@@ -661,6 +696,454 @@ const game = {
                 this.showResult("已是博士", "您已经拥有博士学位，无需再次申请。");
             }
         }
+        this.updateUI();
+    },
+
+    showIntro() {
+        const inputId = "player-name-input";
+        const genderName = "player-gender";
+        const randomName = () => NAME_DB[Math.floor(Math.random() * NAME_DB.length)];
+
+        const content = [
+            '<div class="intro-wrap">',
+            '<div class="intro-title">欢迎入职！</div>',
+            '<div class="intro-row">',
+            '<div class="intro-label">你的名字</div>',
+            '<div class="intro-name-grid">',
+            `<input id="${inputId}" type="text" class="intro-input" placeholder="输入姓名">`,
+            '<button type="button" id="intro-random" class="intro-random-btn">随机姓名</button>',
+            '</div>',
+            '</div>',
+            '<div class="intro-row">',
+            '<div class="intro-label">选择性别</div>',
+            `<select id="gender-select" name="${genderName}" class="intro-select">`,
+            '<option value="男">男</option>',
+            '<option value="女">女</option>',
+            '<option value="其他">其他</option>',
+            '</select>',
+            '</div>',
+            '<div class="intro-row">',
+            '<div class="intro-label">风格选择</div>',
+            '<div class="intro-style-switch">',
+            '<button type="button" id="style-bento" class="intro-style-btn">摸鱼不被抓版</button>',
+            '<button type="button" id="style-brutal" class="intro-style-btn active">活泼版</button>',
+            '</div>',
+            '</div>',
+            '</div>'
+        ].join('');
+
+        this.showModal(
+            "入职信息",
+            content,
+            [{
+                txt: "开始入职",
+                cb: () => {
+                    const input = document.getElementById(inputId);
+                    const name = input && input.value.trim() ? input.value.trim() : randomName();
+                    const genderSelect = document.getElementById("gender-select");
+                    const gender = genderSelect && genderSelect.value ? genderSelect.value : "其他";
+                    this.state.player.name = name;
+                    this.state.player.gender = gender;
+                    const useBento = btnBento && btnBento.classList.contains('active');
+                    document.body.classList.toggle('theme-bento', useBento);
+                    this.closeModal();
+                    this.updateUI();
+                    this.showGuide();
+                }
+            }]
+        );
+
+        const box = document.querySelector('.modal-box');
+        const btnBento = document.getElementById('style-bento');
+        const btnBrutal = document.getElementById('style-brutal');
+        const btnRandom = document.getElementById('intro-random');
+        const setStyle = (style) => {
+            if (!box) return;
+            box.classList.toggle('intro-style-bento', style === 'bento');
+            box.classList.toggle('intro-style-brutal', style === 'brutal');
+            if (btnBento) btnBento.classList.toggle('active', style === 'bento');
+            if (btnBrutal) btnBrutal.classList.toggle('active', style === 'brutal');
+        };
+        if (box) box.classList.add('intro-modal');
+        if (btnBento) btnBento.addEventListener('click', () => setStyle('bento'));
+        if (btnBrutal) btnBrutal.addEventListener('click', () => setStyle('brutal'));
+        if (btnRandom) btnRandom.addEventListener('click', () => {
+            const input = document.getElementById(inputId);
+            if (input) input.value = randomName();
+        });
+        setStyle('brutal');
+    },
+
+    getUniversityCourseById(id) {
+        return UNIVERSITY_COURSES.find(c => c.id === id) || null;
+    },
+
+    getUniversityEarnedCredits() {
+        const uni = this.state.university;
+        return UNIVERSITY_COURSES.reduce((sum, c) => sum + (uni.courseCompleted[c.id] ? c.credits : 0), 0);
+    },
+
+    renderUniversityUI() {
+        const statusEl = document.getElementById('university-status');
+        const actionsEl = document.getElementById('university-actions');
+        const coursesEl = document.getElementById('university-courses');
+        const thesisEl = document.getElementById('university-thesis');
+        if (!statusEl || !actionsEl || !coursesEl || !thesisEl) return;
+
+        const uni = this.state.university;
+        const p = this.state.player;
+        const earned = this.getUniversityEarnedCredits();
+        const isQ2 = this.state.turn.quarter === 2;
+
+        if (!uni.isEnrolled) {
+            statusEl.innerHTML = `
+                <div class="scene-icon">🎓</div>
+                <h3>学术深造中心</h3>
+                <p>在这里攻读更高学位，提升基础智商上限。</p>
+                <div style="margin-top:20px; width:100%">
+                    <button class="primary" style="width:100%; padding:15px; margin-bottom:10px" onclick="game.actionStudy('course')">
+                        参加进修课程 (5000元)<br>
+                        <span style="font-size:0.8em; opacity:0.8">-精力10 -愉悦10</span>
+                    </button>
+                    <button id="btn-apply-program" class="primary" style="width:100%; padding:15px;" ${isQ2 ? "" : "disabled"}>
+                        申请在读硕士
+                    </button>
+                </div>
+            `;
+            actionsEl.innerHTML = "";
+        } else {
+            const programName = uni.programType === 'PhD' ? '博士' : '硕士';
+            const delayTag = uni.isDelayed ? "<span class=\"university-pill\">延毕</span>" : "";
+            statusEl.innerHTML = `
+                当前状态：在读${programName}${delayTag}<br>
+                学分进度：${earned} / ${uni.targetCredits}<br>
+                已修季度：${uni.currentQuarters}
+            `;
+            actionsEl.innerHTML = `
+                <button class="primary" id="btn-select-courses" ${uni.selectedThisQuarter ? "disabled" : ""}>本季度选课</button>
+                <button class="primary" id="btn-write-thesis" ${uni.thesisUnlocked ? "" : "disabled"}>撰写论文</button>
+                <button class="primary" id="btn-graduate">申请毕业</button>
+            `;
+        }
+
+        const applyProgram = document.getElementById('btn-apply-program');
+        const selectCourses = document.getElementById('btn-select-courses');
+        const writeThesis = document.getElementById('btn-write-thesis');
+        const graduate = document.getElementById('btn-graduate');
+        if (applyProgram) {
+            const target = p.edu === "硕士" ? "PhD" : "Master";
+            applyProgram.innerText = p.edu === "硕士" ? "申请在读博士" : "申请在读硕士";
+            applyProgram.onclick = () => this.openEnrollment(target);
+        }
+        if (selectCourses) selectCourses.onclick = () => this.openCourseSelection();
+        if (writeThesis) writeThesis.onclick = () => this.writeThesis();
+        if (graduate) graduate.onclick = () => this.tryGraduate();
+
+        if (!uni.isEnrolled) {
+            coursesEl.innerHTML = "<div class=\"university-course-meta\">未入学</div>";
+            thesisEl.innerHTML = "<div class=\"university-course-meta\">论文尚未开启</div>";
+            return;
+        }
+
+        if (uni.activeCourseIds.length === 0) {
+            coursesEl.innerHTML = "<div class=\"university-course-meta\">本季度尚未选课</div>";
+        } else {
+            coursesEl.innerHTML = uni.activeCourseIds.map(id => {
+                const course = this.getUniversityCourseById(id);
+                if (!course) return "";
+                const progress = uni.courseProgress[id] || 0;
+                const done = uni.courseCompleted[id];
+                const statusText = done ? "已修完" : `进度 ${progress}/4`;
+                const disabled = done ? "disabled" : "";
+                return `
+                    <div class="university-course-card">
+                        <div class="university-course-title">${course.name}</div>
+                        <div class="university-course-intro">${course.intro}</div>
+                        <div class="university-course-meta">学分：${course.credits}｜${statusText}</div>
+                        <div class="university-course-actions">
+                            <button ${disabled} onclick="game.attendCourse(${course.id})">上课</button>
+                            <button ${disabled} onclick="game.hireSubstitute(${course.id})">代课</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        if (!uni.thesisUnlocked) {
+            thesisEl.innerHTML = "<div class=\"university-course-meta\">论文任务尚未开启（第二年起开启）。</div>";
+        } else {
+            thesisEl.innerHTML = `
+                <div class="university-course-meta">论文进度：${uni.thesisProgress}%</div>
+                <div class="bar-track"><div class="bar-fill" style="width:${uni.thesisProgress}%; background:var(--primary)"></div></div>
+            `;
+        }
+    },
+
+    openEnrollment(type) {
+        const isQ2 = this.state.turn.quarter === 2;
+        if (!isQ2) {
+            this.showResult("申请受限", "仅限每年 Q2 申请入学。");
+            return;
+        }
+        const p = this.state.player;
+        if (type === 'Master') {
+            if (p.edu === "硕士" || p.edu === "博士") {
+                this.showResult("无需申请", "你已拥有硕士及以上学位。");
+                return;
+            }
+        }
+        if (type === 'PhD') {
+            if (p.edu !== "硕士") {
+                this.showResult("条件不足", "申请博士需先获得硕士学位。");
+                return;
+            }
+        }
+        this.applyEnrollment(type);
+    },
+
+    applyEnrollment(type) {
+        const uni = this.state.university;
+        if (uni.isEnrolled) {
+            this.showResult("已在读", "当前已有在读学位，请先完成学业。");
+            return;
+        }
+        uni.isEnrolled = true;
+        uni.programType = type;
+        uni.targetCredits = type === 'PhD' ? 36 : 32;
+        uni.currentQuarters = 0;
+        uni.thesisProgress = 0;
+        uni.thesisUnlocked = false;
+        uni.isDelayed = false;
+        uni.activeCourseIds = [];
+        uni.courseProgress = {};
+        uni.courseCompleted = {};
+        uni.courseStartYear = {};
+        uni.selectedThisQuarter = false;
+        this.state.player.eduStatus = type === 'PhD' ? "在读博士" : "在读硕士";
+        this.showResult("录取成功", `目标学分：${uni.targetCredits}，请在本季度选课。`);
+        this.updateUI();
+    },
+
+    openCourseSelection() {
+        const uni = this.state.university;
+        if (!uni.isEnrolled) {
+            this.showResult("未入学", "请先申请在读学位。");
+            return;
+        }
+        if (uni.selectedThisQuarter) {
+            this.showResult("选课完成", "本季度已完成选课。");
+            return;
+        }
+        const carryover = uni.activeCourseIds.length;
+        const slots = 3 - carryover;
+        if (slots <= 0) {
+            this.showResult("选课受限", "本季度课程已满，请先完成在修课程。");
+            uni.selectedThisQuarter = true;
+            this.renderUniversityUI();
+            return;
+        }
+        const available = UNIVERSITY_COURSES.filter(c => !uni.courseCompleted[c.id] && !uni.activeCourseIds.includes(c.id));
+        if (available.length < slots) {
+            this.showResult("选课受限", "可选课程不足，请先完成已选课程。");
+            return;
+        }
+        const listHtml = available.map(c =>
+            `<label style="display:block; margin-bottom:6px;">` +
+            `<input type="checkbox" class="uni-course-check" value="${c.id}">` +
+            `${c.name}（${c.credits}学分）` +
+            `</label>`
+        ).join('');
+
+        this.showModal(
+            "本季度选课",
+            `<div style="text-align:left">${listHtml}</div>`,
+            [{
+                txt: "确认选课",
+                cb: () => {
+                    const selected = Array.from(document.querySelectorAll('.uni-course-check:checked')).map(el => Number(el.value));
+                    if (selected.length !== slots) {
+                        this.showResult("选课失败", `本季度需选择 ${slots} 门课程。`);
+                        return;
+                    }
+                    uni.activeCourseIds = uni.activeCourseIds.concat(selected);
+                    selected.forEach(id => { uni.courseStartYear[id] = this.state.turn.year; });
+                    uni.selectedThisQuarter = true;
+                    this.closeModal();
+                    this.updateUI();
+                }
+            }],
+            true
+        );
+    },
+
+    attendCourse(courseId) {
+        const uni = this.state.university;
+        if (!uni.activeCourseIds.includes(courseId)) {
+            this.showResult("未选课程", "该课程不在本季度选课中。");
+            return;
+        }
+        if (uni.courseCompleted[courseId]) {
+            this.showResult("课程已修完", "请选择其他课程。");
+            return;
+        }
+        if (this.state.player.health < 5 || this.state.player.mood < 8) {
+            this.showResult("状态不足", "精力(5)或愉悦(8)不足，无法上课。");
+            return;
+        }
+        this.markAction();
+        this.changeStat('health', -5);
+        this.changeStat('mood', -8);
+        uni.courseProgress[courseId] = (uni.courseProgress[courseId] || 0) + 1;
+        if (uni.courseProgress[courseId] >= 4) {
+            uni.courseProgress[courseId] = 4;
+            uni.courseCompleted[courseId] = true;
+            const course = this.getUniversityCourseById(courseId);
+            this.showResult("课程完成", `【${course.name}】修读完成，获得 ${course.credits} 学分。`);
+        } else {
+            const course = this.getUniversityCourseById(courseId);
+            this.showResult("课程进度", `【${course.name}】进度更新：${uni.courseProgress[courseId]}/4`);
+        }
+        this.updateUI();
+    },
+
+    hireSubstitute(courseId) {
+        const uni = this.state.university;
+        if (!uni.activeCourseIds.includes(courseId)) {
+            this.showResult("未选课程", "该课程不在本季度选课中。");
+            return;
+        }
+        if (uni.courseCompleted[courseId]) {
+            this.showResult("课程已修完", "请选择其他课程。");
+            return;
+        }
+        if (this.state.player.savings < 1000) {
+            this.showResult("存款不足", "存款不足 1000 元，无法雇佣代课。");
+            return;
+        }
+        this.markAction();
+        this.changeStat('savings', -1000);
+        const caught = Math.random() < 0.2;
+        const course = this.getUniversityCourseById(courseId);
+        if (caught) {
+            uni.courseProgress[courseId] = 0;
+            this.showResult(`代课被抓\n【${course.name}】课程进度清零，声望 -10。`, { rep: -10 });
+        } else {
+            uni.courseProgress[courseId] = (uni.courseProgress[courseId] || 0) + 1;
+            if (uni.courseProgress[courseId] >= 4) {
+                uni.courseProgress[courseId] = 4;
+                uni.courseCompleted[courseId] = true;
+                this.showResult("代课成功", `【${course.name}】修读完成，获得 ${course.credits} 学分。`);
+            } else {
+                this.showResult("代课成功", `【${course.name}】进度更新：${uni.courseProgress[courseId]}/4`);
+            }
+        }
+        this.updateUI();
+    },
+
+    updateUniversityQuarter(didYearAdvance) {
+        const uni = this.state.university;
+        if (!uni.isEnrolled) return;
+        uni.currentQuarters += 1;
+        uni.selectedThisQuarter = false;
+
+        if (uni.currentQuarters === 5) {
+            uni.thesisUnlocked = true;
+            this.showResult("论文开启", "第二学年开始，毕业论文任务已开启。");
+        }
+
+        const maxQuarters = uni.programType === 'PhD' ? 16 : 12;
+        if (uni.currentQuarters > maxQuarters && !uni.isDelayed) {
+            uni.isDelayed = true;
+            this.state.player.eduStatus = (uni.programType === 'PhD' ? "在读博士" : "在读硕士") + "（延毕）";
+            this.showResult("延毕提醒", "标准修读时间已过，进入延毕状态。");
+        }
+
+        if (didYearAdvance) {
+            const currentYear = this.state.turn.year;
+            const nextActive = [];
+            uni.activeCourseIds.forEach(id => {
+                if (uni.courseCompleted[id]) {
+                    nextActive.push(id);
+                    return;
+                }
+                const startYear = uni.courseStartYear[id];
+                if (startYear && startYear < currentYear) {
+                    uni.courseProgress[id] = 0;
+                    delete uni.courseStartYear[id];
+                    return;
+                }
+                nextActive.push(id);
+            });
+            uni.activeCourseIds = nextActive;
+        }
+    },
+
+    writeThesis() {
+        const uni = this.state.university;
+        if (!uni.isEnrolled) {
+            this.showResult("未入学", "请先申请在读学位。");
+            return;
+        }
+        if (!uni.thesisUnlocked) {
+            this.showResult("尚未开启", "论文任务尚未开启（第二年开始）。");
+            return;
+        }
+        if (uni.thesisProgress >= 100) {
+            this.showResult("论文完成", "论文已完成，无需继续。");
+            return;
+        }
+        if (this.state.player.health < 15 || this.state.player.mood < 10) {
+            this.showResult("状态不足", "精力(15)或愉悦(10)不足，无法写论文。");
+            return;
+        }
+        this.markAction();
+        this.changeStat('health', -15);
+        this.changeStat('mood', -10);
+        const inc = uni.programType === 'PhD' ? 10 : 20;
+        uni.thesisProgress = Math.min(100, uni.thesisProgress + inc);
+        this.showResult("论文进度", `论文进度提升至 ${uni.thesisProgress}%`);
+        this.updateUI();
+    },
+
+    checkGraduationRequirements(silent = false) {
+        const uni = this.state.university;
+        const earned = this.getUniversityEarnedCredits();
+        const coursesDone = earned >= uni.targetCredits;
+        const thesisDone = uni.thesisProgress >= 100;
+        if (coursesDone && thesisDone) return true;
+        if (!silent) {
+            return `尚未满足毕业条件。学分：${earned}/${uni.targetCredits}，论文：${uni.thesisProgress}%`;
+        }
+        return false;
+    },
+
+    tryGraduate() {
+        const uni = this.state.university;
+        if (!uni.isEnrolled) {
+            this.showResult("未入学", "当前没有在读学位。");
+            return;
+        }
+        const ok = this.checkGraduationRequirements(true);
+        if (!ok) {
+            const msg = this.checkGraduationRequirements(false);
+            this.showResult("无法毕业", msg);
+            return;
+        }
+        const degree = uni.programType === 'PhD' ? "博士" : "硕士";
+        this.state.player.edu = degree;
+        this.state.player.eduStatus = "";
+        uni.isEnrolled = false;
+        uni.programType = null;
+        uni.targetCredits = 0;
+        uni.currentQuarters = 0;
+        uni.thesisProgress = 0;
+        uni.thesisUnlocked = false;
+        uni.isDelayed = false;
+        uni.activeCourseIds = [];
+        uni.courseProgress = {};
+        uni.courseCompleted = {};
+        uni.selectedThisQuarter = false;
+        this.showResult("毕业成功", `获得学位：${degree}。`, { rep: 5, iq: 15, eq: 15 });
         this.updateUI();
     },
 
@@ -788,6 +1271,11 @@ const game = {
         if (success) {
             p.titleIdx++;
             this.state.flags.quartersInTitle = 0;
+            if (p.titleIdx === 4) {
+                const caps = this.getIqEqCaps();
+                p.iq = UTILS.clamp(p.iq, caps.min, caps.max);
+                p.eq = UTILS.clamp(p.eq, caps.min, caps.max);
+            }
             this.showModal("评审通过", `恭喜晋升为 [${next}]！`, [{txt:"确认",cb:()=>this.closeModal()}]);
         } else {
             this.showResult("评审未通过", { rep: -1 });
@@ -843,6 +1331,10 @@ const game = {
 
     showModal(title, text, choices, isNotice = false) {
         this.isModalOpen = true;
+        const modalBox = document.querySelector('.modal-box');
+        if (modalBox) {
+            modalBox.classList.remove('intro-modal', 'intro-style-bento', 'intro-style-brutal');
+        }
         document.getElementById('modal-title').innerText = title;
         document.getElementById('modal-text').innerHTML = text.replace(/\n/g, '<br>');
         const cBox = document.getElementById('modal-choices');

@@ -116,19 +116,17 @@
     </div>
 
     <div id="view-university" class="view-container">
-        <div class="scene-placeholder">
-            <div class="scene-icon">🎓</div>
-            <h3>学术深造中心</h3>
-            <p>在这里攻读更高学位，提升基础智商上限。</p>
-            <div style="margin-top:20px; width:100%">
-                <button class="primary" style="width:100%; padding:15px; margin-bottom:10px" onclick="game.actionStudy('course')">
-                    参加进修课程 (5000元)<br>
-                    <span style="font-size:0.8em; opacity:0.8">-精力10 -愉悦10</span>
-                </button>
-                <button id="btn-degree" class="primary" style="width:100%; padding:15px; background:#7e57c2" onclick="game.actionStudy('degree')">
-                    <span id="degree-title">申请在职博士 (50000元)</span><br>
-                    <span id="degree-desc" style="font-size:0.8em; opacity:0.8">晋升学历 (需硕士学位)</span>
-                </button>
+        <div class="university-panel">
+            <div class="university-header">大学进修</div>
+            <div id="university-status" class="university-status"></div>
+            <div id="university-actions" class="university-actions"></div>
+            <div class="university-section">
+                <div class="university-section-title">本季度课程</div>
+                <div id="university-courses" class="university-courses"></div>
+            </div>
+            <div class="university-section">
+                <div class="university-section-title">论文进度</div>
+                <div id="university-thesis" class="university-thesis"></div>
             </div>
         </div>
     </div>
