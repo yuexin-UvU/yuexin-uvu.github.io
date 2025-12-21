@@ -81,14 +81,17 @@
 
         /* 左栏 */
         #col-left { position: relative; }
-        .settings-btn { position: absolute; top: 15px; left: 15px; background: transparent; font-size: 1.2rem; }
-        .settings-menu { display: none; position: absolute; top: 45px; left: 15px; background: #fff; border-radius: 12px; width: 160px; z-index: 20; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .settings-btn:hover + .settings-menu, .settings-menu:hover { display: block; }
+        .settings-wrap { position: absolute; top: 15px; left: 15px; z-index: 30; }
+        .settings-btn { background: transparent; font-size: 1.2rem; padding: 8px 10px; }
+        .settings-menu { display: none; position: absolute; top: 38px; left: 0; background: #fff; border-radius: 12px; width: 160px; z-index: 20; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .settings-wrap:hover .settings-menu,
+        .settings-wrap:focus-within .settings-menu,
+        .settings-wrap.open .settings-menu { display: block; }
         .menu-item { padding: 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; font-size: 0.85rem; }
         .menu-item:hover { background: var(--bg-color); }
 
         .profile-card { text-align: center; margin-top: 10px; margin-bottom: 25px; position: relative; }
-        .avatar { font-size: 3.5rem; background: var(--primary-light); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; cursor: help; }
+        .avatar { font-size: 3.5rem; background: var(--primary-light); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; cursor: default; }
         
         /* 个人简介悬停 */
         .tooltip {
@@ -98,9 +101,9 @@
             opacity: 0; transition: opacity 0.3s; font-size: 0.8rem; line-height: 1.4;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2); pointer-events: none;
         }
-        .profile-card:hover .tooltip { visibility: visible; opacity: 1; }
+        .avatar:hover + .tooltip { visibility: hidden; opacity: 0; }
 
-        .user-name { font-size: 1.2rem; font-weight: 700; cursor: help; }
+        .user-name { font-size: 1.2rem; font-weight: 700; cursor: default; }
         .user-title { background: var(--accent-light); color: var(--accent); padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; display: inline-block; margin-top: 5px; }
 
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }

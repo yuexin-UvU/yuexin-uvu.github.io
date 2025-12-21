@@ -16,10 +16,12 @@
 
 <div id="app">
     <div class="panel" id="col-left">
-        <button class="settings-btn">⚙️</button>
-        <div class="settings-menu">
+        <div class="settings-wrap" id="settings-wrap">
+            <button class="settings-btn" id="settings-btn" aria-haspopup="true" aria-expanded="false">⚙️</button>
+            <div class="settings-menu" id="settings-menu" role="menu">
             <div class="menu-item" onclick="game.undoQuarter()">↺ 返回上一季度</div>
             <div class="menu-item" onclick="location.reload()">☠ 重置所有数据</div>
+            </div>
         </div>
 
         <div class="profile-card">
