@@ -362,11 +362,26 @@
             padding: 14px 16px 12px;
             box-shadow: 4px 4px 0 #000;
         }
+        .guide-skip {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            border: none;
+            background: transparent;
+            color: #6b7280;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 0;
+        }
+        .guide-skip:hover { color: #111827; }
         body.theme-bento .guide-bubble {
             border: none;
             border-radius: 18px;
             box-shadow: 0 12px 30px rgba(15, 23, 42, 0.2);
         }
+        body.theme-bento .guide-skip { color: #94a3b8; }
+        body.theme-bento .guide-skip:hover { color: #111827; }
         .guide-step {
             font-size: 0.85rem;
             font-weight: 700;

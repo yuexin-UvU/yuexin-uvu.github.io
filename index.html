@@ -167,6 +167,7 @@
 <div id="guide-overlay" class="guide-overlay hidden" onclick="game.nextGuideStep(event)">
     <div class="guide-highlight" id="guide-highlight"></div>
     <div class="guide-bubble" id="guide-bubble" onclick="event.stopPropagation()">
+        <button class="guide-skip" id="guide-skip" onclick="game.skipGuide(event)">跳过</button>
         <div class="guide-step" id="guide-step">步骤 1/10</div>
         <div class="guide-text" id="guide-text"></div>
         <button class="guide-next" id="guide-next" onclick="game.nextGuideStep(event)">下一步</button>
