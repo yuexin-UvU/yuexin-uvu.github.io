@@ -35,13 +35,13 @@
             --panel-bg: #FFFFFF;
             --primary: #3B82F6;
             --primary-light: #E6F0FF;
-            --accent: #64748B;
+            --accent: #F59E0B;
             --accent-light: #EEF2F7;
             --success: #22C55E;
             --warning: #F59E0B;
             --danger: #EF4444;
-            --text-main: #1F2937;
-            --text-sub: #6B7280;
+            --text-main: #1E2A44;
+            --text-sub: #5B6B7E;
             --border-radius: 20px;
             --shadow: 0 6px 18px rgba(31,41,55,0.06);
             --shadow-hover: 0 10px 24px rgba(31,41,55,0.1);
@@ -166,7 +166,7 @@
 
         .user-name { font-size: 1.2rem; font-weight: 700; cursor: default; }
         .user-title { background: #000; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; display: inline-block; margin-top: 5px; }
-        body.theme-bento .user-title { background: #1D1D1F; font-weight: 600; }
+        body.theme-bento .user-title { background: var(--primary); font-weight: 600; }
 
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
         .stat-item { text-align: center; background: #fff; padding: 8px; border-radius: 8px; border: 2px solid #000; box-shadow: 3px 3px 0 #ddd; }
@@ -294,9 +294,9 @@
             box-shadow: 0 8px 30px rgba(0,0,0,0.08);
             border: 1px solid #eee;
         }
-        .intro-style-bento .modal-title { color: #1D1D1F; font-weight: 700; }
-        .intro-style-bento .intro-title { color: #1D1D1F; font-weight: 700; }
-        .intro-style-bento .intro-label { color: #1D1D1F; }
+        .intro-style-bento .modal-title { color: var(--text-main); font-weight: 700; }
+        .intro-style-bento .intro-title { color: var(--text-main); font-weight: 700; }
+        .intro-style-bento .intro-label { color: var(--text-main); }
         .intro-style-bento .intro-hint { color: #86868B; }
         .intro-style-bento .intro-input, .intro-style-bento .intro-select {
             border: 1px solid #e5e7eb;
@@ -406,9 +406,9 @@
         }
         body.theme-bento .guide-next {
             border: none;
-            background: #111827;
+            background: var(--primary);
             color: #fff;
-            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.25);
+            box-shadow: 0 8px 18px rgba(37, 99, 235, 0.25);
         }
 
         /* === 新增：中间栏导航条 === */
@@ -422,7 +422,7 @@
             box-shadow: 4px 4px 0 #000;
             gap: 8px;
         }
-        body.theme-bento .middle-nav { border: none; box-shadow: var(--shadow); border-radius: 20px; background: #EFF3F8; }
+        body.theme-bento .middle-nav { border: none; box-shadow: var(--shadow); border-radius: 20px; background: #EEF2FF; }
 
         .nav-tab {
             flex: 1;
