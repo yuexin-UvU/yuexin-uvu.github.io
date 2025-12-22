@@ -1043,12 +1043,14 @@ const game = {
         this.changeStat('health', -5);
         this.changeStat('mood', -8);
         uni.courseProgress[courseId] = (uni.courseProgress[courseId] || 0) + 1;
-        if (uni.courseProgress[courseId] >= 4) {
-            uni.courseProgress[courseId] = 4;
-            uni.courseCompleted[courseId] = true;
-            const course = this.getUniversityCourseById(courseId);
-            this.showResult("课程完成", `【${course.name}】修读完成，获得 ${course.credits} 学分。`);
-        } else {
+        if (uni.courseProgress[courseId] >= 4) {
+            uni.courseProgress[courseId] = 4;
+            uni.courseCompleted[courseId] = true;
+            uni.activeCourseIds = uni.activeCourseIds.filter(id => id !== courseId);
+            delete uni.courseStartYear[courseId];
+            const course = this.getUniversityCourseById(courseId);
+            this.showResult("课程完成", `【${course.name}】修读完成，获得 ${course.credits} 学分。`);
+        } else {
             const course = this.getUniversityCourseById(courseId);
             this.showResult("课程进度", `【${course.name}】进度更新：${uni.courseProgress[courseId]}/4`);
         }
@@ -1078,11 +1080,13 @@ const game = {
             this.showResult(`代课被抓\n【${course.name}】课程进度清零，声望 -10。`, { rep: -10 });
         } else {
             uni.courseProgress[courseId] = (uni.courseProgress[courseId] || 0) + 1;
-            if (uni.courseProgress[courseId] >= 4) {
-                uni.courseProgress[courseId] = 4;
-                uni.courseCompleted[courseId] = true;
-                this.showResult("代课成功", `【${course.name}】修读完成，获得 ${course.credits} 学分。`);
-            } else {
+            if (uni.courseProgress[courseId] >= 4) {
+                uni.courseProgress[courseId] = 4;
+                uni.courseCompleted[courseId] = true;
+                uni.activeCourseIds = uni.activeCourseIds.filter(id => id !== courseId);
+                delete uni.courseStartYear[courseId];
+                this.showResult("代课成功", `【${course.name}】修读完成，获得 ${course.credits} 学分。`);
+            } else {
                 this.showResult("代课成功", `【${course.name}】进度更新：${uni.courseProgress[courseId]}/4`);
             }
         }
@@ -1107,14 +1111,14 @@ const game = {
             this.showResult("延毕提醒", "标准修读时间已过，进入延毕状态。");
         }
 
-        if (didYearAdvance) {
-            const currentYear = this.state.turn.year;
-            const nextActive = [];
-            uni.activeCourseIds.forEach(id => {
-                if (uni.courseCompleted[id]) {
-                    nextActive.push(id);
-                    return;
-                }
+        if (didYearAdvance) {
+            const currentYear = this.state.turn.year;
+            const nextActive = [];
+            uni.activeCourseIds.forEach(id => {
+                if (uni.courseCompleted[id]) {
+                    delete uni.courseStartYear[id];
+                    return;
+                }
                 const startYear = uni.courseStartYear[id];
                 if (startYear && startYear < currentYear) {
                     uni.courseProgress[id] = 0;
