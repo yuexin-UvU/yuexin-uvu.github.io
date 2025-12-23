@@ -1472,7 +1472,7 @@ const game = {
         if (overlay) overlay.classList.add('hidden');
     },
 
-    showGuide() {
+showGuide() {
         this.guideSteps = [
             {
                 selector: "#status-panel",
@@ -1499,24 +1499,31 @@ const game = {
                 scene: "office",
                 text: "🏛️ 展览策划\n这是你的核心工作！\n点击【申请新展览】开始项目，随后推进搜集、研究、设计等环节。\n所有工作都会消耗精力，请量力而行。"
             },
+            // ========== 【新增】行政任务引导 ==========
+            {
+                selector: "#panel-admin", // 指向右侧行政面板
+                scene: "office",
+                text: "🎲 行政甩锅 (高能预警)\n每个季度领导都会派发【行政杂活】。\n你可以点击【掷骰子】尝试甩锅：\n👉 点数≥3：甩锅成功，无事发生。\n👉 点数<3：甩锅失败，【展览面板】将被锁定一季度，无法推进工作！"
+            },
+            // ========================================
             {
                 selector: "#tab-university",
                 scene: "office",
                 text: "🎓 大学导航\n点击这里可以切换到【大学/进修】界面。\n提升学历是当上馆长的必经之路。"
             },
             {
-                selector: "#btn-study-course", // 如果未入学，这按钮是进修课程
+                selector: "#btn-study-course", 
                 scene: "university",
                 text: "📚 进修课程\n在这里可以选择短期课程进修，消耗金钱和精力，但能提升智商和声望。"
             },
             {
-                selector: "#btn-apply-program", // 申请按钮
+                selector: "#btn-apply-program", 
                 scene: "university",
                 text: "📜 学位申请\n只有每年的【Q2】可以申请硕士或博士！\n硕士学制3年，博士4年。记得攒够学费再来申请哦。"
             },
             {
                 selector: "#tab-home",
-                scene: "office", // 切回主场景展示Tab
+                scene: "office", 
                 text: "🏠 家庭系统\n（这部分还没来得及优化，大家可以忽略...）\n当你的存款超过1000万时，这里会自动解锁。"
             },
             {
