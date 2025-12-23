@@ -597,12 +597,11 @@ nextQuarter() {
 
         const workCost = -UTILS.rand(10, 15);
         appliedEffect.health = workCost;
-        this.changeStat('health', workCost);
         if (effect && typeof effect === 'object') {
             if (effect.mood !== undefined) {
                 const v = effect.mood;
                 const capped = Math.sign(v) * Math.min(Math.abs(v), 5);
-                if (capped !== 0) { appliedEffect.mood = capped; this.changeStat('mood', capped); }
+                if (capped !== 0) { appliedEffect.mood = capped; }
             }
         }
 
