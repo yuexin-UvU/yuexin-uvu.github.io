@@ -148,7 +148,12 @@ const game = {
                 didActionThisQuarter: false,
                 isPanelLocked: false,
                 currentAdminTask: null,
-                adminTaskDone: false
+                adminTaskDone: false,
+                
+                // 【新增】作死计数器
+                adminAfterExhibitStreak: 0, 
+                // 【新增】本季度是否已经干过展览活了
+                hasDoneExhibitTaskThisQuarter: false 
             },
 
             university: {
@@ -239,6 +244,18 @@ const game = {
         const finalRoll = baseRoll;
         const task = this.state.flags.currentAdminTask;
         this.state.flags.adminTaskDone = true;
+        
+        // 【新增】计算“先斩后奏”的连击数
+        // 如果 flag 为 true，说明在掷骰子前已经点过展览任务了 -> 作死+1
+        if (this.state.flags.hasDoneExhibitTaskThisQuarter) {
+            if (this.state.flags.adminAfterExhibitStreak === undefined) this.state.flags.adminAfterExhibitStreak = 0;
+            this.state.flags.adminAfterExhibitStreak++;
+            // 可以在控制台偷偷打印一下，方便调试
+            console.log("作死计数:", this.state.flags.adminAfterExhibitStreak);
+        } else {
+            // 如果很乖，是先回消息再干活的，计数清零
+            this.state.flags.adminAfterExhibitStreak = 0;
+        }
         const btn = document.querySelector('.dice-btn');
         if (finalRoll >= 3) {
             this.addChatMsg('player', `（掷出 ${finalRoll}）领导，这事儿我不熟啊，要不让隔壁小李去？他擅长这个。`);
@@ -330,11 +347,34 @@ const game = {
             this.state.flags.hasAppliedExhibitThisQuarter = false;
             this.state.flags.hasStudiedThisQuarter = false;
             this.state.flags.didActionThisQuarter = false;
-            this.generateAdminTask();
+            
+            // 1. 先生成常规行政任务 (会重置 isPanelLocked = false)
+            this.generateAdminTask(); 
+            
+            // 2. 【新增】重置本季度行为标记
+            this.state.flags.hasDoneExhibitTaskThisQuarter = false;
+
+            // 3. 【新增】判定“领导的不满”事件
+            // 条件：连续3个季度先干活后回话 + 50%概率
+            if (this.state.flags.adminAfterExhibitStreak >= 3 && Math.random() < 0.5) {
+                // 惩罚执行
+                this.changeStat('mood', -10);
+                this.state.flags.isPanelLocked = true; // 强制锁定面板
+                this.state.flags.adminAfterExhibitStreak = 0; // 惩罚后清空计数，给个改过自新的机会
+                
+                // 弹窗通知
+                this.showModal(
+                    "😡 领导的不满", 
+                    "领导在例会上点名批评了你：\n“有些人啊，工作分不清主次！消息也不回，在那瞎忙什么？”\n\n【后果】\n💔 愉悦 -10\n🔒 下季度展览面板已被强制锁定（整顿职场作风）",
+                    [{txt: "忍气吞声", cb: () => this.closeModal()}]
+                );
+                this.log("danger", "被领导针对了：因不懂“规矩”，本季度展览工作被暂停。");
+            }
+
             this.checkSurvival();
             this.log("turn", `📅 Y${this.state.turn.year} - Q${this.state.turn.quarter}`);
             this.updateUI();
-            this.renderExhibitPanel();
+            this.renderExhibitPanel(); // 重新渲染以显示锁
         };
 
         if (!this.state.flags.didActionThisQuarter) {
@@ -454,6 +494,12 @@ const game = {
 
     actionExhibitTask(id, key) {
         this.markAction();
+        
+        // 【新增】记录：玩家在处理行政任务前，先处理了展览任务
+        if (!this.state.flags.adminTaskDone) {
+            this.state.flags.hasDoneExhibitTaskThisQuarter = true;
+        }
+
         if (this.state.flags.isPanelLocked) {
             this.showResult("面板锁定", "本季度行政任务繁忙，无法推进展览工作。");
             return;
