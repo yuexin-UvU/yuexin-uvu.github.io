@@ -145,7 +145,10 @@ const game = {
                 hasAppliedExhibitThisQuarter: false,
                 hasStudiedThisQuarter: false,
                 promotedThisYear: false,
-                didActionThisQuarter: false
+                didActionThisQuarter: false,
+                isPanelLocked: false,
+                currentAdminTask: null,
+                adminTaskDone: false
             },
 
             university: {
@@ -170,7 +173,91 @@ const game = {
         this.saveState();
         this.log("system", `🎉 欢迎入职！这里是您的工位。新的一年，请多关照！`);
         this.updateUI();
+        this.generateAdminTask();
         this.renderExhibitPanel();
+    },
+
+    switchRightTab(tabName) {
+        document.querySelectorAll('.right-tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.right-panel').forEach(panel => panel.classList.remove('active'));
+        const btns = document.querySelectorAll('.right-tab-btn');
+        if (tabName === 'admin') btns[0].classList.add('active');
+        if (tabName === 'log') btns[1].classList.add('active');
+        const panel = document.getElementById(`panel-${tabName}`);
+        if (panel) panel.classList.add('active');
+    },
+
+    generateAdminTask() {
+        this.state.flags.isPanelLocked = false;
+        this.state.flags.adminTaskDone = false;
+        const task = ADMIN_TASKS[Math.floor(Math.random() * ADMIN_TASKS.length)];
+        this.state.flags.currentAdminTask = task;
+        const chatBox = document.getElementById('admin-chat-box');
+        if (chatBox) {
+            chatBox.innerHTML = '';
+            this.addChatMsg('leader', task.text);
+        }
+        const btn = document.querySelector('.dice-btn');
+        if (btn) {
+            btn.disabled = false;
+            btn.innerText = '🎲 尝试甩锅 (Roll)';
+        }
+        this.switchRightTab('admin');
+    },
+
+    addChatMsg(role, text) {
+        const box = document.getElementById('admin-chat-box');
+        if (!box) return;
+        const div = document.createElement('div');
+        div.className = `chat-msg ${role}`;
+        const avatarTxt = role === 'leader' ? '领' : (role === 'player' ? '我' : '统');
+        div.innerHTML = `<div class=\"avatar\">${avatarTxt}</div><div class=\"bubble\">${text}</div>`;
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
+    },
+
+    actionRollDice() {
+        if (this.state.flags.adminTaskDone) return;
+        const btn = document.querySelector('.dice-btn');
+        if (!btn) return;
+        btn.disabled = true;
+        let rollCount = 0;
+        const maxRolls = 10;
+        const interval = setInterval(() => {
+            const tempRoll = Math.floor(Math.random() * 6) + 1;
+            btn.innerText = `🎲 判定中... ${tempRoll}`;
+            rollCount++;
+            if (rollCount >= maxRolls) {
+                clearInterval(interval);
+                this.resolveDiceResult();
+            }
+        }, 100);
+    },
+
+    resolveDiceResult() {
+        const baseRoll = Math.floor(Math.random() * 6) + 1;
+        const finalRoll = baseRoll;
+        const task = this.state.flags.currentAdminTask;
+        this.state.flags.adminTaskDone = true;
+        const btn = document.querySelector('.dice-btn');
+        if (finalRoll >= 3) {
+            this.addChatMsg('player', `（掷出 ${finalRoll}）领导，这事儿我不熟啊，要不让隔壁小李去？他擅长这个。`);
+            setTimeout(() => {
+                this.addChatMsg('leader', '行吧行吧，那你忙你的展览去。');
+                this.log('success', '🎲 甩锅成功！你避开了繁琐的行政任务。');
+            }, 800);
+            if (btn) btn.innerText = `🎲 判定 ${finalRoll} (成功)`;
+            return;
+        }
+        this.state.flags.isPanelLocked = true;
+        this.addChatMsg('player', `（掷出 ${finalRoll}）好的领导...我马上办...（内心崩溃）`);
+        setTimeout(() => {
+            if (task) this.addChatMsg('system', `❌ 任务失败：${task.failDesc}`);
+            this.addChatMsg('system', '🔒 本季度展览工作面板已被锁定！');
+            this.log('danger', `🎲 甩锅失败 (点数${finalRoll})，被迫处理行政任务，展览进度停滞。`);
+            this.renderExhibitPanel();
+        }, 800);
+        if (btn) btn.innerText = `🎲 判定 ${finalRoll} (失败)`;
     },
 
     saveState() { this.history = JSON.parse(JSON.stringify(this.state)); },
@@ -235,6 +322,7 @@ const game = {
             this.state.flags.hasAppliedExhibitThisQuarter = false;
             this.state.flags.hasStudiedThisQuarter = false;
             this.state.flags.didActionThisQuarter = false;
+            this.generateAdminTask();
             this.checkSurvival();
             this.log("turn", `📅 Y${this.state.turn.year} - Q${this.state.turn.quarter}`);
             this.updateUI();
@@ -304,6 +392,10 @@ const game = {
 
     actionApplyExhibit() {
         this.markAction();
+        if (this.state.flags.isPanelLocked) {
+            this.showResult("面板锁定", "本季度行政任务繁忙，无法推进展览工作。");
+            return;
+        }
         if (this.state.flags.hasAppliedExhibitThisQuarter) {
             this.showResult("申请受限", "本季度申请额度已用完，请下个季度再来。");
             return;
@@ -347,6 +439,10 @@ const game = {
 
     actionExhibitTask(id, key) {
         this.markAction();
+        if (this.state.flags.isPanelLocked) {
+            this.showResult("面板锁定", "本季度行政任务繁忙，无法推进展览工作。");
+            return;
+        }
         if (this.state.player.health <= 10) {
             this.showResult("精力预警", "🚑 您的精力状况极差，无法进行高强度工作！请务必先休息。");
             return;
@@ -1199,59 +1295,68 @@ const game = {
     renderExhibitPanel() {
         const c = document.getElementById('exhibits-container');
         c.innerHTML = "";
+        const panelLocked = this.state.flags.isPanelLocked;
+        c.style.position = panelLocked ? 'relative' : 'static';
         if (this.state.exhibitions.length === 0) {
             c.innerHTML = `<div style="text-align:center; color:#ccc; padding:20px;">暂无进行中的项目</div>`;
+            if (panelLocked) {
+                const overlay = document.createElement('div');
+                overlay.className = 'exhibit-locked-overlay';
+                overlay.innerHTML = `<div class="lock-icon">🔒</div><div class="lock-text">行政任务繁忙中...</div><div style="font-size:12px; color:#666; margin-top:5px;">本季度无法推进展览工作</div>`;
+                c.appendChild(overlay);
+            }
             return;
         }
-
         this.state.exhibitions.forEach(ex => {
             const div = document.createElement('div');
             div.className = "exhibit-card " + ex.status;
             if (ex.status === 'active') {
-                // 显示倒计时，颜色随时间变红
                 let dlColor = ex.deadline <= 1 ? "var(--danger)" : (ex.deadline <= 2 ? "var(--warning)" : "var(--success)");
                 let html = `
                     <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
                         <div style="font-weight:bold; color:var(--primary)">${ex.name}</div>
-                        <div style="font-weight:bold; color:${dlColor}">🔥 距开展: ${ex.deadline}Q</div>
+                        <div style="font-weight:bold; color:${dlColor}">🔥 距开展 ${ex.deadline}Q</div>
                     </div>
                     <div class="task-grid">`;
-                // 遍历任务按钮
                 for(let k in EX_TASKS) {
                     const taskConfig = EX_TASKS[k];
                     const done = ex.tasks[k] >= 100;
-                    // 检查阶段锁
                     const unlocked = this.checkPhaseUnlocked(ex, taskConfig.phase);
                     let btnClass = "task-btn";
                     let btnTxt = taskConfig.name;
                     let disabled = "";
                     if (done) {
                         btnClass += " done";
-                        btnTxt += " ✔";
+                        btnTxt += " ?";
                         disabled = "disabled";
                     } else if (!unlocked) {
-                        // 如果未解锁，变灰并加锁
-                        btnClass += " locked"; 
-                        btnTxt = "🔒 " + (taskConfig.phase === 2 ? "策划" : "执行"); // 简略显示阶段名
+                        btnClass += " locked";
+                        btnTxt = "🔒 " + (taskConfig.phase === 2 ? "策划" : "执行");
+                        disabled = "disabled";
+                    } else if (panelLocked) {
+                        btnClass += " locked";
                         disabled = "disabled";
                     }
-                    // 只有解锁且未完成的才能点
                     html += `<button class="${btnClass}" style="${!unlocked ? 'opacity:0.5; cursor:not-allowed;' : ''}" 
                              onclick="game.actionExhibitTask(${ex.id},'${k}')" ${disabled}>
                              <span>${btnTxt}</span>
                              </button>`;
                 }
-
                 html += `</div>`;
                 div.innerHTML = html;
             } else if (ex.status === 'waiting') {
-                div.innerHTML = `<div style="font-weight:bold; color:var(--text-main)">${ex.name}</div><div style="color:var(--warning); text-align:center; margin-top:10px;">⏳ 等待反馈报告...</div>`;
+                div.innerHTML = `<div style="font-weight:bold; color:var(--text-main)">${ex.name}</div><div style="color:var(--warning); text-align:center; margin-top:10px;">⏳等待反馈报告...</div>`;
             } else if (ex.status === 'ready_for_feedback') {
                 div.innerHTML = `<div style="font-weight:bold; color:var(--text-main)">${ex.name}</div><button class="primary" style="width:100%; margin-top:10px;" onclick="game.actionViewFeedback(${ex.id})">查看报告</button>`;
             }
-
             c.appendChild(div);
         });
+        if (panelLocked) {
+            const overlay = document.createElement('div');
+            overlay.className = 'exhibit-locked-overlay';
+            overlay.innerHTML = `<div class="lock-icon">🔒</div><div class="lock-text">行政任务繁忙中...</div><div style="font-size:12px; color:#666; margin-top:5px;">本季度无法推进展览工作</div>`;
+            c.appendChild(overlay);
+        }
     },
     // [修改] 升级后的摸鱼逻辑：随机抽取剧情事件
     actionLeisure(type) {

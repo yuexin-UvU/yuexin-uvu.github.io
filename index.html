@@ -14,8 +14,8 @@
     <button class="btn-start" onclick="startGame()">开始游戏</button>
 </div>
 
-<div id="app">
-    <div class="panel" id="col-left">
+<div id="app" class="game-container">
+    <div class="panel col-left" id="col-left">
         <div class="settings-wrap" id="settings-wrap">
             <button class="settings-btn" id="settings-btn" aria-haspopup="true" aria-expanded="false">⚙️</button>
             <div class="settings-menu" id="settings-menu" role="menu">
@@ -85,7 +85,7 @@
         </div>
     </div>
 
-    <div class="panel" id="col-middle" style="background:#f8faff; border:none; padding:0; box-shadow:none;">
+    <div class="panel col-center" id="col-middle" style="background:#f8faff; border:none; padding:0; box-shadow:none;">
     
     <div class="middle-nav">
         <div class="nav-tab active" onclick="game.switchScene('office')" id="tab-office">🏢 办公室</div>
@@ -147,12 +147,29 @@
 
 </div>
 
-    <div class="panel" id="col-right">
-        <div class="log-header">
-            <span>工作周报</span><span class="log-tag">Y<span id="ui-year">1</span> - Q<span id="ui-quarter">1</span></span>
+    <div class="panel col-right" id="col-right">
+        <div class="right-tabs">
+            <button class="right-tab-btn active" onclick="game.switchRightTab('admin')">行政任务</button>
+            <button class="right-tab-btn" onclick="game.switchRightTab('log')">工作日志</button>
         </div>
-        <div id="log-container"></div>
-        <button class="primary" id="btn-end-quarter" onclick="game.nextQuarter()" style="margin-top:15px; height:55px; font-size:1.1rem; border-radius:16px;">结束本季度 🌙</button>
+        <div id="panel-admin" class="right-panel active">
+            <div class="chat-container" id="admin-chat-box">
+                <div class="chat-msg leader">
+                    <div class="avatar">?</div>
+                    <div class="bubble">小王啊，这有个紧急材料要写一下。</div>
+                </div>
+            </div>
+            <div class="admin-actions" id="admin-actions">
+                <button class="dice-btn" onclick="game.actionRollDice()">🎲 尝试甩锅 (Roll)</button>
+            </div>
+        </div>
+        <div id="panel-log" class="right-panel">
+            <div class="log-header">
+                <span>工作周报</span><span class="log-tag">Y<span id="ui-year">1</span> - Q<span id="ui-quarter">1</span></span>
+            </div>
+            <div id="log-container"></div>
+        </div>
+        <button class="primary" id="btn-end-quarter" onclick="game.nextQuarter()" style="margin-top:15px; height:55px; font-size:1.1rem; border-radius:16px;">结束本季度🌙</button>
     </div>
 </div>
 
