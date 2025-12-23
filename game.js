@@ -273,6 +273,14 @@ const game = {
     },
 
     nextQuarter() {
+        // ========== 【新增】行政任务检查 ==========
+        const isFirstTurn = this.state.turn.year === 1 && this.state.turn.quarter === 1;
+        if (!isFirstTurn && !this.state.flags.adminTaskDone) {
+            this.showResult("无法下班", "本季度的【行政任务】还未处理！\n请先点击右侧栏的【掷骰子】回复领导消息。");
+            this.switchRightTab('admin'); // 自动切换到行政栏提醒玩家
+            return; // 阻止结束季度
+        }
+        // ========================================
         const proceedEndQuarter = () => {
             this.saveState();
             this.changeStat('money', 30000);
@@ -392,6 +400,13 @@ const game = {
 
     actionApplyExhibit() {
         this.markAction();
+        // 逻辑：如果不是第一年第一季度，且行政任务没做完，则禁止申请
+        const isFirstTurn = this.state.turn.year === 1 && this.state.turn.quarter === 1;
+        if (!isFirstTurn && !this.state.flags.adminTaskDone) {
+            this.showResult("流程卡住了", "领导的消息还没回呢！\n请先处理右侧栏的【行政任务】（掷骰子），否则无法审批新项目。");
+            this.switchRightTab('admin'); // 贴心地自动切过去
+            return;
+        }
         if (this.state.flags.isPanelLocked) {
             this.showResult("面板锁定", "本季度行政任务繁忙，无法推进展览工作。");
             return;
