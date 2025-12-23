@@ -289,29 +289,23 @@ const game = {
         this.renderExhibitPanel();
     },
 
-    nextQuarter() {
-        // ========== 【新增】行政任务检查 ==========
-        const isFirstTurn = this.state.turn.year === 1 && this.state.turn.quarter === 1;
-        if (!isFirstTurn && !this.state.flags.adminTaskDone) {
-            this.showResult("无法下班", "本季度的【行政任务】还未处理！\n请先点击右侧栏的【掷骰子】回复领导消息。");
-            this.switchRightTab('admin'); // 自动切换到行政栏提醒玩家
-            return; // 阻止结束季度
-        }
-        // ========================================
+nextQuarter() {
+        // 1. 定义核心结算流程 (包含发工资、随机事件、生成新任务等)
         const proceedEndQuarter = () => {
             this.saveState();
             this.changeStat('money', 30000);
-            this.log("success", "💰 季度经费已到账 (+30000)，新的预算周期开始了。");
-            // 发放季度工资到个人存款（savings）
+            this.log("success", "💰 季度经费已到账 (+30000)。");
+            
             const sal = (TITLES[this.state.player.titleIdx] && TITLES[this.state.player.titleIdx].salary) || 0;
             const quarterSalary = sal * 3;
             if (quarterSalary > 0) {
                 this.changeStat('savings', quarterSalary);
                 this.log("success", `💵 工资已发放：${UTILS.formatMoney(quarterSalary)}（已入个人存款）`);
             }
-            // 触发随机事件
+            
             EventManager.triggerEndQuarter(this);
             if (this.state.turn.quarter === 4 && this.state.flags.researchApplied) this.settleResearch();
+            
             this.state.exhibitions.forEach(ex => {
                 ex.quartersActive++;
                 if (ex.status === 'waiting') {
@@ -322,6 +316,7 @@ const game = {
                     }
                 }
             });
+
             const prevYear = this.state.turn.year;
             this.state.turn.quarter++;
             this.state.flags.quartersInTitle++;
@@ -335,6 +330,8 @@ const game = {
 
             const didYearAdvance = this.state.turn.year !== prevYear;
             this.updateUniversityQuarter(didYearAdvance);
+            
+            // 结局判定：庸碌一生
             if (this.state.turn.year === 4 && this.state.turn.quarter === 1 && this.state.player.titleIdx === 0) {
                 this.endGame(
                     "结局·庸碌一生",
@@ -348,21 +345,17 @@ const game = {
             this.state.flags.hasStudiedThisQuarter = false;
             this.state.flags.didActionThisQuarter = false;
             
-            // 1. 先生成常规行政任务 (会重置 isPanelLocked = false)
+            // 生成新任务
             this.generateAdminTask(); 
             
-            // 2. 【新增】重置本季度行为标记
+            // 重置作死标记
             this.state.flags.hasDoneExhibitTaskThisQuarter = false;
 
-            // 3. 【新增】判定“领导的不满”事件
-            // 条件：连续3个季度先干活后回话 + 50%概率
+            // 判定“领导的不满” (连续3次先斩后奏)
             if (this.state.flags.adminAfterExhibitStreak >= 3 && Math.random() < 0.5) {
-                // 惩罚执行
                 this.changeStat('mood', -10);
-                this.state.flags.isPanelLocked = true; // 强制锁定面板
-                this.state.flags.adminAfterExhibitStreak = 0; // 惩罚后清空计数，给个改过自新的机会
-                
-                // 弹窗通知
+                this.state.flags.isPanelLocked = true;
+                this.state.flags.adminAfterExhibitStreak = 0;
                 this.showModal(
                     "😡 领导的不满", 
                     "领导在例会上点名批评了你：\n“有些人啊，工作分不清主次！消息也不回，在那瞎忙什么？”\n\n【后果】\n💔 愉悦 -10\n🔒 下季度展览面板已被强制锁定（整顿职场作风）",
@@ -374,29 +367,71 @@ const game = {
             this.checkSurvival();
             this.log("turn", `📅 Y${this.state.turn.year} - Q${this.state.turn.quarter}`);
             this.updateUI();
-            this.renderExhibitPanel(); // 重新渲染以显示锁
+            this.renderExhibitPanel();
         };
 
-        if (!this.state.flags.didActionThisQuarter) {
+        // 2. 定义检查流程 (行政检查 -> 空操作检查 -> 执行结算)
+        const runChecks = () => {
+            // [检查] 行政任务是否完成
+            const isFirstTurn = this.state.turn.year === 1 && this.state.turn.quarter === 1;
+            if (!isFirstTurn && !this.state.flags.adminTaskDone) {
+                this.showResult("无法下班", "本季度的【行政任务】还未处理！\n请先点击右侧栏的【掷骰子】回复领导消息。");
+                this.switchRightTab('admin');
+                return;
+            }
+
+            // [检查] 是否空操作
+            if (!this.state.flags.didActionThisQuarter) {
+                this.showModal(
+                    "提醒",
+                    "本季度你没有任何操作，记得安排工作或提升自己。",
+                    [{
+                        txt: "继续进入下一季度",
+                        cb: () => {
+                            this.closeModal();
+                            proceedEndQuarter();
+                        }
+                    }, {
+                        txt: "返回本季度",
+                        cb: () => this.closeModal()
+                    }],
+                    true
+                );
+                return;
+            }
+
+            // 一切正常，执行结算
+            proceedEndQuarter();
+        };
+
+        // 3. 【新增】精力值检查 (最优先触发)
+        if (this.state.player.health <= 0) {
             this.showModal(
-                "提醒",
-                "本季度你没有任何操作，记得安排工作或提升自己。",
-                [{
-                    txt: "继续进入下一季度",
-                    cb: () => {
-                        this.closeModal();
-                        proceedEndQuarter();
+                "准备下班",
+                "同事拦住你：“你看起来没什么精神，脸色惨白，要不喝个咖啡再回家？”\n\n(⚠️ 精力值已耗尽，强行下班可能直接触发【过劳死】结局)",
+                [
+                    { 
+                        txt: "去买咖啡", 
+                        cb: () => { 
+                            this.closeModal(); 
+                            this.switchScene('office'); // 帮你切回办公室找商店
+                        } 
+                    },
+                    { 
+                        txt: "坚持下班", 
+                        cb: () => { 
+                            this.closeModal(); 
+                            runChecks(); // 玩家头铁，继续执行后续检查
+                        } 
                     }
-                }, {
-                    txt: "返回本季度",
-                    cb: () => this.closeModal()
-                }],
+                ],
                 true
             );
             return;
         }
 
-        proceedEndQuarter();
+        // 4. 精力正常，直接跑检查
+        runChecks();
     },
     // 结果弹窗 (通知类，可点击背景关闭)
     showResult(msg, effects) {
