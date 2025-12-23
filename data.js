@@ -3287,86 +3287,86 @@ const CURATION_EVENTS = {
 
 // [新增] 摸鱼休息事件库
 const LEISURE_EVENTS = {
-    // === 1. 闭目养神 (健康+3~5, 愉悦+3~5) ===
+    // === 1. 闭目养神 (健康+8~10, 愉悦+5~8) ===
     'slack': [
         {
             title: "摸鱼：库房小憩",
             desc: "躲进恒温恒湿的文物库房角落，靠着装满陶片的木箱眯一会。",
             choices: [
-                { txt: "A. 深呼吸霉味", effect: { health: 3, mood: 4 }, res: "老物件的气息让人安心。" },
-                { txt: "B. 彻底放空", effect: { health: 5, mood: 5 }, res: "梦见陶俑活过来了。" }
+                { txt: "A. 深呼吸霉味", effect: { health: 8, mood: 4 }, res: "老物件的气息让人安心。" },
+                { txt: "B. 彻底放空", effect: { health: 10, mood: 5 }, res: "梦见陶俑活过来了。" }
             ]
         },
         {
             title: "摸鱼：罗汉床",
             desc: "中午的展厅人迹罕至，你偷偷坐在那张昂贵的红木罗汉床（复制品）边上。",
             choices: [
-                { txt: "A. 假装古人", effect: { health: 4, mood: 5 }, res: "稍微感受到了帝王享受。" },
-                { txt: "B. 揉揉太阳穴", effect: { health: 5, mood: 3 }, res: "偏头痛缓解了不少。" }
+                { txt: "A. 假装古人", effect: { health: 8, mood: 5 }, res: "稍微感受到了帝王享受。" },
+                { txt: "B. 揉揉太阳穴", effect: { health: 8, mood: 3 }, res: "偏头痛缓解了不少。" }
             ]
         },
         {
             title: "摸鱼：天台花园",
             desc: "溜到天台的花园里，今天的阳光正好，几只麻雀在石雕上跳跃。",
             choices: [
-                { txt: "A. 晒晒后背", effect: { health: 5, mood: 4 }, res: "暖洋洋的，充满电了。" },
-                { txt: "B. 听鸟叫声", effect: { health: 3, mood: 5 }, res: "比馆长的唠叨好听。" }
+                { txt: "A. 晒晒后背", effect: { health: 10, mood: 4 }, res: "暖洋洋的，充满电了。" },
+                { txt: "B. 听鸟叫声", effect: { health: 10, mood: 5 }, res: "比馆长的唠叨好听。" }
             ]
         },
         {
             title: "摸鱼：视听室",
             desc: "借口去视听室检查设备，在最舒服的沙发位上戴上了降噪耳机。",
             choices: [
-                { txt: "A. 播放白噪音", effect: { health: 4, mood: 3 }, res: "这里的隔音效果真棒。" },
-                { txt: "B. 闭目养神", effect: { health: 4, mood: 5 }, res: "偷得浮生半日闲。" }
+                { txt: "A. 播放白噪音", effect: { health: 8, mood: 3 }, res: "这里的隔音效果真棒。" },
+                { txt: "B. 闭目养神", effect: { health: 8, mood: 5 }, res: "偷得浮生半日闲。" }
             ]
         },
         {
             title: "摸鱼：按摩椅",
             desc: "躲在员工休息室的按摩椅上，虽然皮面有点破，但功能还算正常。",
             choices: [
-                { txt: "A. 开启震动", effect: { health: 5, mood: 3 }, res: "骨头都酥软了。" },
-                { txt: "B. 开启加热", effect: { health: 4, mood: 4 }, res: "腰肌劳损得到了救赎。" }
+                { txt: "A. 开启震动", effect: { health: 10, mood: 3 }, res: "骨头都酥软了。" },
+                { txt: "B. 开启加热", effect: { health: 10, mood: 4 }, res: "腰肌劳损得到了救赎。" }
             ]
         },
         {
             title: "摸鱼：图录枕头",
             desc: "趴在办公桌上，用两本厚厚的《文物图录》搭成了一个完美的枕头。",
             choices: [
-                { txt: "A. 调整高度", effect: { health: 3, mood: 3 }, res: "书香（物理）助眠。" },
-                { txt: "B. 蒙头大睡", effect: { health: 5, mood: 4 }, res: "甚至流了一点口水。" }
+                { txt: "A. 调整高度", effect: { health: 8, mood: 3 }, res: "书香（物理）助眠。" },
+                { txt: "B. 蒙头大睡", effect: { health: 10, mood: 4 }, res: "甚至流了一点口水。" }
             ]
         },
         {
             title: "摸鱼：咖啡厅角落",
             desc: "跑到文创咖啡厅的角落，点了一杯不加糖的冰水，看着窗外发呆。",
             choices: [
-                { txt: "A. 观察游客", effect: { health: 3, mood: 4 }, res: "看来大家都很累啊。" },
-                { txt: "B. 眼神失焦", effect: { health: 4, mood: 5 }, res: "大脑终于停止了转动。" }
+                { txt: "A. 观察游客", effect: { health: 8, mood: 4 }, res: "看来大家都很累啊。" },
+                { txt: "B. 眼神失焦", effect: { health: 10, mood: 5 }, res: "大脑终于停止了转动。" }
             ]
         },
         {
             title: "摸鱼：监控室",
             desc: "假装在安保监控室“协同工作”，其实是盯着几十个屏幕发呆。",
             choices: [
-                { txt: "A. 数人头", effect: { health: 3, mood: 3 }, res: "有一种催眠的韵律。" },
-                { txt: "B. 靠着椅背", effect: { health: 4, mood: 4 }, res: "保安大哥递来一个靠枕。" }
+                { txt: "A. 数人头", effect: { health: 8, mood: 3 }, res: "有一种催眠的韵律。" },
+                { txt: "B. 靠着椅背", effect: { health: 10, mood: 4 }, res: "保安大哥递来一个靠枕。" }
             ]
         },
         {
             title: "摸鱼：微观世界",
             desc: "在修复室等待胶水凝固的间隙，你盯着显微镜下的纤维纹路出神。",
             choices: [
-                { txt: "A. 眨眨眼睛", effect: { health: 5, mood: 3 }, res: "缓解了视疲劳。" },
-                { txt: "B. 冥想片刻", effect: { health: 3, mood: 5 }, res: "心跳变得平缓了。" }
+                { txt: "A. 眨眨眼睛", effect: { health: 10, mood: 3 }, res: "缓解了视疲劳。" },
+                { txt: "B. 冥想片刻", effect: { health: 8, mood: 5 }, res: "心跳变得平缓了。" }
             ]
         },
         {
             title: "摸鱼：避难所",
             desc: "厕所永远是打工人的避难所，你锁上隔间的门，享受片刻宁静。",
             choices: [
-                { txt: "A. 靠着门板", effect: { health: 3, mood: 5 }, res: "世界上最安全的角落。" },
-                { txt: "B. 闭眼深蹲", effect: { health: 5, mood: 3 }, res: "腿麻了，但精神好了。" }
+                { txt: "A. 靠着门板", effect: { health: 8, mood: 5 }, res: "世界上最安全的角落。" },
+                { txt: "B. 闭眼深蹲", effect: { health: 10, mood: 3 }, res: "腿麻了，但精神好了。" }
             ]
         }
     ],
