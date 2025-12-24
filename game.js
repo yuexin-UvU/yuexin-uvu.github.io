@@ -320,12 +320,27 @@ nextQuarter() {
             const prevYear = this.state.turn.year;
             this.state.turn.quarter++;
             this.state.flags.quartersInTitle++;
+            // === 【修改】年份更替与退休判定 ===
             if (this.state.turn.quarter > 4) {
                 this.state.turn.year++;
                 this.state.turn.quarter = 1;
-                this.state.player.age += 1;
+                this.state.player.age += 1; // 年龄+1
                 this.state.flags.researchApplied = false;
                 this.state.flags.promotedThisYear = false;
+
+                // 【新增】退休结局判定
+                const p = this.state.player;
+                // 设定退休年龄：女60，男(及其他)65
+                const retireAge = p.gender === '女' ? 60 : 65; 
+                
+                if (p.age >= retireAge) {
+                    const finalTitle = TITLES[p.titleIdx].name;
+                    this.endGame(
+                        "结局·光荣退休",
+                        `🎉 光荣退休！\n\n你坚守到岗位的最后一刻，一生完成了无数展览。\n现在可以好好休息，享受退休生活了。\n\n----------------\n🎖️ 最终职称：【${finalTitle}】\n💰 退休存款：${UTILS.formatMoney(p.savings)}`
+                    );
+                    return; // 阻止后续逻辑，直接结束
+                }
             }
 
             const didYearAdvance = this.state.turn.year !== prevYear;

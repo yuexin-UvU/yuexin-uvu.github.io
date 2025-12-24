@@ -47,7 +47,7 @@ ctrl shift p搜索`Terminal: Select Default Profile`，看看下拉菜单里有�
             "icon": "terminal-git-bash"
         },
         "PowerShell 7": {
-            "path": "C:\\_Tools\\PowerShell\\7\\pwsh.exe",
+            "path": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
             "args": [
                 "-NoLogo"
             ]
@@ -55,7 +55,7 @@ ctrl shift p搜索`Terminal: Select Default Profile`，看看下拉菜单里有�
     },
     "terminal.integrated.defaultProfile.windows": "PowerShell 7",
         "terminal.integrated.automationProfile.windows": {
-            "path": "C:\\_Tools\\PowerShell\\7\\pwsh.exe",
+            "path": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
             "args": ["-NoLogo"]
     }
 ```
