@@ -1513,35 +1513,85 @@ nextQuarter() {
         }
     },
 
-    actionPromote() {
+actionPromote() {
         this.markAction();
         const p = this.state.player;
         const q = this.state.flags.quartersInTitle;
         let success = false, next = "";
-        if (p.titleIdx === 0 && (q>=4) + (p.iq>=35&&p.eq>=35) + (p.rep>=10) >= 2) { success=true; next="馆员"; }
 
-        else if (p.titleIdx === 1 && q>=8 && p.iq>=50 && p.eq>=50 && p.rep>=30) { success=true; next="副研究馆员"; }
+        // 1. 助理 -> 馆员 (入门门槛，保持宽松)
+        // 逻辑：工龄到了，且稍有能力或声望即可
+        if (p.titleIdx === 0) {
+            const conditions = [
+                q >= 4,                  // 工龄满1年
+                (p.iq + p.eq) >= 80,     // 综合能力尚可
+                p.rep >= 10              // 有一点名声
+            ];
+            // 满足任意2条即可
+            if (conditions.filter(Boolean).length >= 2) {
+                success = true; next = "馆员";
+            }
+        }
 
-        else if (p.titleIdx === 2 && q>=8 && p.iq>=80 && p.eq>=80 && p.rep>=50) { success=true; next="研究馆员"; }
+        // 2. 馆员 -> 副研究馆员 (开始分流)
+        else if (p.titleIdx === 1) {
+            // 路径A：学术骨干 (高智商，低情商容忍)
+            const pathAcademic = p.iq >= 70 && p.rep >= 40;
+            // 路径B：八面玲珑 (高情商，中智商)
+            const pathManager = p.eq >= 70 && p.iq >= 40 && p.rep >= 40;
+            // 基础工龄：2年
+            if (q >= 8 && (pathAcademic || pathManager)) {
+                success = true; next = "副研究馆员";
+            }
+        }
 
+        // 3. 副研究馆员 -> 研究馆员 (专家级)
+        else if (p.titleIdx === 2) {
+            // 路径A：学界泰斗 (智商极高，声望极高)
+            const pathExpert = p.iq >= 90 && p.rep >= 100;
+            // 路径B：领军人物 (双高，均衡发展)
+            const pathLeader = p.iq >= 75 && p.eq >= 75 && p.rep >= 80;
+            
+            if (q >= 12 && (pathExpert || pathLeader)) {
+                success = true; next = "研究馆员";
+            }
+        }
+
+        // 4. 研究馆员 -> 馆长 (最终BOSS)
+        // 馆长必须有极高的声望，且不能有明显的短板
+        else if (p.titleIdx === 3) {
+            if (q >= 16 && p.rep >= 300 && p.iq >= 80 && p.eq >= 80) {
+                success = true; next = "馆长";
+            }
+        }
+
+        // === 结算逻辑 ===
         this.state.flags.promotedThisYear = true;
+        
         if (success) {
             p.titleIdx++;
             this.state.flags.quartersInTitle = 0;
+            
+            // 如果升到了馆长(index 4)，直接触发结局
             if (p.titleIdx === 4) {
-                const caps = this.getIqEqCaps();
-                p.iq = UTILS.clamp(p.iq, caps.min, caps.max);
-                p.eq = UTILS.clamp(p.eq, caps.min, caps.max);
                 this.endGame(
                     "结局·馆长",
-                    "恭喜你，经过多年的学习、实践与选择，你最终成为了这座博物馆的馆长。\n在展厅与办公室之间，你逐渐找到了平衡学术、公众与现实运作的方法。\n博物馆并非完美，却在你的带领下持续运转、不断调整，也回应着时代的期待。\n或许前方仍有争议与挑战，但你已经明白\n博物馆的未来，正是在一次次判断与承担中被塑造出来的。"
+                    "恭喜你，经过多年的深耕与博弈，你最终成为了这座博物馆的馆长。\n" +
+                    "你不仅在学术上有所建树，更懂得如何在复杂的职场中平衡各方利益。\n" +
+                    "此刻，你站在办公室的落地窗前，俯瞰着排队入馆的人群。\n" +
+                    "这座博物馆的未来，此刻正握在你的手中。"
                 );
                 return;
             }
 
-            this.showModal("评审通过", `恭喜晋升为 [${next}]！`, [{txt:"确认",cb:()=>this.closeModal()}]);
+            this.showModal("评审通过", `恭喜！凭借出色的表现，你已晋升为 [${next}]！\n工资收入将大幅提升。`, [{txt:"确认",cb:()=>this.closeModal()}]);
         } else {
-            this.showResult("评审未通过", { rep: -1 });
+            // 失败反馈优化：告诉玩家差在哪里
+            let reason = "资历或能力尚有欠缺";
+            if (p.titleIdx === 3) reason = "馆长之位需要极高的声望(300+)与均衡的能力(双80+)";
+            else if (p.titleIdx === 2) reason = "需要更高的学术造诣(IQ>90)或综合管理能力";
+            
+            this.showResult("评审未通过", `${reason}\n\n(评审委员会认为你还需要再历练一年)\n声望 -5`, { rep: -5 });
         }
 
         this.updateUI();

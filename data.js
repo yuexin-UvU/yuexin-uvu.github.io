@@ -155,7 +155,7 @@ const CURATION_EVENTS = {
                 desc: "描述：抵达秦皇陵遗址公园时下起暴雨，鞋子全湿了，但原定只有半天拍摄时间。",
                 choices: [
                     { txt: "A. 冒雨作业：穿雨衣坚持拍摄，精神可嘉但效果一般。", effect: { iq: 5, health: -8, mood: -4 }, res: "拍到了雨中的遗址，别有一番风味。" },
-                    { txt: "B. 室内访谈：放弃外景，改为深入采访工作人员。", effect: { eq: 7, iq: 5, health: -4 }, res: "获得了意想不到的口述资料。" },
+                    { txt: "B. 室内访谈：放弃外景，改为深入采访工作人员。", effect: { eq: 8, iq: 5, health: -4 }, res: "获得了意想不到的口述资料。" },
                     { txt: "C. 等雨停：赌一把运气，如果雨不停就用旧素材。", effect: { iq: 4, health: -3, mood: -6 }, res: "雨没停...只能用旧图了。" }
                 ]
             },
@@ -163,9 +163,9 @@ const CURATION_EVENTS = {
                 title: "事件 3.2：热情的接待",
                 desc: "描述：当地博物馆的接待人员非常热情，晚上安排了长达3小时的酒局饭局。",
                 choices: [
-                    { txt: "A. 欣然赴约：这是建立人脉的好机会，喝！", effect: { eq: 8, health: -7, mood: 3 }, res: "交到了朋友，但宿醉头痛。" },
-                    { txt: "B. 婉言拒绝：借口身体不适回酒店整理笔记。", effect: { iq: 6, eq: 3, health: -3 }, res: "由于拒绝，对方略显冷淡。" },
-                    { txt: "C. 露个脸：去坐半小时，喝杯茶就溜走。", effect: { eq: 6, iq: 4, health: -4 }, res: "得体的社交。" }
+                    { txt: "A. 欣然赴约：这是建立人脉的好机会，喝！", effect: { eq: 9, health: -7, mood: 3 }, res: "交到了朋友，但宿醉头痛。" },
+                    { txt: "B. 婉言拒绝：借口身体不适回酒店整理笔记。", effect: { iq: 6, eq: 5, health: -3 }, res: "由于拒绝，对方略显冷淡。" },
+                    { txt: "C. 露个脸：去坐半小时，喝杯茶就溜走。", effect: { eq: 7, iq: 4, health: -4 }, res: "得体的社交。" }
                 ]
             },
             {
@@ -183,7 +183,7 @@ const CURATION_EVENTS = {
                 choices: [
                     { txt: "A. 咬牙坚持：站着去，在车上还能用手机看资料。", effect: { iq: 5, health: -8, mood: -5 }, res: "腿断了，但资料看完了。" },
                     { txt: "B. 改签推迟：晚一天去，保证休息，但压缩调研时间。", effect: { health: -3, iq: 4 }, res: "精神饱满地开始了第二天的行程。" },
-                    { txt: "C. 拼车前往：找陌生人拼车，贵但快，社交风险未知。", effect: { eq: 5, health: -5, mood: -4, money: -500 }, res: "一路尬聊，但准时到达。" }
+                    { txt: "C. 拼车前往：找陌生人拼车，贵但快，社交风险未知。", effect: { eq: 7, health: -5, mood: -4, money: -500 }, res: "一路尬聊，但准时到达。" }
                 ]
             }
         ],
@@ -695,8 +695,8 @@ const CURATION_EVENTS = {
                 desc: "描述：工作室建在垃圾填埋场旁，恶臭熏天，你仍需保持优雅微笑。",
                 choices: [
                     { txt: "A. 戴防毒面具：显得很不礼貌，但保命要紧。", effect: { health: -2, eq: -5, iq: 4 }, res: "艺术家觉得你不尊重他的环境。" },
-                    { txt: "B. 强忍恶心：用意志力克服生理反应。", effect: { eq: 8, health: -6, mood: -6 }, res: "忍常人所不能忍，佩服。" },
-                    { txt: "C. 喷满香水：试图用香奈儿盖过垃圾味。", effect: { eq: 5, health: -4, mood: -3 }, res: "混合的味道更恶心了。" }
+                    { txt: "B. 强忍恶心：用意志力克服生理反应。", effect: { eq: 9, health: -6, mood: -6 }, res: "忍常人所不能忍，佩服。" },
+                    { txt: "C. 喷满香水：试图用香奈儿盖过垃圾味。", effect: { eq: 6, health: -4, mood: -3 }, res: "混合的味道更恶心了。" }
                 ]
             },
             {
@@ -712,18 +712,18 @@ const CURATION_EVENTS = {
                 title: "事件 3.3：狼狈逃离",
                 desc: "描述：潜入竞对展览偷拍被安保认出，必须在两分钟内尴尬地逃离现场。",
                 choices: [
-                    { txt: "A. 假装路人：淡定地走出去，死不承认。", effect: { eq: 7, health: -3, mood: -2 }, res: "只要我不尴尬，尴尬的就是别人。" },
+                    { txt: "A. 假装路人：淡定地走出去，死不承认。", effect: { eq: 8, health: -3, mood: -2 }, res: "只要我不尴尬，尴尬的就是别人。" },
                     { txt: "B. 夺路狂奔：丢脸就丢脸，别被抓住。", effect: { health: -5, mood: -5, iq: 4 }, res: "跑得比兔子还快。" },
-                    { txt: "C. 反客为主：声称是来谈收购的。", effect: { iq: 6, eq: 5, mood: -8 }, res: "虽然是瞎编，但镇住了场面。" }
+                    { txt: "C. 反客为主：声称是来谈收购的。", effect: { iq: 6, eq: 7, mood: -8 }, res: "虽然是瞎编，但镇住了场面。" }
                 ]
             },
             {
                 title: "事件 3.4：雨夜蹲守",
                 desc: "描述：艺术家突然抑郁闭门不见，你在门口淋着冷雨苦苦蹲守了一整夜。",
                 choices: [
-                    { txt: "A. 苦肉计：发自拍给他看淋湿的样子。", effect: { eq: 8, health: -7, mood: -4 }, res: "艺术家心软了，终于开了门。" },
-                    { txt: "B. 留信离开：塞一张纸条，回家洗热水澡。", effect: { iq: 5, health: -3, eq: 4 }, res: "得体的处理方式。" },
-                    { txt: "C. 破门而入：担心他自杀，直接踹门。", effect: { iq: 4, eq: 8 }, res: "虽然粗鲁，但救了他一命（大概）。" }
+                    { txt: "A. 苦肉计：发自拍给他看淋湿的样子。", effect: { eq: 9, health: -7, mood: -4 }, res: "艺术家心软了，终于开了门。" },
+                    { txt: "B. 留信离开：塞一张纸条，回家洗热水澡。", effect: { iq: 5, health: -3, eq: 5 }, res: "得体的处理方式。" },
+                    { txt: "C. 破门而入：担心他自杀，直接踹门。", effect: { iq: 4, eq: 9 }, res: "虽然粗鲁，但救了他一命（大概）。" }
                 ]
             }
         ],
@@ -1243,9 +1243,9 @@ const CURATION_EVENTS = {
                 title: "事件 3.2：半夜蚕声",
                 desc: "描述：必须亲自尝试养蚕，半夜被数万只蚕宝宝啃食桑叶的沙沙声吓醒。",
                 choices: [
-                    { txt: "A. 克服恐惧：这也是一种自然白噪音。", effect: { eq: 6, mood: 3, health: -4 }, res: "你居然听着这声音睡着了。" },
+                    { txt: "A. 克服恐惧：这也是一种自然白噪音。", effect: { eq: 7, mood: 3, health: -4 }, res: "你居然听着这声音睡着了。" },
                     { txt: "B. 戴耳塞睡：眼不见心不烦。", effect: { health: -2, iq: 4, mood: -2 }, res: "睡眠质量一般。" },
-                    { txt: "C. 换人来养：把任务丢给实习生。", effect: { eq: 4, health: -2, mood: -4 }, res: "实习生黑眼圈很重。" }
+                    { txt: "C. 换人来养：把任务丢给实习生。", effect: { eq: 5, health: -2, mood: -4 }, res: "实习生黑眼圈很重。" }
                 ]
             },
             {
@@ -1488,7 +1488,7 @@ const CURATION_EVENTS = {
                 choices: [
                     { txt: "A. 逃离现场：san值狂掉，无法继续工作。", effect: { health: -4, mood: -7, iq: 3 }, res: "真的很吓人。" },
                     { txt: "B. 触摸脸庞：克服恐惧，检查皮肤材质。", effect: { iq: 7, health: -5, mood: -4 }, res: "专业的触感检查。" },
-                    { txt: "C. 质问设计：为什么要设计得这么像人？", effect: { eq: 6, iq: 4, health: -3 }, res: "引发了哲学讨论。" }
+                    { txt: "C. 质问设计：为什么要设计得这么像人？", effect: { eq: 8, iq: 4, health: -3 }, res: "引发了哲学讨论。" }
                 ]
             },
             {
@@ -1506,7 +1506,7 @@ const CURATION_EVENTS = {
                 choices: [
                     { txt: "A. 伪造证件：假装是维修工混进去。", effect: { health: -8, iq: 6, rep: -5 }, res: "被机器狗识破并驱逐。" },
                     { txt: "B. 无人机侦查：飞进去拍两张就跑。", effect: { iq: 7, health: -4, mood: -6 }, res: "拍到了机密画面，但无人机被击落了。" },
-                    { txt: "C. 正规预约：虽然要排队三个月。", effect: { eq: 5, iq: 3, health: -2 }, res: "按规矩办事。" }
+                    { txt: "C. 正规预约：虽然要排队三个月。", effect: { eq: 7, iq: 3, health: -2 }, res: "按规矩办事。" }
                 ]
             }
         ],
@@ -1911,7 +1911,7 @@ const CURATION_EVENTS = {
                 choices: [
                     { txt: "A. 保持冷静：割断缠绕物，慢慢上浮。", effect: { iq: 8, health: -5, mood: -5 }, res: "死里逃生，极其冷静。" },
                     { txt: "B. 恐慌挣扎：急速上浮，得了减压病。", effect: { health: -10, mood: -8, iq: 2 }, res: "被送进高压氧舱抢救。" },
-                    { txt: "C. 呼叫潜伴：做手势求救，幸好有人在。", effect: { eq: 7, health: -3, mood: -4 }, res: "团队合作救了命。" }
+                    { txt: "C. 呼叫潜伴：做手势求救，幸好有人在。", effect: { eq: 9, health: -3, mood: -4 }, res: "团队合作救了命。" }
                 ]
             },
             {
@@ -2314,9 +2314,9 @@ const CURATION_EVENTS = {
                 title: "事件：江宁织造",
                 desc: "前往南京考察江宁织造博物馆，想借几件清代云锦，对方馆长态度冷淡。",
                 choices: [
-                    { txt: "A. 三顾茅庐：天天去门口堵馆长。", effect: { eq: 8, health: -6, mood: -4 }, res: "终于借到了。" },
+                    { txt: "A. 三顾茅庐：天天去门口堵馆长。", effect: { eq: 9, health: -6, mood: -4 }, res: "终于借到了。" },
                     { txt: "B. 放弃原件：回去找工厂定做仿品。", effect: { iq: 4, health: -2, mood: -3 }, res: "只能用仿品。" },
-                    { txt: "C. 交换展品：拿我们馆的镇馆之宝做交换。", effect: { eq: -6, iq: 6 }, res: "代价很大。" }
+                    { txt: "C. 交换展品：拿我们馆的镇馆之宝做交换。", effect: { eq: 5, iq: 6 }, res: "代价很大。" }
                 ]
             },
             {
@@ -2325,7 +2325,7 @@ const CURATION_EVENTS = {
                 choices: [
                     { txt: "A. 徒步进山：走坏两双鞋，感受作者的穷困。", effect: { health: -7, mood: 5, iq: 4 }, res: "身临其境。" },
                     { txt: "B. 无人机拍摄：飞进去拍个全景就撤。", effect: { iq: 5, health: -2, mood: -2 }, res: "素材不够丰富。" },
-                    { txt: "C. 借宿村农：和当地老人同吃同住听传说。", effect: { eq: 7, health: -4, mood: 4 }, res: "听到了很多故事。" }
+                    { txt: "C. 借宿村农：和当地老人同吃同住听传说。", effect: { eq: 9, health: -4, mood: 4 }, res: "听到了很多故事。" }
                 ]
             },
             {
@@ -2729,7 +2729,7 @@ const CURATION_EVENTS = {
                 desc: "听说老城区要拆迁，连夜去废墟里捡门牌号和老窗框。",
                 choices: [
                     { txt: "A. 全副武装：戴安全帽穿劳保鞋，注意落石。", effect: { iq: 5, health: -6, mood: -2 }, res: "捡到了好东西。" },
-                    { txt: "B. 雇人去捡：给收废品的大爷发钱让他帮忙留。", effect: { eq: 7, iq: 4, health: -2, money: -2000 }, res: "轻松搞定。" },
+                    { txt: "B. 雇人去捡：给收废品的大爷发钱让他帮忙留。", effect: { eq: 8, iq: 4, health: -2, money: -2000 }, res: "轻松搞定。" },
                     { txt: "C. 铤而走险：翻进围挡去拆那块最漂亮的砖雕。", effect: { health: -10, mood: 6, rep: -5 }, res: "太危险了！" }
                 ]
             },
@@ -2737,7 +2737,7 @@ const CURATION_EVENTS = {
                 title: "事件：早市体验",
                 desc: "为了记录真实的烟火气，凌晨三点去批发市场录音。",
                 choices: [
-                    { txt: "A. 融入其中：帮摊主搬菜，换取最真实的对话。", effect: { eq: 8, health: -7, mood: 5 }, res: "录到了最真实的声音。" },
+                    { txt: "A. 融入其中：帮摊主搬菜，换取最真实的对话。", effect: { eq: 9, health: -7, mood: 5 }, res: "录到了最真实的声音。" },
                     { txt: "B. 隐形旁观：躲在角落里偷偷录。", effect: { iq: 5, mood: -2, eq: 3 }, res: "没被发现。" },
                     { txt: "C. 正常采访：拿着话筒去问，大家都变得很拘谨。", effect: { iq: 4, eq: -4, mood: -3 }, res: "素材很生硬。" }
                 ]
@@ -2748,7 +2748,7 @@ const CURATION_EVENTS = {
                 choices: [
                     { txt: "A. 大快朵颐：哪怕拉肚子也要吃完全套。", effect: { health: -8, mood: 7 }, res: "味道真不错，就是肚子疼。" },
                     { txt: "B. 浅尝辄止：每个菜尝一口就吐掉。", effect: { iq: 5, health: -2, eq: -3 }, res: "浪费粮食。" },
-                    { txt: "C. 采访食客：我不吃，我看别人吃什么表情。", effect: { eq: 6, iq: 4, health: -1 }, res: "聪明的调研。" }
+                    { txt: "C. 采访食客：我不吃，我看别人吃什么表情。", effect: { eq: 8, iq: 4, health: -1 }, res: "聪明的调研。" }
                 ]
             }
         ],
@@ -3152,8 +3152,8 @@ const CURATION_EVENTS = {
                 desc: "现场看专家提取象牙，必须用液氮冻住，稍有不慎象牙就会粉碎。",
                 choices: [
                     { txt: "A. 屏息凝视：大气不敢出，生怕吹口气就坏了。", effect: { mood: -5, iq: 4, health: -2 }, res: "紧张刺激。" },
-                    { txt: "B. 协助搬运：手都在抖，压力山大。", effect: { eq: -6, health: -4 }, res: "手抖了。" },
-                    { txt: "C. 视频记录：站远点拍素材，别添乱。", effect: { iq: 5, eq: 3, health: -1 }, res: "记录者。" }
+                    { txt: "B. 协助搬运：手都在抖，压力山大。", effect: { eq: 4, health: -4 }, res: "手抖了。" },
+                    { txt: "C. 视频记录：站远点拍素材，别添乱。", effect: { iq: 5, eq: 5, health: -1 }, res: "记录者。" }
                 ]
             },
             {
@@ -3496,7 +3496,7 @@ const LEISURE_EVENTS = {
 const DEFAULT_EVENTS = {
     'collect': [{txt:"上门拜访整理资料",effect:{rep:3,eq:2,health:-5},res:"获赠珍贵资料"},{txt:"施压获取",effect:{rep:-4,iq:1,health:-3,mood:-2},res:"引发抵触"}],
     'read': [{txt:"交叉考证",effect:{iq:3,rep:2,health:-6},res:"获认可"},{txt:"统一录入",effect:{rep:-2,iq:-2,health:-3},res:"被质疑"}],
-    'trip': [{txt:"提出合作方案",effect:{eq:4,rep:3,health:-7},res:"达成合作"},{txt:"单方要求",effect:{eq:-2,rep:-1,health:-4},res:"被婉拒"}],
+    'trip': [{txt:"提出合作方案",effect:{eq:7,rep:3,health:-7},res:"达成合作"},{txt:"单方要求",effect:{eq:-2,rep:-1,health:-4},res:"被婉拒"}],
     'theme': [{txt:"提出融合主题",effect:{eq:5,rep:4,health:-6},res:"全票通过"},{txt:"站队一方",effect:{eq:-2,rep:1,health:-4},res:"得罪同事"}],
     'items': [{txt:"策划深度专题",effect:{iq:3,rep:3,health:-6},res:"专业性强"},{txt:"只选美观展品",effect:{rep:-2,eq:1,health:-4},res:"被批肤浅"}],
     'design': [{txt:"针对性设计动线",effect:{iq:4,rep:3,health:-7},res:"体验佳"},{txt:"照搬模板",effect:{iq:-2,rep:-1,health:-3},res:"无特色"}],
