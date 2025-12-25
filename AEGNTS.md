@@ -1,1 +1,1 @@
-（已经执行过的命令可以删掉/移动到.history，因为codex每次执行命令都会读取AGENTS.md，即使不在聊天框指定"执行AGENTS.md"）
+（已经执行过的命令可以删掉，因为codex每次执行命令都会读取AGENTS.md，即使不在聊天框指定"执行AGENTS.md"）
