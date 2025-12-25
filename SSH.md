@@ -28,7 +28,8 @@
 
 	```bash
 	git config --global user.signingkey 末尾粘贴刚刚复制的那一整行代码
-	git config --global commit.gpgSign true
+    git remote set-url origin git@github.com:yuexin-UvU/yuexin-uvu.github.io.git
+    ssh -T git@github.com
 	```
 
 	之后再“推送”时github上就会显示"Verified"
