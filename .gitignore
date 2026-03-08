@@ -1,2 +1,7 @@
 *.pdf
 *.pptx
+ref/
+.venv-markitdown/
+tools/markitdown/
+__pycache__/
+playwright-audit/
