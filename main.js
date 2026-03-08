@@ -4,11 +4,14 @@ const printButton = document.getElementById("print-button");
 const printedDate = document.getElementById("printed-date");
 const navLinks = Array.from(document.querySelectorAll("[data-nav-link]"));
 const sections = Array.from(document.querySelectorAll("[data-section]"));
+const revealItems = Array.from(document.querySelectorAll("[data-reveal]"));
 const paperMotion = document.getElementById("paper-motion");
 const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)",
 );
-const themeStorageKey = "gyx-theme";
+const themeStorageKey = "gyx-archive-theme";
+
+root.classList.add("js-ready");
 
 function setTheme(theme) {
   root.dataset.theme = theme;
@@ -42,19 +45,20 @@ function playPaperFeedAnimation() {
 
   paperMotion.getAnimations().forEach((animation) => animation.cancel());
 
-  const keyframes = [
-    { offset: 0, transform: "translateY(-56px)" },
-    { offset: 0.24, transform: "translateY(-28px)" },
-    { offset: 0.46, transform: "translateY(-32px)" },
-    { offset: 0.72, transform: "translateY(-10px)" },
-    { offset: 1, transform: "translateY(0)" },
-  ];
-
-  paperMotion.animate(keyframes, {
-    duration: 680,
-    easing: "cubic-bezier(0.22, 1, 0.36, 1)",
-    fill: "both",
-  });
+  paperMotion.animate(
+    [
+      { offset: 0, transform: "translateY(-58px)" },
+      { offset: 0.22, transform: "translateY(-34px)" },
+      { offset: 0.4, transform: "translateY(-38px)" },
+      { offset: 0.7, transform: "translateY(-12px)" },
+      { offset: 1, transform: "translateY(0)" },
+    ],
+    {
+      duration: 760,
+      easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+      fill: "both",
+    },
+  );
 }
 
 function markActiveLink(id) {
@@ -86,12 +90,25 @@ function observeSections() {
       }
     },
     {
-      rootMargin: "-24% 0px -58% 0px",
-      threshold: [0.2, 0.35, 0.55],
+      rootMargin: "-24% 0px -56% 0px",
+      threshold: [0.18, 0.35, 0.52],
     },
   );
 
   sections.forEach((section) => observer.observe(section));
+}
+
+function revealItemsOnLoad() {
+  if (!revealItems.length) {
+    return;
+  }
+
+  requestAnimationFrame(() => {
+    revealItems.forEach((item, index) => {
+      item.style.transitionDelay = `${Math.min(index * 36, 240)}ms`;
+      item.classList.add("is-visible");
+    });
+  });
 }
 
 function bindNavigation() {
@@ -120,8 +137,12 @@ function setPrintedDate() {
 setTheme(resolveInitialTheme());
 setPrintedDate();
 observeSections();
+revealItemsOnLoad();
 bindNavigation();
-playPaperFeedAnimation();
+
+window.addEventListener("load", () => {
+  playPaperFeedAnimation();
+});
 
 if (themeToggle) {
   themeToggle.addEventListener("click", () => {
