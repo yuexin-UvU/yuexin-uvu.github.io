@@ -978,14 +978,20 @@ button {
 .portfolio-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
   gap: 1rem;
   margin-top: 1rem;
+}
+
+.portfolio-card {
+  display: flex;
 }
 
 .portfolio-link-card {
   display: flex;
   flex-direction: column;
   min-height: 100%;
+  flex: 1;
   padding: 1.2rem 1.25rem 1.35rem;
   color: inherit;
   transition:
