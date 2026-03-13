@@ -105,31 +105,35 @@ const translations = {
         "Invited to present research at the Jiangsu and China main-venue youth forums of International Museum Day (May 18).",
       "callout-body-2":
         "Selected for the 2025 Jiangsu Graduate Practice and Innovation Program, continuing work on the rhetoric of narrative exhibitions.",
-      "portfolio-kicker": "Portfolio",
-      "portfolio-title": "Curatorial & Creative Projects",
-      "portfolio-intro":
-        "Three clickable portfolio entries are collected here. Each card opens a dedicated project page in a new tab, with continued access to the original Word file.",
+      "portfolio-title": "Portfolio",
       "portfolio-chip-1": "Project 01",
       "portfolio-card-title-1":
-        '"Steel and Glory: Interpretation Script for the European Knight Armor and Culture Exhibition"',
-      "portfolio-card-meta-1": "Interpretation script · Guided exhibition narrative",
+        '"Museum Simulator" Web Game',
+      "portfolio-card-meta-1": "Independent project · Web game",
       "portfolio-card-body-1":
-        "Focused on the unit 'The Twilight of Knights,' this project organizes visitor-facing transitions and object interpretation around armor, polearms, firearms, and the decline of knighthood.",
+        "Independently planned and produced the web game \"Museum Simulator,\" covering theme, gameplay framing, copywriting, and overall presentation. Centered on museum management simulation, it translates cultural content into interactive narrative; the project reached 1,000+ reads and 200+ reposts within two days of launch.",
       "portfolio-card-cta-1": "Open project ↗",
       "portfolio-chip-2": "Project 02",
       "portfolio-card-title-2":
-        '"Mesoamerican Maya Civilization Exhibition" Cultural-Product Worldbuilding',
-      "portfolio-card-meta-2": "Creative setting · Mythology-based IP system",
+        '"Steel and Glory: Interpretation Script for the European Knight Armor and Culture Exhibition"',
+      "portfolio-card-meta-2": "Interpretation script · Guided exhibition narrative",
       "portfolio-card-body-2":
-        "Built around the World Tree, this concept translates Maya deities such as the jaguar god, feathered serpent, rain god, and maize god into an expandable character system for exhibition-related merchandise.",
+        "Focused on the unit 'The Twilight of Knights,' this project organizes visitor-facing transitions and object interpretation around armor, polearms, firearms, and the decline of knighthood.",
       "portfolio-card-cta-2": "Open project ↗",
       "portfolio-chip-3": "Project 03",
       "portfolio-card-title-3":
-        '"The Explorer\'s Gazette" Bestiary Promotional Brochure',
-      "portfolio-card-meta-3": "Brochure copy · Newspaper-style worldbuilding",
+        '"Mesoamerican Maya Civilization Exhibition" Cultural-Product Worldbuilding',
+      "portfolio-card-meta-3": "Creative setting · Mythology-based IP system",
       "portfolio-card-body-3":
-        "Framed as a fantasy newspaper special issue set in 1625, this brochure connects monster attacks, wanted notices, siren cave bulletins, and expedition ads into a continuous promotional reading experience.",
+        "Built around the World Tree, this concept translates Maya deities such as the jaguar god, feathered serpent, rain god, and maize god into an expandable character system for exhibition-related merchandise.",
       "portfolio-card-cta-3": "Open project ↗",
+      "portfolio-chip-4": "Project 04",
+      "portfolio-card-title-4":
+        '"The Explorer\'s Gazette" Bestiary Promotional Brochure',
+      "portfolio-card-meta-4": "Brochure copy · Newspaper-style worldbuilding",
+      "portfolio-card-body-4":
+        "Framed as a fantasy newspaper special issue set in 1625, this brochure connects monster attacks, wanted notices, siren cave bulletins, and expedition ads into a continuous promotional reading experience.",
+      "portfolio-card-cta-4": "Open project ↗",
       "field-section-label": "Field Notes",
       "field-section-title": "Practice & Fieldwork",
       "timeline-chip": "Timeline",
