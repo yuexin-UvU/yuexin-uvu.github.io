@@ -85,7 +85,7 @@ const translations = {
       "work-card-chip-2": "Article",
       "work-card-title-2":
         "Reverse Activation and Identity Practice: Museum Visiting Mechanisms in Interest-Based Communities",
-      "work-card-meta-2": "Published · Museum audience research",
+      "work-card-meta-2": "Under review",
       "work-card-body-2":
         "Drawing on 1,046 posts from Xiaohongshu and Weibo, this study proposes a path in which interest communities reactivate exhibit meaning, highlighting identity practice and decentralized interpretation networks.",
       "work-card-chip-3": "Review",
@@ -195,7 +195,7 @@ const translations = {
       "direction-list-2": `
         <li>Selected for the 2025 Jiangsu Graduate Practice and Innovation Program</li>
         <li>The paper "From Narrative to Rhetoric" was published in Science Education and Museums</li>
-        <li>Participated in armor exhibition projects and curatorial/worldbuilding work for the Shanghai Museum Maya exhibition</li>
+        <li>Contributed to the interpretation script for Chengdu Museum's "European Knight Armor and Culture Exhibition," cultural-product development and operations for Shanghai Museum's "World Tree Summit: Maya Civilization Exhibition," and the "Bestiary" exhibition promotional brochure</li>
       `,
       "practice-list-1": `
         <li>"Reconstructing the Past through Images": generative 3D modeling for cultural relic interaction, responsible for textual adaptation</li>
