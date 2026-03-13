@@ -133,6 +133,10 @@ const translations = {
       "field-section-label": "Field Notes",
       "field-section-title": "Practice & Fieldwork",
       "timeline-chip": "Timeline",
+      "timeline-title-0":
+        "Beijing Kunyuan Cultural Heritage Exhibitions Co., Ltd. · Planning/Operations",
+      "timeline-body-0":
+        "Contributed to museum cultural-product development, operations, and exhibition planning.",
       "timeline-title-1": "China Museums Association · Office Intern",
       "timeline-body-1":
         "Participated in planning and on-site execution for the Second Museology Conference, handling conference copy, guest coordination, and event support, while also assisting with the seventh council transition.",
