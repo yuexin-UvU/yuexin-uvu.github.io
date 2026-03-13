@@ -59,10 +59,6 @@ const translations = {
       "stat-label-4": "Academic ranking",
       "profile-title": "Profile",
       "profile-stamp": "Archive Seal",
-      "quote-text":
-        '"Interest reactivates the meaning of exhibits through intertextual comparison and affective confirmation."',
-      "quote-source":
-        'From "Reverse Activation and Identity Practice: Museum Visiting Mechanisms in Interest-Based Communities"',
       "research-section-label": "Research Focus",
       "research-section-title": "Research Directions",
       "direction-chip-1": "Track 01",
