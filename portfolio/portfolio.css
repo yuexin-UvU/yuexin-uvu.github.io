@@ -186,6 +186,41 @@ a {
   background: rgba(155, 79, 50, 0.06);
 }
 
+.doc-content {
+  margin-top: 1rem;
+}
+
+.doc-content p {
+  margin: 0.65rem 0;
+  color: var(--ink-soft);
+  line-height: 1.95;
+  font-size: 0.95rem;
+}
+
+.doc-content .doc-title {
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.doc-content .doc-heading {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.doc-content .doc-meta {
+  font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.doc-content .doc-alert {
+  color: var(--accent);
+  font-weight: 600;
+}
+
 @media (max-width: 760px) {
   .project-shell {
     width: min(100% - 1rem, 1100px);
