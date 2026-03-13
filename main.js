@@ -73,8 +73,10 @@ const translations = {
       "direction-title-2": "Museum Rhetoric and Narrative Exhibitions",
       "direction-body-2":
         "This research explores how exhibition texts, spatial narratives, and rhetorical strategies shape public cognition and identity, while extending theory into curatorial practice, label writing, and exhibition worldbuilding.",
-      "works-section-label": "Selected Works",
-      "works-section-title": "Selected Publications",
+      "portfolio-section-label": "Portfolio",
+      "portfolio-title": "Portfolio",
+      "works-section-label": "Research Outputs",
+      "works-section-title": "Research Outputs",
       "work-card-chip-1": "Sole Author",
       "work-card-title-1":
         "Audience Feedback on Uncivil Museum Visiting Behavior",
@@ -105,7 +107,6 @@ const translations = {
         "Invited to present research at the Jiangsu and China main-venue youth forums of International Museum Day (May 18).",
       "callout-body-2":
         "Selected for the 2025 Jiangsu Graduate Practice and Innovation Program, continuing work on the rhetoric of narrative exhibitions.",
-      "portfolio-title": "Portfolio",
       "portfolio-chip-1": "Project 01",
       "portfolio-card-title-1":
         '"Museum Simulator" Web Game',
