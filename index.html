@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="light" data-theme-mode="system" data-lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>郭悦歆 | 博物馆观众研究与策展实践</title>
+    <meta
+      id="page-description"
+      name="description"
+      content="郭悦歆的个人主页，聚焦博物馆观众研究、博物馆修辞、展览评估与策展实践。"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ece6da'/%3E%3Ccircle cx='32' cy='32' r='28' fill='none' stroke='%23a64f36' stroke-width='3'/%3E%3Cpath d='M15 43.5h34M22 25.5h20M25 25.5v18M32 25.5v18M39 25.5v18M18 25.5l14-10 14 10' fill='none' stroke='%23a64f36' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="main.js"></script>
+  </head>
+  <body>
+    <div class="page-grid">
+      <main class="layout">
+        <div class="printer-frame">
+          <header class="printer-shell" id="top">
+            <div class="shell-glow" aria-hidden="true"></div>
+
+            <div class="brand-row">
+              <div class="brand-block">
+                <div class="brand-mark" aria-hidden="true">
+                  <svg viewBox="0 0 64 64" role="presentation">
+                    <circle cx="32" cy="32" r="28" />
+                    <path d="M15 43.5h34" />
+                    <path d="M22 25.5h20" />
+                    <path d="M25 25.5v18" />
+                    <path d="M32 25.5v18" />
+                    <path d="M39 25.5v18" />
+                    <path d="M18 25.5l14-10 14 10" />
+                  </svg>
+                </div>
+                <div class="brand-copy">
+                  <p class="brand-name">YUEXIN GUO</p>
+                  <p class="brand-tag" id="brand-tagline">
+                    博物馆观众研究 / 策展札记
+                  </p>
+                </div>
+              </div>
+
+              <div class="status-block" aria-label="打印机状态">
+                <span class="status-light"></span>
+                <span class="status-text">ON</span>
+              </div>
+            </div>
+
+            <div class="nav-row">
+              <nav class="shell-nav" aria-label="页面导航">
+                <a
+                  class="printer-btn nav-link active"
+                  data-nav-link
+                  href="#home"
+                  ><span id="nav-home-label">首页</span></a
+                >
+                <a class="printer-btn nav-link" data-nav-link href="#research"
+                  ><span id="nav-research-label">研究</span></a
+                >
+                <a class="printer-btn nav-link" data-nav-link href="#works"
+                  ><span id="nav-works-label">成果</span></a
+                >
+                <a class="printer-btn nav-link" data-nav-link href="#field"
+                  ><span id="nav-field-label">实践</span></a
+                >
+                <a class="printer-btn nav-link" data-nav-link href="#contact"
+                  ><span id="nav-contact-label">联系</span></a
+                >
+              </nav>
+
+              <div class="shell-tools">
+                <div class="dial-cluster">
+                  <div
+                    class="rotary-dial-wrap"
+                    id="language-dial"
+                    data-dial="language"
+                    style="--dial-rotation:-45deg"
+                  >
+                    <div
+                      class="rotary-dial-labels rotary-dial-labels-arc"
+                      aria-hidden="true"
+                    >
+                      <span
+                        class="rotary-dial-label is-active"
+                        data-option="zh"
+                        >中</span
+                      >
+                      <span class="rotary-dial-label" data-option="en">EN</span>
+                    </div>
+                    <button
+                      class="rotary-dial-knob"
+                      id="language-toggle"
+                      type="button"
+                      aria-label="切换到英文"
+                      title="切换到英文"
+                    >
+                      <span class="rotary-dial-indicator" aria-hidden="true">
+                        <span class="rotary-dial-line"></span>
+                      </span>
+                      <span class="sr-only" id="language-toggle-label"
+                        >切换到英文</span
+                      >
+                    </button>
+                  </div>
+
+                  <div
+                    class="rotary-dial-wrap"
+                    id="theme-dial"
+                    data-dial="theme"
+                    data-layout="inline"
+                    style="--dial-rotation:-45deg"
+                  >
+                    <div
+                      class="rotary-dial-labels rotary-dial-labels-inline"
+                      aria-hidden="true"
+                    >
+                      <span
+                        class="rotary-dial-label rotary-dial-label-icon is-active"
+                        data-option="system"
+                      >
+                        <svg viewBox="0 0 24 24" role="presentation">
+                          <rect x="4.5" y="5.5" width="15" height="10" rx="1.6" />
+                          <path d="M9 19h6M11 15.5V19M13 15.5V19" />
+                        </svg>
+                        <span class="sr-only">跟随系统</span>
+                      </span>
+                      <span
+                        class="rotary-dial-label rotary-dial-label-icon"
+                        data-option="light"
+                      >
+                        <svg viewBox="0 0 24 24" role="presentation">
+                          <circle cx="12" cy="12" r="4.2" />
+                          <path
+                            d="M12 1.8v3.1M12 19.1v3.1M4.08 4.08l2.2 2.2M17.72 17.72l2.2 2.2M1.8 12h3.1M19.1 12h3.1M4.08 19.92l2.2-2.2M17.72 6.28l2.2-2.2"
+                          />
+                        </svg>
+                        <span class="sr-only">浅色</span>
+                      </span>
+                      <span
+                        class="rotary-dial-label rotary-dial-label-icon"
+                        data-option="dark"
+                      >
+                        <svg viewBox="0 0 24 24" role="presentation">
+                          <path
+                            d="M20.2 14.55A8.8 8.8 0 0 1 9.45 3.8 9.2 9.2 0 1 0 20.2 14.55Z"
+                          />
+                        </svg>
+                        <span class="sr-only">深色</span>
+                      </span>
+                    </div>
+                    <button
+                      class="rotary-dial-knob"
+                      id="theme-toggle"
+                      type="button"
+                      aria-label="当前跟随系统，点击切换到浅色"
+                      title="当前跟随系统，点击切换到浅色"
+                    >
+                      <span class="rotary-dial-indicator" aria-hidden="true">
+                        <span class="rotary-dial-line"></span>
+                      </span>
+                      <span class="sr-only" id="theme-toggle-label"
+                        >当前跟随系统，点击切换到浅色</span
+                      >
+                    </button>
+                  </div>
+                </div>
+
+                <button
+                  class="printer-btn printer-btn-circle"
+                  id="print-button"
+                  type="button"
+                  aria-label="打印页面"
+                  title="打印页面"
+                >
+                  <span aria-hidden="true">
+                    <svg viewBox="0 0 24 24" role="presentation">
+                      <path d="M7 3.5h10v4H7z" />
+                      <path d="M6 15.5h12v5H6z" />
+                      <path d="M5 8.5h14a2 2 0 0 1 2 2v4H3v-4a2 2 0 0 1 2-2Z" />
+                      <path d="M17.5 12h1" />
+                    </svg>
+                  </span>
+                  <span class="sr-only" id="print-label">打印页面</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="shell-foot" aria-hidden="true">
+              <div class="feed-slot"></div>
+            </div>
+          </header>
+
+          <div class="printer-shadow" aria-hidden="true"></div>
+
+          <div class="paper-wrap">
+            <div class="paper-top-shadow" aria-hidden="true"></div>
+
+            <div class="paper-motion" id="paper-motion">
+              <article class="paper">
+                <div class="paper-perforation left" aria-hidden="true"></div>
+                <div class="paper-perforation right" aria-hidden="true"></div>
+
+                <div class="paper-content">
+                  <section
+                    class="printed-section hero-section"
+                    id="home"
+                    data-section
+                  >
+                    <div class="hero-banner">
+                      <span class="section-chip accent" id="hero-chip"
+                        >馆藏卡 GYX-2026</span
+                      >
+                      <span class="hero-banner-text" id="hero-banner-text"
+                        >博物馆观众研究 / 策展实践</span
+                      >
+                    </div>
+
+                    <div class="hero-grid">
+                      <div class="hero-copy">
+                        <p class="hero-kicker" id="hero-kicker">
+                          博物馆观众研究 / 博物馆修辞
+                        </p>
+                        <h1 id="hero-name">郭悦歆</h1>
+                        <p class="hero-lead" id="hero-lead">
+                          南京大学博物馆专业硕士，关注博物馆观众研究、博物馆修辞与叙事型展览。
+                          以 UGC
+                          文本分析、主题分析、访谈与展览评估为主要方法，也持续参与策展、
+                          展览写作与文博传播实践。
+                        </p>
+
+                        <div class="tag-row" aria-label="研究标签">
+                          <span class="tag" id="tag-1">观众研究</span>
+                          <span class="tag" id="tag-2">博物馆修辞</span>
+                          <span class="tag" id="tag-3">展览评估</span>
+                          <span class="tag" id="tag-4">策展写作</span>
+                        </div>
+
+                        <div class="contact-strip">
+                          <a href="mailto:yuexin_guo@yeah.net">EMAIL</a>
+                          <a
+                            href="https://github.com/yuexin-UvU"
+                            target="_blank"
+                            rel="noopener"
+                            >GITHUB</a
+                          >
+                          <span id="contact-base">驻留 / 南京 · 苏州</span>
+                        </div>
+
+                        <div class="stats-grid" aria-label="关键信息">
+                          <article class="stat-card">
+                            <strong>4+</strong>
+                            <span id="stat-label-1">代表论文与评论</span>
+                          </article>
+                          <article class="stat-card">
+                            <strong>1046</strong>
+                            <span id="stat-label-2">UGC 文本样本</span>
+                          </article>
+                          <article class="stat-card">
+                            <strong>30+</strong>
+                            <span id="stat-label-3">深度访谈记录</span>
+                          </article>
+                          <article class="stat-card">
+                            <strong>Top 5%</strong>
+                            <span id="stat-label-4">本硕阶段成绩排名</span>
+                          </article>
+                        </div>
+                      </div>
+
+                      <aside class="profile-panel">
+                        <div class="profile-card">
+                          <div class="profile-frame">
+                            <img src="assets/profile.jpg" alt="郭悦歆证件照" />
+                            <span class="stamp" id="profile-stamp">馆藏印记</span>
+                          </div>
+
+                          <div class="profile-meta">
+                            <p class="profile-title" id="profile-title">
+                              个人档案
+                            </p>
+                            <ul class="profile-list" id="profile-list">
+                              <li>南京大学考古文博与中华文明研究院</li>
+                              <li>研究方向：博物馆观众研究、博物馆修辞</li>
+                              <li>国家奖学金 / 学业奖学金一等奖</li>
+                              <li>5·18 国际博物馆日中国主会场青年论坛发言</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </aside>
+                    </div>
+
+                    <blockquote class="quote-card">
+                      <p id="quote-text">
+                        “兴趣通过互文性叙事对照与情感确认机制，实现对展品意义的反向激活。”
+                      </p>
+                      <footer id="quote-source">
+                        摘自《反向激活与身份实践：探析兴趣圈层下博物馆观众的参观机制》
+                      </footer>
+                    </blockquote>
+                  </section>
+
+                  <section class="printed-section" id="research" data-section>
+                    <div class="section-head">
+                      <div class="section-label">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M4 18.5h16M6.5 16V6.5h11V16M9 9h6M9 12h6" />
+                        </svg>
+                        <span id="research-section-label">研究方向</span>
+                      </div>
+                      <h2 id="research-section-title">研究方向</h2>
+                    </div>
+
+                    <div class="research-grid">
+                      <article class="direction-card">
+                        <div class="card-topline">
+                          <span class="section-chip" id="direction-chip-1"
+                            >方向 01</span
+                          >
+                          <span class="card-code">AUDIENCE / FIELD</span>
+                        </div>
+                        <h3 id="direction-title-1">博物馆观众研究</h3>
+                        <p id="direction-body-1">
+                          重点关注观众如何在数字媒介、兴趣圈层与展览空间之间建构意义，具体议题涵盖
+                          不文明参观行为、兴趣导向型参观、文创消费动机与跨文化展览观众评估。
+                        </p>
+                        <ul class="detail-list" id="direction-list-1">
+                          <li>
+                            方法：UGC
+                            文本分析、反思式主题分析、访谈、问卷与可视化
+                          </li>
+                          <li>
+                            案例：辽宁省博物馆、河南省博物院、呼和浩特市老牛儿童探索馆等
+                          </li>
+                          <li>
+                            成果：独作发表于《中国博物馆》，并完成兴趣圈层观众机制研究
+                          </li>
+                        </ul>
+                      </article>
+
+                      <article class="direction-card">
+                        <div class="card-topline">
+                          <span class="section-chip" id="direction-chip-2"
+                            >方向 02</span
+                          >
+                          <span class="card-code">RHETORIC / EXHIBITION</span>
+                        </div>
+                        <h3 id="direction-title-2">博物馆修辞与叙事型展览</h3>
+                        <p id="direction-body-2">
+                          关注展览文本、空间叙事与修辞策略如何塑造公共认知和身份认同，
+                          同时将理论研究延伸到策展实践、展签写作与展览世界观设定。
+                        </p>
+                        <ul class="detail-list" id="direction-list-2">
+                          <li>2025 年江苏省研究生实践创新计划项目立项</li>
+                          <li>
+                            论文《从“叙事”到“修辞”》发表于《科学教育与博物馆》
+                          </li>
+                          <li>
+                            参与盔甲展览、上博玛雅展览策展与世界观设定撰写
+                          </li>
+                        </ul>
+                      </article>
+                    </div>
+                  </section>
+
+                  <section class="printed-section" id="works" data-section>
+                    <div class="section-head">
+                      <div class="section-label">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M5 5.5h14v13H5zM8.5 9h7M8.5 12h7M8.5 15h4" />
+                        </svg>
+                        <span id="works-section-label">代表成果</span>
+                      </div>
+                      <h2 id="works-section-title">代表成果</h2>
+                    </div>
+
+                    <div class="works-grid">
+                      <article class="work-card highlight">
+                        <div class="card-topline">
+                          <span
+                            class="section-chip accent"
+                            id="work-card-chip-1"
+                            >独作</span
+                          >
+                          <span class="card-code">CNM 2025(04)</span>
+                        </div>
+                        <h3 id="work-card-title-1">
+                          《博物馆不文明参观行为的观众反馈研究》
+                        </h3>
+                        <p class="work-meta" id="work-card-meta-1">
+                          中国博物馆 · CSSCI 扩展版 · 2025
+                        </p>
+                        <p id="work-card-body-1">
+                          基于社交媒体 UGC
+                          与文本分析，讨论观众如何识别、命名并反馈博物馆参观中的
+                          秩序问题，尝试为观众治理提供经验性依据。
+                        </p>
+                      </article>
+
+                      <article class="work-card">
+                        <div class="card-topline">
+                          <span class="section-chip" id="work-card-chip-2"
+                            >论文</span
+                          >
+                          <span class="card-code">INTEREST / UGC</span>
+                        </div>
+                        <h3 id="work-card-title-2">
+                          《反向激活与身份实践：探析兴趣圈层下博物馆观众的参观机制》
+                        </h3>
+                        <p class="work-meta" id="work-card-meta-2">
+                          已发表 · 博物馆观众研究
+                        </p>
+                        <p id="work-card-body-2">
+                          以 1046
+                          条小红书与微博文本为基础，提出“兴趣反向激活展品意义”的解释路径，
+                          关注兴趣圈层观众的身份实践与去中心化解释网络。
+                        </p>
+                      </article>
+
+                      <article class="work-card">
+                        <div class="card-topline">
+                          <span class="section-chip" id="work-card-chip-3"
+                            >评论</span
+                          >
+                          <span class="card-code">SEM / RHETORIC</span>
+                        </div>
+                        <h3 id="work-card-title-3">
+                          《从“叙事”到“修辞”：评〈博物馆修辞学：国家空间中的公民认同构建〉及其方法论意义》
+                        </h3>
+                        <p class="work-meta" id="work-card-meta-3">
+                          科学教育与博物馆 · 已发表
+                        </p>
+                        <p id="work-card-body-3">
+                          从方法论角度讨论叙事型展览研究如何转向修辞分析，思考展览话语、
+                          空间结构与公共认同之间的关系。
+                        </p>
+                      </article>
+
+                      <article class="work-card">
+                        <div class="card-topline">
+                          <span class="section-chip" id="work-card-chip-4"
+                            >协作研究</span
+                          >
+                          <span class="card-code">MUSEUM MANAGEMENT</span>
+                        </div>
+                        <h3 id="work-card-title-4">
+                          《基于语义主题分析的凤冠冰箱贴文创产品消费动机研究》
+                        </h3>
+                        <p class="work-meta" id="work-card-meta-4">
+                          收录于《博物馆管理》
+                        </p>
+                        <p id="work-card-body-4">
+                          围绕文创消费动机、用户生成内容与语义主题建模开展协作研究，
+                          主要负责数据处理与语义分析。
+                        </p>
+                      </article>
+                    </div>
+
+                    <div class="callout-row">
+                      <div class="callout-card">
+                        <span class="callout-label">FORUM</span>
+                        <p id="callout-body-1">
+                          获邀在 5·18
+                          国际博物馆日江苏主会场、中国主会场青年论坛汇报研究。
+                        </p>
+                      </div>
+                      <div class="callout-card">
+                        <span class="callout-label">PROJECT</span>
+                        <p id="callout-body-2">
+                          2025
+                          年江苏省研究生实践创新计划项目立项，持续推进叙事型展览修辞研究。
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="portfolio-stack">
+                      <div class="subsection-head">
+                        <p class="subsection-kicker" id="portfolio-kicker">
+                          作品集 Portfolio
+                        </p>
+                        <h3 id="portfolio-title">策展与文创项目</h3>
+                        <p class="portfolio-intro" id="portfolio-intro">
+                          收录三个可跳转的完整作品条目，点击卡片将在新标签页打开项目详情，并可继续查看
+                          Word 原件。
+                        </p>
+                      </div>
+
+                      <div class="portfolio-grid">
+                        <article class="portfolio-card">
+                          <a
+                            class="portfolio-link-card"
+                            href="portfolio/armor.html"
+                            target="_blank"
+                            rel="noopener"
+                          >
+                            <div class="card-topline">
+                              <span class="section-chip" id="portfolio-chip-1"
+                                >作品 01</span
+                              >
+                              <span class="card-code">EXHIBITION SCRIPT</span>
+                            </div>
+                            <h3 id="portfolio-card-title-1">
+                              「钢铁与荣耀——欧洲骑士盔甲与文化展」讲解词
+                            </h3>
+                            <p
+                              class="work-meta"
+                              id="portfolio-card-meta-1"
+                            >
+                              展览讲解词 · 导览叙事文本
+                            </p>
+                            <p id="portfolio-card-body-1">
+                              以“骑士的黄昏”为重点单元，围绕盔甲、长柄武器、火枪与佣兵制度的历史转折，组织面向观众的导览节奏、过渡词与展品解说语言。
+                            </p>
+                            <span
+                              class="portfolio-cta"
+                              id="portfolio-card-cta-1"
+                              >查看详情 ↗</span
+                            >
+                          </a>
+                        </article>
+
+                        <article class="portfolio-card">
+                          <a
+                            class="portfolio-link-card"
+                            href="portfolio/maya.html"
+                            target="_blank"
+                            rel="noopener"
+                          >
+                            <div class="card-topline">
+                              <span class="section-chip" id="portfolio-chip-2"
+                                >作品 02</span
+                              >
+                              <span class="card-code">WORLD BUILDING</span>
+                            </div>
+                            <h3 id="portfolio-card-title-2">
+                              「中美洲玛雅文明展」文创世界观设定
+                            </h3>
+                            <p
+                              class="work-meta"
+                              id="portfolio-card-meta-2"
+                            >
+                              文创设定 · 神话 IP 世界观
+                            </p>
+                            <p id="portfolio-card-body-2">
+                              以世界树为核心结构，将美洲豹神、羽蛇神、雨神、玉米神等玛雅神灵转译为可持续扩展的角色系统，服务展览衍生文创叙事。
+                            </p>
+                            <span
+                              class="portfolio-cta"
+                              id="portfolio-card-cta-2"
+                              >查看详情 ↗</span
+                            >
+                          </a>
+                        </article>
+
+                        <article class="portfolio-card">
+                          <a
+                            class="portfolio-link-card"
+                            href="portfolio/explorer.html"
+                            target="_blank"
+                            rel="noopener"
+                          >
+                            <div class="card-topline">
+                              <span class="section-chip" id="portfolio-chip-3"
+                                >作品 03</span
+                              >
+                              <span class="card-code">PROMOTIONAL BROCHURE</span>
+                            </div>
+                            <h3 id="portfolio-card-title-3">
+                              《探险家日报》幻兽录宣传册
+                            </h3>
+                            <p
+                              class="work-meta"
+                              id="portfolio-card-meta-3"
+                            >
+                              宣传册文案 · 报刊式世界观包装
+                            </p>
+                            <p id="portfolio-card-body-3">
+                              以 1625 年奇幻报纸特刊为形式，整合异兽突袭、悬赏通缉、塞壬洞穴号外与探险启事，构建连续性的宣传阅读体验。
+                            </p>
+                            <span
+                              class="portfolio-cta"
+                              id="portfolio-card-cta-3"
+                              >查看详情 ↗</span
+                            >
+                          </a>
+                        </article>
+                      </div>
+                    </div>
+                  </section>
+
+                  <section class="printed-section" id="field" data-section>
+                    <div class="section-head">
+                      <div class="section-label">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M4.5 18.5h15M6.5 15.5l3-8 2.5 5 2-3 3.5 6" />
+                        </svg>
+                        <span id="field-section-label">实践记录</span>
+                      </div>
+                      <h2 id="field-section-title">实践经历</h2>
+                    </div>
+
+                    <div class="field-layout">
+                      <article class="timeline-card">
+                        <div class="card-topline">
+                          <span class="section-chip" id="timeline-chip"
+                            >时间线</span
+                          >
+                          <span class="card-code">ARCHIVE LOG</span>
+                        </div>
+                        <ol class="timeline-list">
+                          <li>
+                            <span class="timeline-time">2025.08 — 2025.12</span>
+                            <div class="timeline-body">
+                              <h3 id="timeline-title-1">
+                                中国博物馆协会 · 办公室实习生
+                              </h3>
+                              <p id="timeline-body-1">
+                                参与第二届博物馆学大会筹备与现场执行，负责会议文案、
+                                嘉宾协调及会务支持；同时参与第七届理事会换届相关执行工作。
+                              </p>
+                            </div>
+                          </li>
+                          <li>
+                            <span class="timeline-time">2025</span>
+                            <div class="timeline-body">
+                              <h3 id="timeline-title-2">中国主会场青年论坛发言</h3>
+                              <p id="timeline-body-2">
+                                在 5·18 国际博物馆日中国主会场青年论坛汇报研究，
+                                相关活动获媒体报道，并接受 CGTN 专访。
+                              </p>
+                            </div>
+                          </li>
+                          <li>
+                            <span class="timeline-time">2024.04 — 2024.06</span>
+                            <div class="timeline-body">
+                              <h3 id="timeline-title-3">
+                                安徽省文物考古研究所 · 考古发掘实习
+                              </h3>
+                              <p id="timeline-body-3">
+                                参与考古发掘与现场记录工作，在田野环境中理解文物材料、
+                                现场沟通与公众解释的关系。
+                              </p>
+                            </div>
+                          </li>
+                        </ol>
+                      </article>
+
+                      <div class="practice-grid">
+                        <article class="practice-card">
+                          <div class="card-topline">
+                            <span class="section-chip" id="practice-chip-1"
+                              >项目</span
+                            >
+                            <span class="card-code">EVALUATION</span>
+                          </div>
+                          <h3 id="practice-title-1">观众评估与研究项目</h3>
+                          <ul class="detail-list" id="practice-list-1">
+                            <li>
+                              “拍古问今”：生成式三维建模文物动态交互系统，负责内容文本转译
+                            </li>
+                            <li>
+                              辽宁省博物馆文创吸引力评估，完成 30+
+                              份有效深访记录
+                            </li>
+                            <li>
+                              河南省博物院墨西哥玛雅文明大展观众评估，参与问卷与访谈设计
+                            </li>
+                            <li>
+                              中国科技馆石窟寺主题课题展览评估，支持展览反馈整理
+                            </li>
+                          </ul>
+                        </article>
+
+                        <article class="practice-card">
+                          <div class="card-topline">
+                            <span class="section-chip" id="practice-chip-2"
+                              >策展</span
+                            >
+                            <span class="card-code">CURATION</span>
+                          </div>
+                          <h3 id="practice-title-2">策展与展览写作</h3>
+                          <ul class="detail-list" id="practice-list-2">
+                            <li>
+                              坤远文博实习，参与盔甲展览项目与展示文本工作
+                            </li>
+                            <li>参与上博玛雅展览策展协作与世界观设定撰写</li>
+                            <li>
+                              关注展览叙事、空间语言与观众进入方式之间的匹配
+                            </li>
+                          </ul>
+                        </article>
+                      </div>
+                    </div>
+
+                    <div class="evidence-grid" aria-label="现场记录">
+                      <figure class="evidence-card">
+                        <img
+                          src="assets/fieldwork.jpg"
+                          alt="博物馆现场观众调研"
+                        />
+                        <figcaption>
+                          <span>FIELDWORK</span>
+                          <strong id="evidence-title-1"
+                            >观众调研与现场沟通</strong
+                          >
+                        </figcaption>
+                      </figure>
+                      <figure class="evidence-card">
+                        <img src="assets/forum-stage.jpg" alt="论坛汇报现场" />
+                        <figcaption>
+                          <span>FORUM</span>
+                          <strong id="evidence-title-2"
+                            >5·18 国际博物馆日论坛汇报</strong
+                          >
+                        </figcaption>
+                      </figure>
+                      <figure class="evidence-card">
+                        <img
+                          src="assets/journal-cover.jpg"
+                          alt="博物馆管理期刊封面"
+                        />
+                        <figcaption>
+                          <span>PUBLICATION</span>
+                          <strong id="evidence-title-3"
+                            >《博物馆管理》相关研究成果</strong
+                          >
+                        </figcaption>
+                      </figure>
+                      <figure class="evidence-card">
+                        <img
+                          src="assets/cssci-certificate.png"
+                          alt="CSSCI收录证书"
+                        />
+                        <figcaption>
+                          <span>INDEXING</span>
+                          <strong id="evidence-title-4"
+                            >CSSCI 扩展版收录证明</strong
+                          >
+                        </figcaption>
+                      </figure>
+                    </div>
+                  </section>
+
+                  <section class="printed-section" id="contact" data-section>
+                    <div class="section-head">
+                      <div class="section-label">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M4 7.5h16v9H4z" />
+                          <path d="m5 8.5 7 5 7-5" />
+                        </svg>
+                        <span id="contact-section-label">联系与教育</span>
+                      </div>
+                      <h2 id="contact-section-title">联系与教育背景</h2>
+                    </div>
+
+                    <div class="contact-layout">
+                      <article class="contact-card">
+                        <div class="card-topline">
+                          <span
+                            class="section-chip accent"
+                            id="contact-card-chip"
+                            >联系</span
+                          >
+                          <span class="card-code" id="contact-card-code"
+                            >开放研究与策展协作</span
+                          >
+                        </div>
+                        <h3 id="contact-card-title">欢迎交流</h3>
+                        <p id="contact-card-body">
+                          如果你也在关注博物馆观众研究、展览修辞、展签写作或策展协作，
+                          欢迎通过邮箱联系我。
+                        </p>
+                        <div class="contact-actions">
+                          <a href="mailto:yuexin_guo@yeah.net"
+                            >yuexin_guo@yeah.net</a
+                          >
+                          <a
+                            href="https://github.com/yuexin-UvU"
+                            target="_blank"
+                            rel="noopener"
+                            >github.com/yuexin-UvU</a
+                          >
+                        </div>
+                      </article>
+
+                      <article class="education-card">
+                        <div class="card-topline">
+                          <span class="section-chip" id="education-card-chip"
+                            >教育</span
+                          >
+                          <span class="card-code" id="education-card-code"
+                            >学术经历</span
+                          >
+                        </div>
+                        <div class="education-item">
+                          <h3 id="education-title-1">
+                            南京大学 · 历史学硕士（博物馆）
+                          </h3>
+                          <p id="education-body-1">
+                            2024.09 — 2027.06 · GPA 前 5% · 国家奖学金 /
+                            学业奖学金一等奖
+                          </p>
+                        </div>
+                        <div class="education-item">
+                          <h3 id="education-title-2">
+                            淮北师范大学 · 历史学学士（文化遗产）
+                          </h3>
+                          <p id="education-body-2">
+                            2020.09 — 2024.06 · GPA 前 5% · 安徽省优秀毕业生 /
+                            优秀奖学金一等
+                          </p>
+                        </div>
+                      </article>
+
+                      <article class="methods-card">
+                        <div class="card-topline">
+                          <span class="section-chip" id="methods-card-chip"
+                            >方法</span
+                          >
+                          <span class="card-code" id="methods-card-code"
+                            >工具箱</span
+                          >
+                        </div>
+                        <h3 id="methods-card-title">研究方法与工具</h3>
+                        <ul class="tool-list" id="methods-list">
+                          <li>
+                            文本与质性分析：UGC、扎根式编码、反思式主题分析
+                          </li>
+                          <li>定量与辅助工具：Python、SPSS、MySQL、NVivo</li>
+                          <li>办公与协作：Excel、Word、ChatGPT</li>
+                          <li>语言：CET-4 495 / CET-6 501</li>
+                        </ul>
+                      </article>
+                    </div>
+                  </section>
+                </div>
+
+                <footer class="paper-footer">
+                  <span
+                    ><span id="printed-label">打印日期</span>
+                    <time id="printed-date">--</time></span
+                  >
+                  <span id="footer-brand">郭悦歆档案</span>
+                </footer>
+              </article>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
