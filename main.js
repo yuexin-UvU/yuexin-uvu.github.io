@@ -38,9 +38,11 @@ const translations = {
     texts: {
       "brand-tagline": "Museum Audience Research / Curatorial Notes",
       "nav-home-label": "Home",
-      "nav-research-label": "Research",
+      "nav-research-label": "Focus",
+      "nav-portfolio-label": "Portfolio",
       "nav-works-label": "Works",
       "nav-field-label": "Field",
+      "nav-blog-label": "Notes",
       "nav-contact-label": "Contact",
       "hero-chip": "Archive Card GYX-2026",
       "hero-banner-text": "Museum Audience Research / Curatorial Practice",
@@ -71,6 +73,23 @@ const translations = {
         "This research explores how exhibition texts, spatial narratives, and rhetorical strategies shape public cognition and identity, while extending theory into curatorial practice, label writing, and exhibition worldbuilding.",
       "portfolio-section-label": "Portfolio",
       "portfolio-title": "Portfolio",
+      "blog-section-label": "Blog",
+      "blog-section-title": "Blog Notes",
+      "blog-feature-chip": "Featured",
+      "blog-feature-meta": "GAME / FRAMEWORK",
+      "blog-feature-title":
+        "\"What Is a Game? A Framework from A to B\"",
+      "blog-feature-body":
+        "Starting from the smallest possible model, how a player moves from A to B, this note unpacks motivation, obstacles, quests, mechanics, and pacing, then extends the idea to MOBAs, racing, chase levels, and narrative design work.",
+      "blog-tag-1": "Game Design",
+      "blog-tag-2": "Core Loop",
+      "blog-tag-3": "Narrative Design",
+      "blog-card-cta": "Read article ↗",
+      "blog-article-kicker": "BLOG 01 / THOUGHT NOTE",
+      "blog-article-title":
+        "What Is a Game? A Framework from A to B",
+      "blog-article-intro":
+        "Lately I have been thinking about a simple question: what exactly is a game? Not in the grand sense of calling games the ninth art, but in a practical sense. If I am a game designer, how should I understand the work I do every day?",
       "works-section-label": "Research Outputs",
       "works-section-title": "Research Outputs",
       "work-card-chip-1": "Sole Author",
@@ -214,6 +233,43 @@ const translations = {
         <li>Quantitative and support tools: Python, SPSS, MySQL, NVivo</li>
         <li>Office and collaboration: Excel, Word, ChatGPT</li>
         <li>Language: CET-4 495 / CET-6 501</li>
+      `,
+      "blog-article-body": `
+        <h4>Starting with a Simple Model</h4>
+        <p>My current answer is this: <strong>the essence of a game is a process that moves the player from A to B.</strong> A and B can be places, goals, achievements, or states. The key point is that a game drives some kind of movement.</p>
+        <p>Under this framework, the designer's job can be reduced to two questions. First, how do we persuade the player to move from A to B? Second, how do we balance forces that speed the player up against forces that slow the player down? Design between A and B is really about regulating the rhythm of that movement.</p>
+        <ul>
+          <li><strong>Obstacles</strong> slow the player down, and overcoming them is what keeps movement going.</li>
+          <li><strong>Quests</strong> also slow progress in the short term, but finishing them often creates a new push forward.</li>
+          <li><strong>Mechanics</strong>, or the core loop, are simply the ways a player can travel from A to B: walking, fighting, jumping, and so on.</li>
+        </ul>
+
+        <h4>Does the Framework Hold Up?</h4>
+        <p>The process-oriented part of this A-to-B model aligns with several classic theories of games. Bernard Suits, for example, describes games as voluntary attempts to achieve goals through unnecessary obstacles, which is very close to the obstacle logic here.</p>
+        <p>But the framework has clear limits. It works well for games with an obvious endpoint, such as RPGs, action games, and stage-based games. It breaks down for titles like Minecraft or Animal Crossing, where there may be no fixed B at all and much of the pleasure comes from lingering near A. It also says more about what players do than what they feel.</p>
+        <p>So I do not see it as a universal model of all games. I see it as a practical lens for <strong>level design and systems design</strong>, and that is already valuable.</p>
+
+        <h4>A Thought on the Bus</h4>
+        <p>I once imagined a little figure moving from A to B. Then I imagined another figure moving from B to A. Two opposing forces, with mutually negating goals, suddenly suggested a completely different kind of play. That almost feels like the structural core of a MOBA.</p>
+        <ul>
+          <li>Add another figure racing from A to B while only one finishing slot exists, and you get racing games or battle royale structures.</li>
+          <li>Turn point B into a moving figure, and you get something like football or a boss fight.</li>
+          <li>Make the opposing figure itself into the obstacle, and you get the chase structure of horror games.</li>
+          <li>Turn the path between A and B into another figure's body, and you move toward Snake.</li>
+        </ul>
+        <p>This made me feel that a core loop may not be a complex system at all, but rather a <strong>smallest repeatable unit of conflict</strong> that can be modified again and again.</p>
+
+        <h4>Using the Framework in Narrative Design</h4>
+        <p>A common problem in narrative design is not that we cannot write, but that we do not know what the writing is serving. With the A-to-B model, the job becomes two concrete questions:</p>
+        <ul>
+          <li><strong>Is B heavy enough?</strong> After reading this line, does the destination feel more meaningful or less meaningful to the player?</li>
+          <li><strong>Is this text a push or a drag?</strong> Does it ask the player to pause and feel the world, or does it urge the player to keep moving?</li>
+        </ul>
+        <p>There is an obvious tension here. Narrative writing naturally slows players down, because good storytelling often depends on attention and emotional pause. But game pacing sometimes requires writing to accelerate players instead. Balancing those two functions may be the first real challenge of using this framework in practice.</p>
+
+        <blockquote class="blog-quote">
+          <p>A game moves the player from A to B. The designer's job is to make that destination matter and to shape how the player gets there.</p>
+        </blockquote>
       `,
     },
   },

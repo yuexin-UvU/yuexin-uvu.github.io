@@ -68,11 +68,17 @@
                 <a class="printer-btn nav-link" data-nav-link href="#research"
                   ><span id="nav-research-label">研究</span></a
                 >
+                <a class="printer-btn nav-link" data-nav-link href="#portfolio"
+                  ><span id="nav-portfolio-label">作品集</span></a
+                >
                 <a class="printer-btn nav-link" data-nav-link href="#works"
                   ><span id="nav-works-label">成果</span></a
                 >
                 <a class="printer-btn nav-link" data-nav-link href="#field"
                   ><span id="nav-field-label">实践</span></a
+                >
+                <a class="printer-btn nav-link" data-nav-link href="#blog"
+                  ><span id="nav-blog-label">博客</span></a
                 >
                 <a class="printer-btn nav-link" data-nav-link href="#contact"
                   ><span id="nav-contact-label">联系</span></a
@@ -364,7 +370,7 @@
                     </div>
                   </section>
 
-                  <section class="printed-section" id="portfolio">
+                  <section class="printed-section" id="portfolio" data-section>
                     <div class="section-head">
                       <div class="section-label">
                         <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -762,6 +768,55 @@
                           >
                         </figcaption>
                       </figure>
+                    </div>
+                  </section>
+
+                  <section class="printed-section" id="blog" data-section>
+                    <div class="section-head">
+                      <div class="section-label">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M5.5 6.5h13v11h-13z" />
+                          <path d="M8.5 9h7M8.5 12h7M8.5 15h4" />
+                        </svg>
+                        <span id="blog-section-label">博客</span>
+                      </div>
+                      <h2 id="blog-section-title">博客札记</h2>
+                    </div>
+
+                    <div class="portfolio-grid blog-card-grid">
+                      <article class="portfolio-card blog-card">
+                        <a
+                          class="portfolio-link-card"
+                          href="blog/game-a-to-b.html"
+                        >
+                          <div class="card-topline">
+                            <span
+                              class="section-chip accent"
+                              id="blog-feature-chip"
+                              >首篇</span
+                            >
+                            <span class="card-code" id="blog-feature-meta"
+                              >GAME / FRAMEWORK</span
+                            >
+                          </div>
+                          <h3 id="blog-feature-title">
+                            对游戏本质的小思考
+                          </h3>
+                          <p id="blog-feature-body">
+                            从“玩家如何从 A 走到 B”这个最小模型出发，拆解动机、
+                            障碍、任务、玩法与节奏之间的关系，也把它延伸到
+                            MOBA、竞速、追逐关卡与文案策划的日常工作中。
+                          </p>
+                          <div class="tag-row blog-tag-row" aria-label="博客标签">
+                            <span class="tag" id="blog-tag-1">游戏策划</span>
+                            <span class="tag" id="blog-tag-2">核心循环</span>
+                            <span class="tag" id="blog-tag-3">文案策划</span>
+                          </div>
+                          <span class="portfolio-cta" id="blog-card-cta"
+                            >阅读全文 ↗</span
+                          >
+                        </a>
+                      </article>
                     </div>
                   </section>
 

@@ -729,6 +729,8 @@ button {
 .callout-card,
 .timeline-card,
 .practice-card,
+.blog-feature,
+.blog-article,
 .contact-card,
 .education-card,
 .methods-card {
@@ -889,6 +891,8 @@ button {
 .portfolio-card,
 .timeline-card,
 .practice-card,
+.blog-feature,
+.blog-article,
 .contact-card,
 .education-card,
 .methods-card {
@@ -900,6 +904,8 @@ button {
 .portfolio-card h3,
 .timeline-card h3,
 .practice-card h3,
+.blog-feature h3,
+.blog-article h3,
 .contact-card h3,
 .education-card h3,
 .methods-card h3 {
@@ -911,12 +917,101 @@ button {
 .direction-card p,
 .work-card p,
 .portfolio-card p,
+.blog-feature p,
 .contact-card p,
 .education-card p {
   margin: 0.85rem 0 0;
   color: var(--ink-soft);
   line-height: 1.9;
   font-size: 0.95rem;
+}
+
+.blog-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.68fr) minmax(0, 1.32fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.blog-card-grid {
+  grid-template-columns: 1fr;
+}
+
+.blog-feature {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.blog-tag-row {
+  margin-top: 1.1rem;
+}
+
+.blog-article-head {
+  padding-bottom: 1.2rem;
+  border-bottom: 1px dashed color-mix(in srgb, var(--ink) 12%, transparent);
+}
+
+.blog-kicker {
+  margin: 0;
+  color: var(--accent);
+  font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.blog-article-intro {
+  margin: 0.95rem 0 0;
+  color: var(--bronze);
+  font-size: 1rem;
+  line-height: 1.95;
+}
+
+.blog-prose {
+  margin-top: 1.4rem;
+}
+
+.blog-prose h4 {
+  margin: 1.65rem 0 0;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+.blog-prose h4:first-child {
+  margin-top: 0;
+}
+
+.blog-prose p,
+.blog-prose li {
+  color: var(--ink-soft);
+  font-size: 0.96rem;
+  line-height: 2;
+}
+
+.blog-prose p {
+  margin: 0.85rem 0 0;
+}
+
+.blog-prose ul {
+  margin: 0.95rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.blog-prose strong {
+  color: var(--ink);
+}
+
+.blog-quote {
+  margin: 1.4rem 0 0;
+  padding: 1.1rem 1.2rem;
+  border-left: 4px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--card));
+}
+
+.blog-quote p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1rem;
 }
 
 .works-grid {
@@ -1216,6 +1311,7 @@ html[data-theme="dark"] .evidence-card img {
   .works-grid,
   .callout-row,
   .field-layout,
+  .blog-layout,
   .contact-layout,
   .evidence-grid {
     grid-template-columns: 1fr;
@@ -1325,6 +1421,9 @@ html[data-theme="dark"] .evidence-card img {
   .direction-card p,
   .work-card p,
   .portfolio-card p,
+  .blog-feature p,
+  .blog-prose p,
+  .blog-prose li,
   .timeline-body p,
   .contact-card p,
   .education-card p {
